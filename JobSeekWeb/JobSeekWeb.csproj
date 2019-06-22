@@ -332,6 +332,8 @@
     <Content Include="Views\Amad\Index.cshtml" />
     <Content Include="Views\Amad\Register.cshtml" />
     <Content Include="Views\Amad\Login.cshtml" />
+    <Content Include="Views\Amad\FAQ.cshtml" />
+    <Content Include="Views\Amad\Contact.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
