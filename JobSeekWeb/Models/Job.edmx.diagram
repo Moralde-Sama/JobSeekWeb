@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="725e723598d34bfcac32a7e3d36e51c6" Name="Diagram1" >
+        <EntityTypeShape EntityType="JobModel.AspNetRole" Width="1.5" PointX="0.75" PointY="2.5" />
+        <EntityTypeShape EntityType="JobModel.AspNetUserClaim" Width="1.5" PointX="5.25" PointY="1" />
+        <EntityTypeShape EntityType="JobModel.AspNetUserLogin" Width="1.5" PointX="5.25" PointY="3.75" />
+        <EntityTypeShape EntityType="JobModel.AspNetUser" Width="1.5" PointX="3" PointY="1.375" />
+        <EntityTypeShape EntityType="JobModel.sysdiagram" Width="1.5" PointX="0.75" PointY="6.75" />
+        <EntityTypeShape EntityType="JobModel.tbl_chat" Width="1.5" PointX="2.75" PointY="6.75" />
+        <EntityTypeShape EntityType="JobModel.tbl_chat_attachment" Width="1.5" PointX="4.75" PointY="6.75" />
+        <EntityTypeShape EntityType="JobModel.tbl_company" Width="1.5" PointX="6.75" PointY="6.75" />
+        <EntityTypeShape EntityType="JobModel.tbl_company_job" Width="1.5" PointX="7.75" PointY="0.75" />
+        <EntityTypeShape EntityType="JobModel.tbl_notification" Width="1.5" PointX="8.75" PointY="4.75" />
+        <EntityTypeShape EntityType="JobModel.tbl_project" Width="1.5" PointX="8.75" PointY="7.75" />
+        <EntityTypeShape EntityType="JobModel.tbl_project_participants" Width="1.5" PointX="9.75" PointY="0.75" />
+        <EntityTypeShape EntityType="JobModel.tbl_requirements" Width="1.5" PointX="0.75" PointY="9.75" />
+        <EntityTypeShape EntityType="JobModel.tbl_skill" Width="1.5" PointX="2.75" PointY="9.75" />
+        <EntityTypeShape EntityType="JobModel.tbl_worker" Width="1.5" PointX="4.75" PointY="9.75" />
+        <EntityTypeShape EntityType="JobModel.tbl_worker_skill" Width="1.5" PointX="10.75" PointY="3.75" />
+        <EntityTypeShape EntityType="JobModel.tbl_category" Width="1.5" PointX="10.75" PointY="6.75" />
+        <AssociationConnector Association="JobModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" />
+        <AssociationConnector Association="JobModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" />
+        <AssociationConnector Association="JobModel.AspNetUserRoles" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
