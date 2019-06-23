@@ -16,7 +16,7 @@ namespace JobSeekWeb
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Worker", action = "WorkerProfile", id = UrlParameter.Optional }
+                defaults: new { controller = "Amad", action = "Index", id = UrlParameter.Optional }
             );
         }
     }
