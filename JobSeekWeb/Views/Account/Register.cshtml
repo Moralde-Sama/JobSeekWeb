@@ -31,18 +31,18 @@
             <div role="document" class=" modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header border-bottom-0">
-                        <button type="button" class="close" style="color: white;">
+                        <a href="/" class="close" style="color: white; border-radius: 5px; text-align: center; padding-top: 3px">
                             X
-                        </button>
+                        </a>
                     </div>
                     <div class="modal-body p-4 p-lg-5">
                         <div class="tabbable-line">
                             <ul class="nav nav-pills nav-fill">
                                 <li class="nav-item active">
-                                    <a data-toggle="tab" href="#worker">Worker</a>
+                                    <a id="btnWorker" data-toggle="tab" style="cursor: pointer;">Worker</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a data-toggle="tab" href="#company">Company </a>
+                                    <a id="btnCompany" data-toggle="tab" style="cursor: pointer;">Company </a>
                                 </li>
                             </ul>
                         </div>
@@ -52,6 +52,7 @@
                         {
                             @Html.AntiForgeryToken()
                             <hr />
+                            <input checked="checked" id="IsWorker" name="IsWorker" type="checkbox" value="true" style="opacity: 0;"/>
                             @Html.ValidationSummary("", new { @class = "text-danger" })
                             <div class="form-group" style="padding: 0 20px;">
                                 @Html.LabelFor(m => m.Email, new { @class = "control-label" })
@@ -76,6 +77,22 @@
     </section>
 </body>
 </html>
+
+<script>
+    document.getElementById("btnWorker").addEventListener("click", function () {
+        setCheckboxValue(true);
+    })
+    document.getElementById("btnCompany").addEventListener("click", function () {
+        setCheckboxValue(false);
+    })
+    function setCheckboxValue(isWorkerSelected) {
+        if (isWorkerSelected) {
+            document.getElementById("IsWorker").value  = true;
+        } else {
+            document.getElementById("IsWorker").value  = false;
+        }
+    }
+</script>
 
     @section Scripts {
         @Scripts.Render("~/bundles/jqueryval")

@@ -108,10 +108,11 @@ warning 6002: The table/view 'Job.dbo.tbl_category' does not have a primary key 
             <PropertyRef Name="companyId" />
           </Key>
           <Property Name="companyId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="name" Type="varchar" MaxLength="200" Nullable="false" />
-          <Property Name="description" Type="varchar" MaxLength="100" Nullable="false" />
-          <Property Name="address" Type="varchar" MaxLength="200" Nullable="false" />
-          <Property Name="categoryId" Type="int" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="200" />
+          <Property Name="description" Type="varchar" MaxLength="100" />
+          <Property Name="address" Type="varchar" MaxLength="200" />
+          <Property Name="categoryId" Type="int" />
+          <Property Name="asp_user_Id" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="tbl_company_job">
           <Key>
@@ -183,12 +184,13 @@ warning 6002: The table/view 'Job.dbo.tbl_category' does not have a primary key 
             <PropertyRef Name="workerId" />
           </Key>
           <Property Name="workerId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="fname" Type="varchar" MaxLength="100" Nullable="false" />
-          <Property Name="mname" Type="varchar" MaxLength="100" Nullable="false" />
-          <Property Name="lname" Type="varchar" MaxLength="100" Nullable="false" />
-          <Property Name="birthdate" Type="date" Nullable="false" />
-          <Property Name="gender" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="header" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="fname" Type="varchar" MaxLength="100" />
+          <Property Name="mname" Type="varchar" MaxLength="100" />
+          <Property Name="lname" Type="varchar" MaxLength="100" />
+          <Property Name="birthdate" Type="date" />
+          <Property Name="gender" Type="varchar" MaxLength="10" />
+          <Property Name="header" Type="varchar" MaxLength="100" />
+          <Property Name="asp_user_Id" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="tbl_worker_skill">
           <Key>
@@ -308,14 +310,12 @@ warning 6002: The table/view 'Job.dbo.tbl_category' does not have a primary key 
           <EntitySet Name="tbl_asp_users" EntityType="JobModel.tbl_asp_users" />
           <EntitySet Name="tbl_chat" EntityType="JobModel.tbl_chat" />
           <EntitySet Name="tbl_chat_attachment" EntityType="JobModel.tbl_chat_attachment" />
-          <EntitySet Name="tbl_company" EntityType="JobModel.tbl_company" />
           <EntitySet Name="tbl_company_job" EntityType="JobModel.tbl_company_job" />
           <EntitySet Name="tbl_notification" EntityType="JobModel.tbl_notification" />
           <EntitySet Name="tbl_project" EntityType="JobModel.tbl_project" />
           <EntitySet Name="tbl_project_participants" EntityType="JobModel.tbl_project_participants" />
           <EntitySet Name="tbl_requirements" EntityType="JobModel.tbl_requirements" />
           <EntitySet Name="tbl_skill" EntityType="JobModel.tbl_skill" />
-          <EntitySet Name="tbl_worker" EntityType="JobModel.tbl_worker" />
           <EntitySet Name="tbl_worker_skill" EntityType="JobModel.tbl_worker_skill" />
           <EntitySet Name="tbl_category" EntityType="JobModel.tbl_category" />
           <AssociationSet Name="FK_dbo_tbl_asp_user_claim_dbo_tbl_asp_users_UserId" Association="JobModel.FK_dbo_tbl_asp_user_claim_dbo_tbl_asp_users_UserId">
@@ -330,6 +330,8 @@ warning 6002: The table/view 'Job.dbo.tbl_category' does not have a primary key 
             <End Role="tbl_asp_role" EntitySet="tbl_asp_role" />
             <End Role="tbl_asp_users" EntitySet="tbl_asp_users" />
           </AssociationSet>
+          <EntitySet Name="tbl_company" EntityType="JobModel.tbl_company" />
+          <EntitySet Name="tbl_worker" EntityType="JobModel.tbl_worker" />
         </EntityContainer>
         <EntityType Name="C__MigrationHistory">
           <Key>
@@ -417,16 +419,6 @@ warning 6002: The table/view 'Job.dbo.tbl_category' does not have a primary key 
           <Property Name="attachmentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="path" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
         </EntityType>
-        <EntityType Name="tbl_company">
-          <Key>
-            <PropertyRef Name="companyId" />
-          </Key>
-          <Property Name="companyId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="description" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="address" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="categoryId" Type="Int32" Nullable="false" />
-        </EntityType>
         <EntityType Name="tbl_company_job">
           <Key>
             <PropertyRef Name="jobId" />
@@ -492,18 +484,6 @@ warning 6002: The table/view 'Job.dbo.tbl_category' does not have a primary key 
           <Property Name="title" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="categoryId" Type="Int32" Nullable="false" />
         </EntityType>
-        <EntityType Name="tbl_worker">
-          <Key>
-            <PropertyRef Name="workerId" />
-          </Key>
-          <Property Name="workerId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="fname" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="mname" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="lname" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="birthdate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="gender" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="header" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-        </EntityType>
         <EntityType Name="tbl_worker_skill">
           <Key>
             <PropertyRef Name="workerSkillId" />
@@ -551,6 +531,30 @@ warning 6002: The table/view 'Job.dbo.tbl_category' does not have a primary key 
           <End Type="JobModel.tbl_asp_role" Role="tbl_asp_role" Multiplicity="*" />
           <End Type="JobModel.tbl_asp_users" Role="tbl_asp_users" Multiplicity="*" />
         </Association>
+        <EntityType Name="tbl_company">
+          <Key>
+            <PropertyRef Name="companyId" />
+          </Key>
+          <Property Name="companyId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="address" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="categoryId" Type="Int32" />
+          <Property Name="asp_user_Id" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tbl_worker">
+          <Key>
+            <PropertyRef Name="workerId" />
+          </Key>
+          <Property Name="workerId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fname" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="mname" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="lname" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="birthdate" Type="DateTime" Precision="0" />
+          <Property Name="gender" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="header" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="asp_user_Id" Type="Int32" Nullable="false" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -642,17 +646,6 @@ warning 6002: The table/view 'Job.dbo.tbl_category' does not have a primary key 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="tbl_company">
-            <EntityTypeMapping TypeName="JobModel.tbl_company">
-              <MappingFragment StoreEntitySet="tbl_company">
-                <ScalarProperty Name="categoryId" ColumnName="categoryId" />
-                <ScalarProperty Name="address" ColumnName="address" />
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="companyId" ColumnName="companyId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="tbl_company_job">
             <EntityTypeMapping TypeName="JobModel.tbl_company_job">
               <MappingFragment StoreEntitySet="tbl_company_job">
@@ -724,19 +717,6 @@ warning 6002: The table/view 'Job.dbo.tbl_category' does not have a primary key 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="tbl_worker">
-            <EntityTypeMapping TypeName="JobModel.tbl_worker">
-              <MappingFragment StoreEntitySet="tbl_worker">
-                <ScalarProperty Name="header" ColumnName="header" />
-                <ScalarProperty Name="gender" ColumnName="gender" />
-                <ScalarProperty Name="birthdate" ColumnName="birthdate" />
-                <ScalarProperty Name="lname" ColumnName="lname" />
-                <ScalarProperty Name="mname" ColumnName="mname" />
-                <ScalarProperty Name="fname" ColumnName="fname" />
-                <ScalarProperty Name="workerId" ColumnName="workerId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="tbl_worker_skill">
             <EntityTypeMapping TypeName="JobModel.tbl_worker_skill">
               <MappingFragment StoreEntitySet="tbl_worker_skill">
@@ -761,6 +741,32 @@ warning 6002: The table/view 'Job.dbo.tbl_category' does not have a primary key 
               <ScalarProperty Name="Id" ColumnName="RoleId" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="tbl_company">
+            <EntityTypeMapping TypeName="JobModel.tbl_company">
+              <MappingFragment StoreEntitySet="tbl_company">
+                <ScalarProperty Name="asp_user_Id" ColumnName="asp_user_Id" />
+                <ScalarProperty Name="categoryId" ColumnName="categoryId" />
+                <ScalarProperty Name="address" ColumnName="address" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="companyId" ColumnName="companyId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_worker">
+            <EntityTypeMapping TypeName="JobModel.tbl_worker">
+              <MappingFragment StoreEntitySet="tbl_worker">
+                <ScalarProperty Name="asp_user_Id" ColumnName="asp_user_Id" />
+                <ScalarProperty Name="header" ColumnName="header" />
+                <ScalarProperty Name="gender" ColumnName="gender" />
+                <ScalarProperty Name="birthdate" ColumnName="birthdate" />
+                <ScalarProperty Name="lname" ColumnName="lname" />
+                <ScalarProperty Name="mname" ColumnName="mname" />
+                <ScalarProperty Name="fname" ColumnName="fname" />
+                <ScalarProperty Name="workerId" ColumnName="workerId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
