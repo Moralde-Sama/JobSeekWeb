@@ -179,20 +179,13 @@
     <Compile Include="Controllers\AmadController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\PartialViewsController.cs" />
+    <Compile Include="Controllers\WorkerController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\AspNetRole.cs">
-      <DependentUpon>Job.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\AspNetUser.cs">
-      <DependentUpon>Job.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\AspNetUserClaim.cs">
-      <DependentUpon>Job.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\AspNetUserLogin.cs">
+    <Compile Include="Models\C__MigrationHistory.cs">
       <DependentUpon>Job.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\IdentityModels.cs" />
@@ -213,6 +206,18 @@
     </Compile>
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\sysdiagram.cs">
+      <DependentUpon>Job.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tbl_asp_role.cs">
+      <DependentUpon>Job.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tbl_asp_users.cs">
+      <DependentUpon>Job.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tbl_asp_user_claim.cs">
+      <DependentUpon>Job.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tbl_asp_user_login.cs">
       <DependentUpon>Job.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_category.cs">
@@ -347,6 +352,8 @@
     <Content Include="Content\amade\ven\popper.js\umd\popper-utils.min.js" />
     <Content Include="Content\amade\ven\popper.js\umd\popper.js" />
     <Content Include="Content\amade\ven\popper.js\umd\popper.min.js" />
+    <Content Include="Content\Moralde\css\custom-materialize.css" />
+    <Content Include="Content\Moralde\Images\eriri.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -361,6 +368,11 @@
       <DependentUpon>Job.edmx</DependentUpon>
       <LastGenOutput>Job.cs</LastGenOutput>
     </Content>
+    <Content Include="Scripts\AngularJS\angular-route.min.js" />
+    <Content Include="Scripts\AngularJS\angular.min.js" />
+    <Content Include="Scripts\AngularJS\Controllers\companies-controller.js" />
+    <Content Include="Scripts\AngularJS\module.js" />
+    <Content Include="Scripts\AngularJS\Router\worker.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <EntityDeploy Include="Models\Job.edmx">
@@ -484,6 +496,9 @@
     <Content Include="Views\Amad\vendor\jquery.cookie\component.json" />
     <Content Include="Views\Amad\vendor\jquery.cookie\cookie.jquery.json" />
     <Content Include="Views\Amad\vendor\popper.js\umd\poppper.js.flow" />
+    <Content Include="Views\Shared\_WorkerLayout.cshtml" />
+    <Content Include="Views\PartialViews\WCompanies.cshtml" />
+    <Content Include="Views\PartialViews\WWorkerProfile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -491,6 +506,7 @@
     <Folder Include="Content\amade\ven\font-awesome\scss\" />
     <Folder Include="Views\Amad\vendor\font-awesome\less\" />
     <Folder Include="Views\Amad\vendor\font-awesome\scss\" />
+    <Folder Include="Views\Worker\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

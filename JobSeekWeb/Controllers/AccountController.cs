@@ -17,6 +17,7 @@ namespace JobSeekWeb.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private JobEntities db = new JobEntities();
 
         public AccountController()
         {
@@ -155,6 +156,20 @@ namespace JobSeekWeb.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    if (model.IsWorker)
+                    {
+                        tbl_worker worker = new tbl_worker();
+                        worker.asp_user_Id = user.Id;
+                        db.tbl_worker.Add(worker);
+                        await db.SaveChangesAsync();
+                    }
+                    else
+                    {
+                        tbl_company company = new tbl_company();
+                        company.asp_user_Id = user.Id;
+                        db.tbl_company.Add(company);
+                        await db.SaveChangesAsync();
+                    }
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
                     
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
