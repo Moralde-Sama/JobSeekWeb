@@ -25,11 +25,12 @@ namespace JobSeekWeb.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
-        public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
-        public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
-        public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
+        public virtual DbSet<C__MigrationHistory> C__MigrationHistory { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
+        public virtual DbSet<tbl_asp_role> tbl_asp_role { get; set; }
+        public virtual DbSet<tbl_asp_user_claim> tbl_asp_user_claim { get; set; }
+        public virtual DbSet<tbl_asp_user_login> tbl_asp_user_login { get; set; }
+        public virtual DbSet<tbl_asp_users> tbl_asp_users { get; set; }
         public virtual DbSet<tbl_chat> tbl_chat { get; set; }
         public virtual DbSet<tbl_chat_attachment> tbl_chat_attachment { get; set; }
         public virtual DbSet<tbl_company> tbl_company { get; set; }

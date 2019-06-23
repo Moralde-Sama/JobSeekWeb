@@ -12,17 +12,17 @@ namespace JobSeekWeb.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class AspNetUser
+    public partial class tbl_asp_users
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public AspNetUser()
+        public tbl_asp_users()
         {
-            this.AspNetUserClaims = new HashSet<AspNetUserClaim>();
-            this.AspNetUserLogins = new HashSet<AspNetUserLogin>();
-            this.AspNetRoles = new HashSet<AspNetRole>();
+            this.tbl_asp_user_claim = new HashSet<tbl_asp_user_claim>();
+            this.tbl_asp_user_login = new HashSet<tbl_asp_user_login>();
+            this.tbl_asp_role = new HashSet<tbl_asp_role>();
         }
     
-        public string Id { get; set; }
+        public int Id { get; set; }
         public string Email { get; set; }
         public bool EmailConfirmed { get; set; }
         public string PasswordHash { get; set; }
@@ -36,10 +36,10 @@ namespace JobSeekWeb.Models
         public string UserName { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AspNetUserClaim> AspNetUserClaims { get; set; }
+        public virtual ICollection<tbl_asp_user_claim> tbl_asp_user_claim { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AspNetUserLogin> AspNetUserLogins { get; set; }
+        public virtual ICollection<tbl_asp_user_login> tbl_asp_user_login { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AspNetRole> AspNetRoles { get; set; }
+        public virtual ICollection<tbl_asp_role> tbl_asp_role { get; set; }
     }
 }

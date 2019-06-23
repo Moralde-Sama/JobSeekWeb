@@ -12,18 +12,18 @@ namespace JobSeekWeb.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class AspNetRole
+    public partial class tbl_asp_role
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public AspNetRole()
+        public tbl_asp_role()
         {
-            this.AspNetUsers = new HashSet<AspNetUser>();
+            this.tbl_asp_users = new HashSet<tbl_asp_users>();
         }
     
-        public string Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AspNetUser> AspNetUsers { get; set; }
+        public virtual ICollection<tbl_asp_users> tbl_asp_users { get; set; }
     }
 }

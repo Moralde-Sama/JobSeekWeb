@@ -12,13 +12,13 @@ namespace JobSeekWeb.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class AspNetUserClaim
+    public partial class tbl_asp_user_claim
     {
         public int Id { get; set; }
-        public string UserId { get; set; }
+        public int UserId { get; set; }
         public string ClaimType { get; set; }
         public string ClaimValue { get; set; }
     
-        public virtual AspNetUser AspNetUser { get; set; }
+        public virtual tbl_asp_users tbl_asp_users { get; set; }
     }
 }
