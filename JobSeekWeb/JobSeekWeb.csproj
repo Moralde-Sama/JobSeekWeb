@@ -206,6 +206,7 @@
       <DependentUpon>Job.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\MyClass\User.cs" />
     <Compile Include="Models\MyClass\Worker.cs" />
     <Compile Include="Models\spWorker_getDetails_Result.cs">
       <DependentUpon>Job.tt</DependentUpon>

@@ -19,7 +19,7 @@ namespace JobSeekWeb.Models
             var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
             // Add custom user claims here
             
-            userIdentity.AddClaim(new Claim("IsWorker", Worker.IsWorker(userIdentity.GetUserId<int>()).ToString()));
+            userIdentity.AddClaim(new Claim("IsWorker", User.IsWorker(userIdentity.GetUserId<int>()).ToString()));
             return userIdentity;
         }
     }

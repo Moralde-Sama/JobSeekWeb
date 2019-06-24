@@ -27,10 +27,5 @@ namespace JobSeekWeb.Models.MyClass
             }
             return (completed.Contains(false)) ? false : true;
         }
-        public static bool IsWorker(int asp_userId)
-        {
-            Nullable<int> result = new JobEntities().spWorker_Exist(asp_userId).FirstOrDefault();
-            return result == 1 ? true : false;
-        }
     }
 }
