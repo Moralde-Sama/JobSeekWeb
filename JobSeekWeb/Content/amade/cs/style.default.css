@@ -1,4 +1,4 @@
-.custom-btn {
+.custom-btnn {
     -webkit-transition: background-color 0.8s;
     margin-left: 5px;
     text-decoration: none !important;
@@ -11,17 +11,26 @@
     border-radius: 5px;
     text-align: center;
 }
-.custom-btn:hover {
+.custom-btnn:hover {
     color: white;
     padding: 8px;
     background-color: #E7475E;
     -webkit-box-shadow: 0 2px 3px rgba(0, 0, 0, 0.08);
 }
-.custom-btn.active {
+.custom-btnn.active {
     color: white;
     padding: 8px;
     background-color: #E7475E;
     -webkit-box-shadow: 0 2px 3px rgba(0, 0, 0, 0.08);
+}
+@media (max-width: 991.98px) {
+    .custom_nav_item {
+        display: flex;
+        justify-content: center;
+    }
+    .custom-btnn.active {
+        width: 80%;
+    }
 }
 /*
 =========================================

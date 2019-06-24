@@ -5,7 +5,7 @@ using System.Web;
 
 namespace JobSeekWeb.Models.MyClass
 {
-    public class User
+    public class Users
     {
         public static bool IsWorker(int asp_userId)
         {

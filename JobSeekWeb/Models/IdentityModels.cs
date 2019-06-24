@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Entity;
-using System.Data.Entity.ModelConfiguration.Conventions;
+﻿using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using JobSeekWeb.Models.MyClass;
@@ -19,7 +16,7 @@ namespace JobSeekWeb.Models
             var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
             // Add custom user claims here
             
-            userIdentity.AddClaim(new Claim("IsWorker", User.IsWorker(userIdentity.GetUserId<int>()).ToString()));
+            userIdentity.AddClaim(new Claim("IsWorker", Users.IsWorker(userIdentity.GetUserId<int>()).ToString()));
             return userIdentity;
         }
     }
