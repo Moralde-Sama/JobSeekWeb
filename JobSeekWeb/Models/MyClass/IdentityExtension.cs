@@ -14,5 +14,10 @@ namespace JobSeekWeb.Extensions
             var claim = ((ClaimsIdentity)identity).FindFirst("IsWorker");
             return (claim != null) ? claim.Value : string.Empty;
         }
+        public static string GetWorkerOrCompanyId(this IIdentity identity)
+        {
+            var claim = ((ClaimsIdentity)identity).FindFirst("WorkCompanyId");
+            return (claim != null) ? claim.Value : string.Empty;
+        }
     }
 }

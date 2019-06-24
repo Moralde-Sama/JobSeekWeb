@@ -359,6 +359,7 @@
     <Content Include="Content\amade\ven\popper.js\umd\popper.js" />
     <Content Include="Content\amade\ven\popper.js\umd\popper.min.js" />
     <Content Include="Content\Moralde\css\custom-materialize.css" />
+    <Content Include="Content\Moralde\css\worker-css.css" />
     <Content Include="Content\Moralde\Images\eriri.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />

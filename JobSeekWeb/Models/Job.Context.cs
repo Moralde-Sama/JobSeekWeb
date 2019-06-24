@@ -43,8 +43,8 @@ namespace JobSeekWeb.Models
         public virtual DbSet<tbl_skill> tbl_skill { get; set; }
         public virtual DbSet<tbl_worker_skill> tbl_worker_skill { get; set; }
         public virtual DbSet<tbl_company> tbl_company { get; set; }
-        public virtual DbSet<tbl_worker> tbl_worker { get; set; }
         public virtual DbSet<tbl_category> tbl_category { get; set; }
+        public virtual DbSet<tbl_worker> tbl_worker { get; set; }
     
         public virtual ObjectResult<Nullable<int>> spWorker_Exist(Nullable<int> asp_userId)
         {
@@ -62,6 +62,65 @@ namespace JobSeekWeb.Models
                 new ObjectParameter("asp_userId", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spWorker_getDetails_Result>("spWorker_getDetails", asp_userIdParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<int>> spCompany_getCompanyId(Nullable<int> asp_userId)
+        {
+            var asp_userIdParameter = asp_userId.HasValue ?
+                new ObjectParameter("asp_userId", asp_userId) :
+                new ObjectParameter("asp_userId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("spCompany_getCompanyId", asp_userIdParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<int>> spWorker_getWorkerId(Nullable<int> asp_userId)
+        {
+            var asp_userIdParameter = asp_userId.HasValue ?
+                new ObjectParameter("asp_userId", asp_userId) :
+                new ObjectParameter("asp_userId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("spWorker_getWorkerId", asp_userIdParameter);
+        }
+    
+        public virtual int spWorker_updateDetails(Nullable<int> workerId, string fname, string mname, string lname, Nullable<System.DateTime> birthdate, string gender, string header, string country, string cellnum)
+        {
+            var workerIdParameter = workerId.HasValue ?
+                new ObjectParameter("workerId", workerId) :
+                new ObjectParameter("workerId", typeof(int));
+    
+            var fnameParameter = fname != null ?
+                new ObjectParameter("fname", fname) :
+                new ObjectParameter("fname", typeof(string));
+    
+            var mnameParameter = mname != null ?
+                new ObjectParameter("mname", mname) :
+                new ObjectParameter("mname", typeof(string));
+    
+            var lnameParameter = lname != null ?
+                new ObjectParameter("lname", lname) :
+                new ObjectParameter("lname", typeof(string));
+    
+            var birthdateParameter = birthdate.HasValue ?
+                new ObjectParameter("birthdate", birthdate) :
+                new ObjectParameter("birthdate", typeof(System.DateTime));
+    
+            var genderParameter = gender != null ?
+                new ObjectParameter("gender", gender) :
+                new ObjectParameter("gender", typeof(string));
+    
+            var headerParameter = header != null ?
+                new ObjectParameter("header", header) :
+                new ObjectParameter("header", typeof(string));
+    
+            var countryParameter = country != null ?
+                new ObjectParameter("country", country) :
+                new ObjectParameter("country", typeof(string));
+    
+            var cellnumParameter = cellnum != null ?
+                new ObjectParameter("cellnum", cellnum) :
+                new ObjectParameter("cellnum", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("spWorker_updateDetails", workerIdParameter, fnameParameter, mnameParameter, lnameParameter, birthdateParameter, genderParameter, headerParameter, countryParameter, cellnumParameter);
         }
     }
 }

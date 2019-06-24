@@ -22,5 +22,7 @@ namespace JobSeekWeb.Models
         public string gender { get; set; }
         public string header { get; set; }
         public int asp_user_Id { get; set; }
+        public string country { get; set; }
+        public string cellnum { get; set; }
     }
 }

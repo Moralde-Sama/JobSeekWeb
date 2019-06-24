@@ -188,6 +188,8 @@
           <Property Name="gender" Type="varchar" MaxLength="10" />
           <Property Name="header" Type="varchar" MaxLength="100" />
           <Property Name="asp_user_Id" Type="int" Nullable="false" />
+          <Property Name="country" Type="varchar" MaxLength="50" />
+          <Property Name="cellnum" Type="varchar" MaxLength="12" />
         </EntityType>
         <EntityType Name="tbl_worker_skill">
           <Key>
@@ -252,11 +254,28 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="spCompany_getCompanyId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="asp_userId" Type="int" Mode="In" />
+        </Function>
         <Function Name="spWorker_Exist" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="asp_userId" Type="int" Mode="In" />
         </Function>
         <Function Name="spWorker_getDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="asp_userId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="spWorker_getWorkerId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="asp_userId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="spWorker_updateDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="workerId" Type="int" Mode="In" />
+          <Parameter Name="fname" Type="varchar" Mode="In" />
+          <Parameter Name="mname" Type="varchar" Mode="In" />
+          <Parameter Name="lname" Type="varchar" Mode="In" />
+          <Parameter Name="birthdate" Type="datetime" Mode="In" />
+          <Parameter Name="gender" Type="varchar" Mode="In" />
+          <Parameter Name="header" Type="varchar" Mode="In" />
+          <Parameter Name="country" Type="varchar" Mode="In" />
+          <Parameter Name="cellnum" Type="varchar" Mode="In" />
         </Function>
         <EntityContainer Name="JobModelStoreContainer">
           <EntitySet Name="__MigrationHistory" EntityType="Self.__MigrationHistory" Schema="dbo" store:Type="Tables" />
@@ -328,13 +347,30 @@
             <End Role="tbl_asp_users" EntitySet="tbl_asp_users" />
           </AssociationSet>
           <EntitySet Name="tbl_company" EntityType="JobModel.tbl_company" />
-          <EntitySet Name="tbl_worker" EntityType="JobModel.tbl_worker" />
           <EntitySet Name="tbl_category" EntityType="JobModel.tbl_category" />
           <FunctionImport Name="spWorker_Exist" ReturnType="Collection(Int32)">
           <Parameter Name="asp_userId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="spWorker_getDetails" ReturnType="Collection(JobModel.spWorker_getDetails_Result)">
-            <Parameter Name="asp_userId" Mode="In" Type="Int32" />
+          <Parameter Name="asp_userId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="tbl_worker" EntityType="JobModel.tbl_worker" />
+          <FunctionImport Name="spCompany_getCompanyId" ReturnType="Collection(Int32)">
+          <Parameter Name="asp_userId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="spWorker_getWorkerId" ReturnType="Collection(Int32)">
+          <Parameter Name="asp_userId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="spWorker_updateDetails">
+            <Parameter Name="workerId" Mode="In" Type="Int32" />
+            <Parameter Name="fname" Mode="In" Type="String" />
+            <Parameter Name="mname" Mode="In" Type="String" />
+            <Parameter Name="lname" Mode="In" Type="String" />
+            <Parameter Name="birthdate" Mode="In" Type="DateTime" />
+            <Parameter Name="gender" Mode="In" Type="String" />
+            <Parameter Name="header" Mode="In" Type="String" />
+            <Parameter Name="country" Mode="In" Type="String" />
+            <Parameter Name="cellnum" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="C__MigrationHistory">
@@ -538,19 +574,6 @@
           <Property Name="categoryId" Type="Int32" />
           <Property Name="asp_user_Id" Type="Int32" Nullable="false" />
         </EntityType>
-        <EntityType Name="tbl_worker">
-          <Key>
-            <PropertyRef Name="workerId" />
-          </Key>
-          <Property Name="workerId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="fname" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="mname" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="lname" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="birthdate" Type="DateTime" Precision="0" />
-          <Property Name="gender" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="header" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="asp_user_Id" Type="Int32" Nullable="false" />
-        </EntityType>
         <EntityType Name="tbl_category">
           <Key>
             <PropertyRef Name="categoryId" />
@@ -568,6 +591,21 @@
           <Property Type="String" Name="header" Nullable="true" MaxLength="100" />
           <Property Type="Int32" Name="asp_user_Id" Nullable="false" />
         </ComplexType>
+        <EntityType Name="tbl_worker">
+          <Key>
+            <PropertyRef Name="workerId" />
+          </Key>
+          <Property Name="workerId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fname" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="mname" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="lname" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="birthdate" Type="DateTime" Precision="0" />
+          <Property Name="gender" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="header" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="asp_user_Id" Type="Int32" Nullable="false" />
+          <Property Name="country" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="cellnum" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -758,20 +796,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="tbl_worker">
-            <EntityTypeMapping TypeName="JobModel.tbl_worker">
-              <MappingFragment StoreEntitySet="tbl_worker">
-                <ScalarProperty Name="asp_user_Id" ColumnName="asp_user_Id" />
-                <ScalarProperty Name="header" ColumnName="header" />
-                <ScalarProperty Name="gender" ColumnName="gender" />
-                <ScalarProperty Name="birthdate" ColumnName="birthdate" />
-                <ScalarProperty Name="lname" ColumnName="lname" />
-                <ScalarProperty Name="mname" ColumnName="mname" />
-                <ScalarProperty Name="fname" ColumnName="fname" />
-                <ScalarProperty Name="workerId" ColumnName="workerId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="tbl_category">
             <EntityTypeMapping TypeName="JobModel.tbl_category">
               <MappingFragment StoreEntitySet="tbl_category">
@@ -795,6 +819,25 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="tbl_worker">
+            <EntityTypeMapping TypeName="JobModel.tbl_worker">
+              <MappingFragment StoreEntitySet="tbl_worker">
+                <ScalarProperty Name="cellnum" ColumnName="cellnum" />
+                <ScalarProperty Name="country" ColumnName="country" />
+                <ScalarProperty Name="asp_user_Id" ColumnName="asp_user_Id" />
+                <ScalarProperty Name="header" ColumnName="header" />
+                <ScalarProperty Name="gender" ColumnName="gender" />
+                <ScalarProperty Name="birthdate" ColumnName="birthdate" />
+                <ScalarProperty Name="lname" ColumnName="lname" />
+                <ScalarProperty Name="mname" ColumnName="mname" />
+                <ScalarProperty Name="fname" ColumnName="fname" />
+                <ScalarProperty Name="workerId" ColumnName="workerId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="spCompany_getCompanyId" FunctionName="JobModel.Store.spCompany_getCompanyId" />
+          <FunctionImportMapping FunctionImportName="spWorker_getWorkerId" FunctionName="JobModel.Store.spWorker_getWorkerId" />
+          <FunctionImportMapping FunctionImportName="spWorker_updateDetails" FunctionName="JobModel.Store.spWorker_updateDetails" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
