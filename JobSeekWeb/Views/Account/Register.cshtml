@@ -1,41 +1,93 @@
-﻿@model JobSeekWeb.Models.RegisterViewModel
+﻿
+@model JobSeekWeb.Models.RegisterViewModel
 @{
     ViewBag.Title = "Register";
+    Layout = "";
 }
 
-<h2>@ViewBag.Title.</h2>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>COMPANY UNKNOWN</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="all,follow">
+    <link rel="stylesheet" href="~/Content/amade/ven/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/Content/amade/ven/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,600">
+    <link rel="stylesheet" href="~/Content/amade/ven/lightbox2/css/lightbox.css">
+    <link rel="stylesheet" href="~/Content/amade/cs/fontastic.css">
+    <link href="~/Content/amade/cs/bootsrat.css" rel="stylesheet">
+    <link href="~/Content/amade/cs/custom.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <section class="hero">
+        <div id="cons" tabindex="-1" role="dialog" aria-hidden="false">
+            <div role="document" class=" modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header border-bottom-0">
+                        <a href="/" class="close" style="color: white; border-radius: 5px; text-align: center; padding: 4px 0 0 2px;">
+                            X
+                        </a>
+                    </div>
+                    <div class="modal-body p-4 p-lg-5">
+                        <div class="tabbable-line">
+                            <ul class="nav nav-pills nav-fill">
+                                <li class="nav-item active">
+                                    <a id="btnWorker" data-toggle="tab" style="cursor: pointer;">Worker</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a id="btnCompany" data-toggle="tab" style="cursor: pointer;">Company </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <br>
 
-@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-{
-    @Html.AntiForgeryToken()
-    <h4>Create a new account.</h4>
-    <hr />
-    @Html.ValidationSummary("", new { @class = "text-danger" })
-    <div class="form-group">
-        @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                        @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <hr />
+                            <input checked="checked" id="IsWorker" name="IsWorker" type="checkbox" value="true" style="opacity: 0;" />
+                            @Html.ValidationSummary("", new { @class = "text-danger" })
+                            <div class="form-group" style="padding: 0 20px;">
+                                @Html.LabelFor(m => m.Email, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group" style="padding: 0 20px;">
+                                @Html.LabelFor(m => m.Password, new { @class = "control-label" })
+                                @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group" style="padding: 0 20px;">
+                                @Html.LabelFor(m => m.ConfirmPassword, new { @class = "control-label" })
+                                @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group" style="padding: 0 20px; display: flex; justify-content: center;">
+                                <input type="submit" class="custom-btn" value="Register" style="background-color: #E7475E;" />
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-        </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" class="btn btn-default" value="Register" />
-        </div>
-    </div>
-}
+    </section>
+</body>
+</html>
 
+<script>
+    document.getElementById("btnWorker").addEventListener("click", function () {
+        setCheckboxValue(true);
+    })
+    document.getElementById("btnCompany").addEventListener("click", function () {
+        setCheckboxValue(false);
+    })
+    function setCheckboxValue(isWorkerSelected) {
+        document.getElementById("IsWorker").value = isWorkerSelected ? true : false;
+    }
+</script>
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }

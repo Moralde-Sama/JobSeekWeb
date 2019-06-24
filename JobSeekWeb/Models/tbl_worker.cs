@@ -18,8 +18,9 @@ namespace JobSeekWeb.Models
         public string fname { get; set; }
         public string mname { get; set; }
         public string lname { get; set; }
-        public System.DateTime birthdate { get; set; }
+        public Nullable<System.DateTime> birthdate { get; set; }
         public string gender { get; set; }
         public string header { get; set; }
+        public int asp_user_Id { get; set; }
     }
 }

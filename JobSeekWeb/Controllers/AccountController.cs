@@ -9,6 +9,8 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using JobSeekWeb.Models;
+using JobSeekWeb.Extensions;
+using JobSeekWeb.Models.MyClass;
 
 namespace JobSeekWeb.Controllers
 {
@@ -17,6 +19,7 @@ namespace JobSeekWeb.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private JobEntities db = new JobEntities();
 
         public AccountController()
         {
@@ -72,14 +75,14 @@ namespace JobSeekWeb.Controllers
             {
                 return View(model);
             }
-
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                    return RedirectToAction("PageByRole", "Home");
+                    //return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
@@ -155,6 +158,20 @@ namespace JobSeekWeb.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    if (model.IsWorker)
+                    {
+                        tbl_worker worker = new tbl_worker();
+                        worker.asp_user_Id = user.Id;
+                        db.tbl_worker.Add(worker);
+                        await db.SaveChangesAsync();
+                    }
+                    else
+                    {
+                        tbl_company company = new tbl_company();
+                        company.asp_user_Id = user.Id;
+                        db.tbl_company.Add(company);
+                        await db.SaveChangesAsync();
+                    }
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
                     
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
@@ -288,7 +305,7 @@ namespace JobSeekWeb.Controllers
         public async Task<ActionResult> SendCode(string returnUrl, bool rememberMe)
         {
             var userId = await SignInManager.GetVerifiedUserIdAsync();
-            if (userId == null)
+            if (userId < 0)
             {
                 return View("Error");
             }

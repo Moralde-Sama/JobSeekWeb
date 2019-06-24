@@ -1,0 +1,54 @@
+﻿
+@{
+    Layout = "";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Worker</title>
+    <base href="/" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><link href="~/Content/Moralde/css/custom-materialize.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+</head>
+<body ng-app="Job">
+    <div class="navbar-fixed">
+        <nav>
+            <div class="nav-wrapper pink">
+                <a href="#!" class="brand-logo">Logo</a>
+                <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+                <ul class="right hide-on-med-and-down">
+                    <li><a href="sass.html">Sass</a></li>
+                    <li><a href="badges.html">Components</a></li>
+                    <li><a href="collapsible.html">Javascript</a></li>
+                    <li><a href="mobile.html">Mobile</a></li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+
+    <ul class="sidenav" id="mobile-demo">
+        <li><a href="sass.html">Sass</a></li>
+        <li><a href="badges.html">Components</a></li>
+        <li><a href="collapsible.html">Javascript</a></li>
+        <li><a href="mobile.html">Mobile</a></li>
+    </ul>
+    <div class="container">
+        <ng-view></ng-view>
+    </div>
+
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <script src="~/Scripts/AngularJS/angular.min.js"></script>
+    <script src="~/Scripts/AngularJS/angular-route.min.js"></script>
+    <script src="~/Scripts/AngularJS/Module.js"></script>
+    <script src="~/Scripts/AngularJS/Controllers/companies-controller.js"></script>
+    <script src="~/Scripts/AngularJS/Router/worker.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.sidenav').sidenav();
+        });
+    </script>
+</body>
+</html>

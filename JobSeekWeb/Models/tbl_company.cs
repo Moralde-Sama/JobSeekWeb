@@ -18,6 +18,7 @@ namespace JobSeekWeb.Models
         public string name { get; set; }
         public string description { get; set; }
         public string address { get; set; }
-        public int categoryId { get; set; }
+        public Nullable<int> categoryId { get; set; }
+        public int asp_user_Id { get; set; }
     }
 }

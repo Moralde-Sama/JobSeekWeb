@@ -1,4 +1,6 @@
-﻿using System;
+﻿using JobSeekWeb.Models.MyClass;
+using Microsoft.AspNet.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -13,18 +15,28 @@ namespace JobSeekWeb.Controllers
             return View();
         }
 
-        public ActionResult About()
+        public ActionResult FAQ()
         {
-            ViewBag.Message = "Your application description page.";
-
             return View();
         }
 
         public ActionResult Contact()
         {
-            ViewBag.Message = "Your contact page.";
-
             return View();
+        }
+        [Authorize]
+        public ActionResult PageByRole()
+        {
+            int asp_userId = User.Identity.GetUserId<int>();
+            if (Users.IsWorker(asp_userId))
+            {
+                return (Worker.IsDetailsCompleted(asp_userId)) ? RedirectToAction("Profile", "Worker") :
+                        RedirectToAction("Dashboard", "Worker");
+            } 
+            else
+            {
+                return RedirectToAction("Index");
+            }
         }
     }
 }
