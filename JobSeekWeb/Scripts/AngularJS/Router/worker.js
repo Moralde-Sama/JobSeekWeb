@@ -1,6 +1,6 @@
 ﻿module.config(function($routeProvider, $locationProvider) {
     $routeProvider
-        .when("/Worker/WorkerProfile", {
+        .when("/Worker/Profile", {
             templateUrl: "../PartialViews/WWorkerProfile",
             controller: "WorkerProfileCtrl"
         })

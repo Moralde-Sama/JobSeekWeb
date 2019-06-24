@@ -207,6 +207,9 @@
     </Compile>
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MyClass\Worker.cs" />
+    <Compile Include="Models\spWorker_getDetails_Result.cs">
+      <DependentUpon>Job.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\sysdiagram.cs">
       <DependentUpon>Job.tt</DependentUpon>
     </Compile>
