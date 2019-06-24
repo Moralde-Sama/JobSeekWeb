@@ -60,6 +60,7 @@ namespace JobSeekWeb.Models
 
         [Display(Name = "Remember me?")]
         public bool RememberMe { get; set; }
+        public bool IsWorker { get; set; }
     }
 
     public class RegisterViewModel

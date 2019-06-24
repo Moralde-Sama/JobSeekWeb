@@ -12,6 +12,8 @@ namespace JobSeekWeb.Models
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class JobEntities : DbContext
     {
@@ -40,8 +42,17 @@ namespace JobSeekWeb.Models
         public virtual DbSet<tbl_requirements> tbl_requirements { get; set; }
         public virtual DbSet<tbl_skill> tbl_skill { get; set; }
         public virtual DbSet<tbl_worker_skill> tbl_worker_skill { get; set; }
-        public virtual DbSet<tbl_category> tbl_category { get; set; }
         public virtual DbSet<tbl_company> tbl_company { get; set; }
         public virtual DbSet<tbl_worker> tbl_worker { get; set; }
+        public virtual DbSet<tbl_category> tbl_category { get; set; }
+    
+        public virtual ObjectResult<Nullable<int>> spWorker_Exist(Nullable<int> asp_userId)
+        {
+            var asp_userIdParameter = asp_userId.HasValue ?
+                new ObjectParameter("asp_userId", asp_userId) :
+                new ObjectParameter("asp_userId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("spWorker_Exist", asp_userIdParameter);
+        }
     }
 }

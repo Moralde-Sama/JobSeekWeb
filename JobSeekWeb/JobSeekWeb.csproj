@@ -188,6 +188,7 @@
     <Compile Include="Models\C__MigrationHistory.cs">
       <DependentUpon>Job.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\MyClass\IdentityExtension.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Job.Context.cs">
       <AutoGen>True</AutoGen>
@@ -205,6 +206,7 @@
       <DependentUpon>Job.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\MyClass\Worker.cs" />
     <Compile Include="Models\sysdiagram.cs">
       <DependentUpon>Job.tt</DependentUpon>
     </Compile>

@@ -76,14 +76,11 @@
           <Property Name="AccessFailedCount" Type="int" Nullable="false" />
           <Property Name="UserName" Type="nvarchar" MaxLength="256" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'Job.dbo.tbl_category' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="tbl_category">
           <Key>
             <PropertyRef Name="categoryId" />
-            <PropertyRef Name="title" />
           </Key>
-          <Property Name="categoryId" Type="int" Nullable="false" />
+          <Property Name="categoryId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="title" Type="varchar" MaxLength="200" Nullable="false" />
         </EntityType>
         <EntityType Name="tbl_chat">
@@ -255,6 +252,9 @@ warning 6002: The table/view 'Job.dbo.tbl_category' does not have a primary key 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="spWorker_Exist" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="asp_userId" Type="int" Mode="In" />
+        </Function>
         <EntityContainer Name="JobModelStoreContainer">
           <EntitySet Name="__MigrationHistory" EntityType="Self.__MigrationHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
@@ -263,6 +263,7 @@ warning 6002: The table/view 'Job.dbo.tbl_category' does not have a primary key 
           <EntitySet Name="tbl_asp_user_login" EntityType="Self.tbl_asp_user_login" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl_asp_user_role" EntityType="Self.tbl_asp_user_role" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl_asp_users" EntityType="Self.tbl_asp_users" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_category" EntityType="Self.tbl_category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl_chat" EntityType="Self.tbl_chat" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl_chat_attachment" EntityType="Self.tbl_chat_attachment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl_company" EntityType="Self.tbl_company" Schema="dbo" store:Type="Tables" />
@@ -274,12 +275,6 @@ warning 6002: The table/view 'Job.dbo.tbl_category' does not have a primary key 
           <EntitySet Name="tbl_skill" EntityType="Self.tbl_skill" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl_worker" EntityType="Self.tbl_worker" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl_worker_skill" EntityType="Self.tbl_worker_skill" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="tbl_category" EntityType="Self.tbl_category" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [tbl_category].[categoryId] AS [categoryId], 
-    [tbl_category].[title] AS [title]
-    FROM [dbo].[tbl_category] AS [tbl_category]</DefiningQuery>
-          </EntitySet>
           <AssociationSet Name="FK_dbo_tbl_asp_user_claim_dbo_tbl_asp_users_UserId" Association="Self.FK_dbo_tbl_asp_user_claim_dbo_tbl_asp_users_UserId">
             <End Role="tbl_asp_users" EntitySet="tbl_asp_users" />
             <End Role="tbl_asp_user_claim" EntitySet="tbl_asp_user_claim" />
@@ -317,7 +312,6 @@ warning 6002: The table/view 'Job.dbo.tbl_category' does not have a primary key 
           <EntitySet Name="tbl_requirements" EntityType="JobModel.tbl_requirements" />
           <EntitySet Name="tbl_skill" EntityType="JobModel.tbl_skill" />
           <EntitySet Name="tbl_worker_skill" EntityType="JobModel.tbl_worker_skill" />
-          <EntitySet Name="tbl_category" EntityType="JobModel.tbl_category" />
           <AssociationSet Name="FK_dbo_tbl_asp_user_claim_dbo_tbl_asp_users_UserId" Association="JobModel.FK_dbo_tbl_asp_user_claim_dbo_tbl_asp_users_UserId">
             <End Role="tbl_asp_users" EntitySet="tbl_asp_users" />
             <End Role="tbl_asp_user_claim" EntitySet="tbl_asp_user_claim" />
@@ -332,6 +326,10 @@ warning 6002: The table/view 'Job.dbo.tbl_category' does not have a primary key 
           </AssociationSet>
           <EntitySet Name="tbl_company" EntityType="JobModel.tbl_company" />
           <EntitySet Name="tbl_worker" EntityType="JobModel.tbl_worker" />
+          <EntitySet Name="tbl_category" EntityType="JobModel.tbl_category" />
+          <FunctionImport Name="spWorker_Exist" ReturnType="Collection(Int32)">
+            <Parameter Name="asp_userId" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="C__MigrationHistory">
           <Key>
@@ -491,14 +489,6 @@ warning 6002: The table/view 'Job.dbo.tbl_category' does not have a primary key 
           <Property Name="workerSkillId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="skillId" Type="Int32" Nullable="false" />
         </EntityType>
-        <EntityType Name="tbl_category">
-          <Key>
-            <PropertyRef Name="categoryId" />
-            <PropertyRef Name="title" />
-          </Key>
-          <Property Name="categoryId" Type="Int32" Nullable="false" />
-          <Property Name="title" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
-        </EntityType>
         <Association Name="FK_dbo_tbl_asp_user_claim_dbo_tbl_asp_users_UserId">
           <End Type="JobModel.tbl_asp_users" Role="tbl_asp_users" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -554,6 +544,13 @@ warning 6002: The table/view 'Job.dbo.tbl_category' does not have a primary key 
           <Property Name="gender" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="header" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="asp_user_Id" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tbl_category">
+          <Key>
+            <PropertyRef Name="categoryId" />
+          </Key>
+          <Property Name="categoryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="title" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -725,14 +722,6 @@ warning 6002: The table/view 'Job.dbo.tbl_category' does not have a primary key 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="tbl_category">
-            <EntityTypeMapping TypeName="JobModel.tbl_category">
-              <MappingFragment StoreEntitySet="tbl_category">
-                <ScalarProperty Name="title" ColumnName="title" />
-                <ScalarProperty Name="categoryId" ColumnName="categoryId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <AssociationSetMapping Name="tbl_asp_user_role" TypeName="JobModel.tbl_asp_user_role" StoreEntitySet="tbl_asp_user_role">
             <EndProperty Name="tbl_asp_users">
               <ScalarProperty Name="Id" ColumnName="UserId" />
@@ -767,6 +756,15 @@ warning 6002: The table/view 'Job.dbo.tbl_category' does not have a primary key 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="tbl_category">
+            <EntityTypeMapping TypeName="JobModel.tbl_category">
+              <MappingFragment StoreEntitySet="tbl_category">
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="categoryId" ColumnName="categoryId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="spWorker_Exist" FunctionName="JobModel.Store.spWorker_Exist" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
