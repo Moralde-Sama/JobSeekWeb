@@ -6,3 +6,11 @@
     display: flex;
     justify-content: center;
 }
+@media (max-width: 576px) {
+    .form-group.margin {
+        margin-top: 15px !important;
+    }
+    #lblprovince {
+        margin-top: 12px
+    }
+}
