@@ -23,6 +23,7 @@ namespace JobSeekWeb.Models.MyClass
         public int province { get; set; }
         public int city { get; set; }
         public int brgy { get; set; }
+        public string prof_path { get; set; }
 
         public void UpdateProfileDetails()
         {

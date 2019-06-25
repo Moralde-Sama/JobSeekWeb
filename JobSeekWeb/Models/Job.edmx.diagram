@@ -24,8 +24,8 @@
         <AssociationConnector Association="JobModel.tbl_asp_user_role" />
         <EntityTypeShape EntityType="JobModel.tbl_company" Width="1.5" PointX="9.375" PointY="10.75" />
         <EntityTypeShape EntityType="JobModel.tbl_category" Width="1.5" PointX="11.375" PointY="7.75" />
-        <EntityTypeShape EntityType="JobModel.tbl_worker" Width="1.5" PointX="11.375" PointY="10.75" />
         <EntityTypeShape EntityType="JobModel.tbl_worker_skill" Width="1.5" PointX="11.375" PointY="3.75" />
+        <EntityTypeShape EntityType="JobModel.tbl_worker" Width="1.5" PointX="11.375" PointY="10.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

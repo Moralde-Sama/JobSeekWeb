@@ -17,20 +17,13 @@ namespace JobSeekWeb.Controllers
         JobEntities db = new JobEntities();
         public ActionResult Dashboard()
         {
-            if (User.Identity.IsWorker() == "True")
+            if (Worker.IsDetailsCompleted(User.Identity.GetUserId<int>()))
             {
-                if (Worker.IsDetailsCompleted(User.Identity.GetUserId<int>()))
-                {
-                    return View("~/Views/Shared/_WorkerLayout.cshtml");
-                }
-                else
-                {
-                    return RedirectToAction("Profile", "Worker");
-                }
+                return View("~/Views/Shared/_WorkerLayout.cshtml");
             }
             else
             {
-                return RedirectToAction("Profile");
+                return RedirectToAction("Profile", "Worker");
             }
         }
         [AllowAnonymous]
@@ -40,7 +33,14 @@ namespace JobSeekWeb.Controllers
         }
         public new ActionResult Profile()
         {
-            return View("~/Views/Shared/_WorkerLayout.cshtml");
+            if (Worker.IsDetailsCompleted(User.Identity.GetUserId<int>()))
+            {
+                return RedirectToAction("Dashboard", "Worker");
+            }
+            else
+            {
+                return View("~/Views/Shared/_WorkerLayout.cshtml");
+            }
         }
 
         [HttpPost]
@@ -50,7 +50,9 @@ namespace JobSeekWeb.Controllers
             //{
                 worker.workerId = Convert.ToInt32(User.Identity.GetWorkerOrCompanyId());
                 worker.asp_user_Id = Convert.ToInt32(User.Identity.GetUserId<int>());
-                //worker.UpdateProfileDetails();
+                worker.prof_path = "/Content/Moralde/Images/eriri.png";
+                worker.header = "Test";
+                worker.UpdateProfileDetails();
                 if(skillIds != null)
                 {
                     foreach (int skillId in skillIds)

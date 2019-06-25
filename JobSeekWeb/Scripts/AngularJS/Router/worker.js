@@ -4,7 +4,7 @@
             templateUrl: "../PartialViews/WWorkerProfile",
             controller: "WorkerProfileCtrl"
         })
-        .when("/Worker/DashboardNo", {
+        .when("/Worker/Dashboard", {
             templateUrl: "../PartialViews/WWorkerDashboard",
             controller: "DashboardCtrl"
         })

@@ -20,7 +20,12 @@ module.controller("CompaniesCtrl", ["$scope", "$http", function (s, h) {
     s.list = [0, 1, 2, 3, 4];
 }])
 module.controller("DashboardCtrl", ["$scope", "$http", function (s, h) {
-    s.list = [0, 1, 2, 3, 4];
+    //console.log("Wala");
+    //var interval = setInterval(function () {
+    //    clearInterval(interval);
+    //    window.location = "../";
+    //    console.log("Wala");
+    //}, 2000);
 }])
 module.controller("WorkerProfileCtrl", ["$scope", "$http", "$q", "workerService", function (s, h, q, service) {
 
@@ -86,36 +91,36 @@ module.controller("WorkerProfileCtrl", ["$scope", "$http", "$q", "workerService"
                         skillIds.push(parseInt(value.id));
                     }
                 });
-                //Swal.fire(
-                //      'Saved Successfully!',
-                //      '',
-                //      'success'
-                //)
                 sendDataHttp("../Worker/svProfDetails", {
                     worker: s.data,
                     skillIds: skillIds,
                     newskills: skillsNew
                 }, (result) => {
                     console.log(result);
-                        if (result == "Success") {
-                            Swal.fire(
-                                'Saved Successfully!',
-                                '',
-                                'success'
-                            )
-                        } else {
-                            Swal.fire(
-                                'Error!',
-                                'Please check your internet connection',
-                                'error'
-                            )
-                            console.log(result);
-                        }
+                    if (result == "Success") {
+                        Swal.fire({
+                            title: 'Saved Successfully!',
+                            text: "",
+                            type: 'success',
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Ok'
+                        }).then((result) => {
+                            window.location = "../Worker/Dashboard";
+                        })
+                    } else {
+                        Swal.fire(
+                            'Error!',
+                            'Please check your internet connection',
+                            'error'
+                        )
+                        console.log(result);
+                    }
                 })
             }
         })
     }
-    
+
     //Methods
     function destroySelect2(selectId) {
         var select = $(`#${selectId}`);
