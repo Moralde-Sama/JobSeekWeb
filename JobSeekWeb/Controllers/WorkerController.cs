@@ -64,6 +64,8 @@ namespace JobSeekWeb.Controllers
                     foreach (string title in newskills)
                     {
                         worker.AddNewSkill(title);
+                        worker.skillId = Skills.getSkillDetailsByTitle(title).skillId;
+                        worker.AddSkill(worker.workerId);
                     }
                 }
                 return Json("Success", JsonRequestBehavior.AllowGet);

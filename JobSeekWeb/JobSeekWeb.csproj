@@ -624,6 +624,7 @@
     <Content Include="Views\Home\FAQ.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\PartialViews\WWorkerDashboard.cshtml" />
+    <Content Include="Views\Amad\Dashboard.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
