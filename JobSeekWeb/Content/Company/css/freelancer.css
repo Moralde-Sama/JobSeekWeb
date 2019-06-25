@@ -30,11 +30,26 @@
   --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
+
+.modal-open {
+    padding: 0 !important;
+    overflow-y: auto;
+}
+#modalLoginForm {
+    padding: 0 !important;
+    overflow-y: auto;
+}
+
+#modalRegisterForm {
+    padding: 0 !important;
+    overflow-y: auto;
+}
+
 *,
 *::before,
 *::after {
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 html {
