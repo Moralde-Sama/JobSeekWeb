@@ -1,4 +1,5 @@
-﻿using JobSeekWeb.Models.MyClass;
+﻿using JobSeekWeb.Models;
+using JobSeekWeb.Models.MyClass;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,8 @@ namespace JobSeekWeb.Controllers
 {
     public class HomeController : Controller
     {
+        private JobEntities db = new JobEntities();
+
         public ActionResult Index()
         {
             return View();
@@ -39,6 +42,13 @@ namespace JobSeekWeb.Controllers
             {
                 return RedirectToAction("Index");
             }
+        }
+        [HttpGet]
+        public JsonResult GetCategoriesAndSkills()
+        {
+            var category = db.spCategories_getAll();
+            var skills = db.spSkills_getAll();
+            return Json(new { categories= category, skills = skills }, JsonRequestBehavior.AllowGet);
         }
     }
 }

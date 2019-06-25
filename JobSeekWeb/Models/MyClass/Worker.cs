@@ -7,8 +7,9 @@ using System.Web;
 
 namespace JobSeekWeb.Models.MyClass
 {
-    public class Worker
+    public class Worker : Skills
     {
+        public JobEntities db = new JobEntities();
         public int workerId { get; set; }
         public string fname { get; set; }
         public string mname { get; set; }
@@ -17,14 +18,18 @@ namespace JobSeekWeb.Models.MyClass
         public string gender { get; set; }
         public string header { get; set; }
         public int asp_user_Id { get; set; }
-        public string country { get; set; }
         public string cellnum { get; set; }
+        public int region { get; set; }
+        public int province { get; set; }
+        public int city { get; set; }
+        public int brgy { get; set; }
 
         public void UpdateProfileDetails()
         {
-            new JobEntities().spWorker_updateDetails(
+            db.spWorker_updateDetails(
                 workerId, fname, mname, lname, birthdate,
-                gender, header, country, cellnum
+                gender, header, cellnum, region, province,
+                city, brgy
                 );
         }
         public static bool IsDetailsCompleted(int asp_userId)

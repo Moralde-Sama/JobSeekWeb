@@ -21,8 +21,12 @@ namespace JobSeekWeb.Models
         public Nullable<System.DateTime> birthdate { get; set; }
         public string gender { get; set; }
         public string header { get; set; }
-        public int asp_user_Id { get; set; }
-        public string country { get; set; }
         public string cellnum { get; set; }
+        public Nullable<int> region { get; set; }
+        public Nullable<int> province { get; set; }
+        public Nullable<int> city { get; set; }
+        public Nullable<int> brgy { get; set; }
+        public int asp_user_Id { get; set; }
+        public string prof_path { get; set; }
     }
 }

@@ -16,5 +16,6 @@ namespace JobSeekWeb.Models
     {
         public int workerSkillId { get; set; }
         public int skillId { get; set; }
+        public int workerId { get; set; }
     }
 }

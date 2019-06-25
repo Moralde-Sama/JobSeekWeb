@@ -1,34 +1,127 @@
-﻿module.controller("CompaniesCtrl", ["$scope", "$http", function(s, h) {
+﻿
+module.service('workerService', function ($http) {
+    this.getRegion = () => {
+        return $http.get("../Content/PH/json/region.json");
+    }
+    this.getProvince = () => {
+        return $http.get("../Content/PH/json/province.json");
+    }
+    this.getCity = () => {
+        return $http.get("../Content/PH/json/city.json");
+    }
+    this.getBrgy = () => {
+        return $http.get("../Content/PH/json/refbrgy.json");
+    }
+    this.getCategoriesandSkills = () => {
+        return $http.get("../Home/GetCategoriesAndSkills");
+    }
+})
+module.controller("CompaniesCtrl", ["$scope", "$http", function (s, h) {
     s.list = [0, 1, 2, 3, 4];
 }])
-module.controller("WorkerProfileCtrl", ["$scope", "$http", function (s, h) {
+module.controller("DashboardCtrl", ["$scope", "$http", function (s, h) {
     s.list = [0, 1, 2, 3, 4];
+}])
+module.controller("WorkerProfileCtrl", ["$scope", "$http", "$q", "workerService", function (s, h, q, service) {
 
     s.data = {};
+    s.addressHolder = [];
+    init();
+    initServices();
 
-    s.saveDetails = (data) => {
-        console.log(data);
-        data.country = "Philippines";
-        data.header = "TEST";
-        data.birthdate = new Date(Date.parse(data.birthdate));
-        //svProfDetails
-        setDataHttp("../Worker/svProfDetails", {
-            worker: s.data,
-            skills: getChipsValue()
-        }, (result) => {
-                console.log(result);
-        })
+    //scope methods
+    s.finishedSelect = (selectId, placeholder) => {
+        $(document).ready(function () {
+            if (placeholder == null) {
+                $(`#${selectId}`).select2();
+            } else {
+                $(`#${selectId}`).select2({
+                    placeholder: placeholder,
+                    tags: true,
+                    maximumSelectionLength: 5
+                });
+            }
+        });
+    }
+    s.optionChanged = (data, addresstype) => {
+        if (data != null) {
+            if (addresstype === "Region") {
+                destroySelect2('province');
+                s.provinces = s.provincesHolder.filter((f) => f.regCode == data);
+            } else if (addresstype === "Province") {
+                destroySelect2('city');
+                s.cities = s.citiesHolder.filter((f) => f.provCode == data);
+            } else if (addresstype === "City") {
+                destroySelect2('brgy');
+                s.brgys = s.brgysHolder.filter((f) => f.citymunCode == data);
+            }
+        }
+    }
+    s.optchangedCategory = (data) => {
+        if (data != null) {
+            destroySelect2("skills");
+            s.skills = s.skillsHolder.filter((f) => f.categoryId == data);
+        }
     }
 
-    //getDataHttp("https://restcountries.eu/rest/v2/all", (data) => {
-    //    s.countries = data;
-    //    console.log(s.countries);
-    //    var interval = setInterval(function () {
-    //        $('select').formSelect();
-    //        clearInterval(interval);
-    //    }, 2000);
-    //});
-
+    s.saveDetails = (data) => {
+        Swal.fire({
+            title: 'Are you sure you want save this information?',
+            text: "You can modify this information on your profile",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result.value) {
+                data.birthdate = new Date(Date.parse(data.birthdate));
+                var skillIds = [];
+                var skillsNew = [];
+                $('#skills').select2('data').forEach((value, index) => {
+                    if (isNaN(value.id)) {
+                        skillsNew.push(value.text);
+                    } else {
+                        //data.skills.push(value.text.replace(/\n/ig, '').replace(/ /g, ''));
+                        skillIds.push(parseInt(value.id));
+                    }
+                });
+                //Swal.fire(
+                //      'Saved Successfully!',
+                //      '',
+                //      'success'
+                //)
+                sendDataHttp("../Worker/svProfDetails", {
+                    worker: s.data,
+                    skillIds: skillIds,
+                    newskills: skillsNew
+                }, (result) => {
+                    console.log(result);
+                        if (result == "Success") {
+                            Swal.fire(
+                                'Saved Successfully!',
+                                '',
+                                'success'
+                            )
+                        } else {
+                            Swal.fire(
+                                'Error!',
+                                'Please check your internet connection',
+                                'error'
+                            )
+                            console.log(result);
+                        }
+                })
+            }
+        })
+    }
+    
+    //Methods
+    function destroySelect2(selectId) {
+        var select = $(`#${selectId}`);
+        select.removeAttr('disabled');
+        select.select2('destroy');
+    }
     function getChipsValue() {
         var skills = [];
         var chips = document.querySelectorAll('.chip');
@@ -48,7 +141,7 @@ module.controller("WorkerProfileCtrl", ["$scope", "$http", function (s, h) {
             }
         })
     }
-    function setDataHttp(URL, parameter, callback) {
+    function sendDataHttp(URL, parameter, callback) {
         h.post(URL, parameter).then((r) => {
             if (r.status == 200) {
                 callback(r.data);
@@ -58,22 +151,36 @@ module.controller("WorkerProfileCtrl", ["$scope", "$http", function (s, h) {
         })
     }
 
-    $(document).ready(function () {
-        $('.datepicker').datepicker({ format: 'mmmm dd, yyyy' });
-        $('input#number').characterCounter();
-        $('.scrollspy').scrollSpy();
-        $('select').formSelect();
-        $('.chips-autocomplete').chips({
-            placeholder: 'Type your skills',
-            autocompleteOptions: {
-                data: {
-                    'Apple': null,
-                    'Microsoft': null,
-                    'Google': null
-                },
-                limit: Infinity,
-                minLength: 1
-            }
+    function initServices() {
+        service.getRegion().then((r) => {
+            s.regions = r.data;
+            service.getProvince().then((r) => {
+                s.provincesHolder = r.data;
+                service.getCity().then((r) => {
+                    s.citiesHolder = r.data;
+                    service.getBrgy().then((r) => {
+                        s.brgysHolder = r.data;
+                    });
+                })
+            })
         });
-    })
+        service.getCategoriesandSkills().then((r) => {
+            s.categories = r.data.categories;
+            s.skillsHolder = r.data.skills;
+        });
+    }
+    function init() {
+
+        $(document).ready(function () {
+            $('#gender').select2();
+            $('#province').select2();
+            $('#city').select2();
+            $('#brgy').select2();
+            $("#skills").select2({
+                tags: true,
+                maximumSelectionLength: 5,
+                placeholder: "Select or add your skills"
+            })
+        })
+    }
 }])

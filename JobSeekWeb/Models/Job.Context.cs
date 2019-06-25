@@ -41,10 +41,10 @@ namespace JobSeekWeb.Models
         public virtual DbSet<tbl_project_participants> tbl_project_participants { get; set; }
         public virtual DbSet<tbl_requirements> tbl_requirements { get; set; }
         public virtual DbSet<tbl_skill> tbl_skill { get; set; }
-        public virtual DbSet<tbl_worker_skill> tbl_worker_skill { get; set; }
         public virtual DbSet<tbl_company> tbl_company { get; set; }
         public virtual DbSet<tbl_category> tbl_category { get; set; }
         public virtual DbSet<tbl_worker> tbl_worker { get; set; }
+        public virtual DbSet<tbl_worker_skill> tbl_worker_skill { get; set; }
     
         public virtual ObjectResult<Nullable<int>> spWorker_Exist(Nullable<int> asp_userId)
         {
@@ -82,7 +82,17 @@ namespace JobSeekWeb.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("spWorker_getWorkerId", asp_userIdParameter);
         }
     
-        public virtual int spWorker_updateDetails(Nullable<int> workerId, string fname, string mname, string lname, Nullable<System.DateTime> birthdate, string gender, string header, string country, string cellnum)
+        public virtual ObjectResult<spCategories_getAll_Result> spCategories_getAll()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spCategories_getAll_Result>("spCategories_getAll");
+        }
+    
+        public virtual ObjectResult<spSkills_getAll_Result> spSkills_getAll()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spSkills_getAll_Result>("spSkills_getAll");
+        }
+    
+        public virtual int spWorker_updateDetails(Nullable<int> workerId, string fname, string mname, string lname, Nullable<System.DateTime> birthdate, string gender, string header, string cellnum, Nullable<int> region, Nullable<int> province, Nullable<int> city, Nullable<int> brgy)
         {
             var workerIdParameter = workerId.HasValue ?
                 new ObjectParameter("workerId", workerId) :
@@ -112,15 +122,71 @@ namespace JobSeekWeb.Models
                 new ObjectParameter("header", header) :
                 new ObjectParameter("header", typeof(string));
     
-            var countryParameter = country != null ?
-                new ObjectParameter("country", country) :
-                new ObjectParameter("country", typeof(string));
-    
             var cellnumParameter = cellnum != null ?
                 new ObjectParameter("cellnum", cellnum) :
                 new ObjectParameter("cellnum", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("spWorker_updateDetails", workerIdParameter, fnameParameter, mnameParameter, lnameParameter, birthdateParameter, genderParameter, headerParameter, countryParameter, cellnumParameter);
+            var regionParameter = region.HasValue ?
+                new ObjectParameter("region", region) :
+                new ObjectParameter("region", typeof(int));
+    
+            var provinceParameter = province.HasValue ?
+                new ObjectParameter("province", province) :
+                new ObjectParameter("province", typeof(int));
+    
+            var cityParameter = city.HasValue ?
+                new ObjectParameter("city", city) :
+                new ObjectParameter("city", typeof(int));
+    
+            var brgyParameter = brgy.HasValue ?
+                new ObjectParameter("brgy", brgy) :
+                new ObjectParameter("brgy", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("spWorker_updateDetails", workerIdParameter, fnameParameter, mnameParameter, lnameParameter, birthdateParameter, genderParameter, headerParameter, cellnumParameter, regionParameter, provinceParameter, cityParameter, brgyParameter);
+        }
+    
+        public virtual int spSkill_addSkill(string title, Nullable<int> categoryId)
+        {
+            var titleParameter = title != null ?
+                new ObjectParameter("title", title) :
+                new ObjectParameter("title", typeof(string));
+    
+            var categoryIdParameter = categoryId.HasValue ?
+                new ObjectParameter("categoryId", categoryId) :
+                new ObjectParameter("categoryId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("spSkill_addSkill", titleParameter, categoryIdParameter);
+        }
+    
+        public virtual int spWorker_addSkill(Nullable<int> workerId, Nullable<int> skillId)
+        {
+            var workerIdParameter = workerId.HasValue ?
+                new ObjectParameter("workerId", workerId) :
+                new ObjectParameter("workerId", typeof(int));
+    
+            var skillIdParameter = skillId.HasValue ?
+                new ObjectParameter("skillId", skillId) :
+                new ObjectParameter("skillId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("spWorker_addSkill", workerIdParameter, skillIdParameter);
+        }
+    
+        public virtual ObjectResult<spSkill_getSkillDetailsById_Result> spSkill_getSkillDetailsById(Nullable<int> skillId)
+        {
+            var skillIdParameter = skillId.HasValue ?
+                new ObjectParameter("skillId", skillId) :
+                new ObjectParameter("skillId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spSkill_getSkillDetailsById_Result>("spSkill_getSkillDetailsById", skillIdParameter);
+        }
+    
+        public virtual ObjectResult<spSkill_getSkillDetailsByTitle_Result> spSkill_getSkillDetailsByTitle(string title)
+        {
+            var titleParameter = title != null ?
+                new ObjectParameter("title", title) :
+                new ObjectParameter("title", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spSkill_getSkillDetailsByTitle_Result>("spSkill_getSkillDetailsByTitle", titleParameter);
         }
     }
 }

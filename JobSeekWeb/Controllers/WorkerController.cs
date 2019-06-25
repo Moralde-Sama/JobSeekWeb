@@ -33,18 +33,45 @@ namespace JobSeekWeb.Controllers
                 return RedirectToAction("Profile");
             }
         }
+        [AllowAnonymous]
+        public ActionResult DashboardNo()
+        {
+            return View("~/Views/Shared/_WorkerLayout.cshtml");
+        }
         public new ActionResult Profile()
         {
             return View("~/Views/Shared/_WorkerLayout.cshtml");
         }
 
         [HttpPost]
-        public JsonResult svProfDetails(Worker worker, string[] skills)
+        public JsonResult svProfDetails(Worker worker, int[] skillIds, string[] newskills)
         {
-            worker.workerId = Convert.ToInt32(User.Identity.GetWorkerOrCompanyId());
-            worker.asp_user_Id = Convert.ToInt32(User.Identity.GetUserId<int>());
-            worker.UpdateProfileDetails();
-            return Json(new { worker = worker, skills = skills }, JsonRequestBehavior.AllowGet);
+            //try
+            //{
+                worker.workerId = Convert.ToInt32(User.Identity.GetWorkerOrCompanyId());
+                worker.asp_user_Id = Convert.ToInt32(User.Identity.GetUserId<int>());
+                //worker.UpdateProfileDetails();
+                if(skillIds != null)
+                {
+                    foreach (int skillId in skillIds)
+                    {
+                        worker.skillId = skillId;
+                        worker.AddSkill(worker.workerId);
+                    }
+                }
+                if(newskills != null)
+                {
+                    foreach (string title in newskills)
+                    {
+                        worker.AddNewSkill(title);
+                    }
+                }
+                return Json("Success", JsonRequestBehavior.AllowGet);
+            //}
+            //catch (Exception e)
+            //{
+            //    return Json("Error: " + e.Message, JsonRequestBehavior.AllowGet);
+            //}
         }
     }
 }
