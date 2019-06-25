@@ -19,13 +19,13 @@
         <EntityTypeShape EntityType="JobModel.tbl_project_participants" Width="1.5" PointX="9.75" PointY="0.75" />
         <EntityTypeShape EntityType="JobModel.tbl_requirements" Width="1.5" PointX="2.75" PointY="9.75" />
         <EntityTypeShape EntityType="JobModel.tbl_skill" Width="1.5" PointX="4.75" PointY="9.75" />
-        <EntityTypeShape EntityType="JobModel.tbl_worker_skill" Width="1.5" PointX="6.75" PointY="10.75" />
-        <EntityTypeShape EntityType="JobModel.tbl_category" Width="1.5" PointX="10.75" PointY="7.75" />
         <AssociationConnector Association="JobModel.FK_dbo_tbl_asp_user_claim_dbo_tbl_asp_users_UserId" />
         <AssociationConnector Association="JobModel.FK_dbo_tbl_asp_user_login_dbo_tbl_asp_users_UserId" />
         <AssociationConnector Association="JobModel.tbl_asp_user_role" />
         <EntityTypeShape EntityType="JobModel.tbl_company" Width="1.5" PointX="9.375" PointY="10.75" />
-        <EntityTypeShape EntityType="JobModel.tbl_worker" Width="1.5" PointX="11.375" PointY="3.75" />
+        <EntityTypeShape EntityType="JobModel.tbl_category" Width="1.5" PointX="11.375" PointY="7.75" />
+        <EntityTypeShape EntityType="JobModel.tbl_worker" Width="1.5" PointX="11.375" PointY="10.75" />
+        <EntityTypeShape EntityType="JobModel.tbl_worker_skill" Width="1.5" PointX="11.375" PointY="3.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

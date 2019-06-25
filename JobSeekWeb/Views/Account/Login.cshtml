@@ -1,63 +1,118 @@
-﻿@using JobSeekWeb.Models
+﻿
+@using JobSeekWeb.Models
 @model LoginViewModel
 @{
+    Layout = "";
     ViewBag.Title = "Log in";
 }
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>COMPANY UNKNOWN</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="all,follow">
+    <link rel="stylesheet" href="~/Content/amade/ven/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/Content/amade/ven/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,600">
+    <link rel="stylesheet" href="~/Content/amade/ven/lightbox2/css/lightbox.css">
+    <link rel="stylesheet" href="~/Content/amade/cs/fontastic.css">
+    <link href="~/Content/amade/cs/bootsrat.css" rel="stylesheet">
+    <link href="~/Content/amade/cs/custom.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+<body>
 
-<h2>@ViewBag.Title.</h2>
-<div class="row">
-    <div class="col-md-8">
-        <section id="loginForm">
-            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-            {
-                @Html.AntiForgeryToken()
-                <h4>Use a local account to log in.</h4>
-                <hr />
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                <div class="form-group">
-                    @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
-                    <div class="col-md-10">
-                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+    <section class="hero">
+        <div id="cons" tabindex="-1" role="dialog" aria-hidden="false">
+            <div role="document" class=" modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header border-bottom-0">
+                        <a href="/" class="close" style="color: white; border-radius: 5px; text-align: center; padding: 4px 0 0 2px;">
+                            X
+                        </a>
                     </div>
-                </div>
-                <div class="form-group">
-                    @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
-                    <div class="col-md-10">
-                        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <div class="checkbox">
-                            @Html.CheckBoxFor(m => m.RememberMe)
-                            @Html.LabelFor(m => m.RememberMe)
+                    <div class="modal-body p-4 p-lg-5">
+                        <div class="tabbable-line">
+                            <ul class="nav nav-pills nav-fill">
+                                <li class="nav-item active">
+                                    <a id="btnWorker" data-toggle="tab" style="cursor: pointer;">Worker</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a id="btnCompany" data-toggle="tab" style="cursor: pointer;">Company </a>
+                                </li>
+                            </ul>
                         </div>
+                        <br>
+                        @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <input checked="checked" id="IsWorker" name="IsWorker" type="checkbox" value="true" style="opacity: 0;" />
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="form-group" style="padding: 0 20px;">
+                                @Html.LabelFor(m => m.Email, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group" style="padding: 0 20px;">
+                                @Html.LabelFor(m => m.Password, new { @class = "control-label" })
+                                @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group" style="padding: 0 20px;">
+                                @Html.CheckBoxFor(m => m.RememberMe)
+                                @Html.LabelFor(m => m.RememberMe)
+                            </div>
+                            <center>
+                                <input type="submit" value="Log in" class="btn btn-primary" style="width: 145px;">
+                            </center>
+                            <br>
+                            <div class="form-group mb-3">
+                                <center>
+                                    <label>Don't have account yet?</label>
+                                    <br>
+                                    <a href="../Account/Register" class="btn btn-primary">Create Account</a>
+                                </center>
+                            </div>
+                            @* Enable this once you have account confirmation enabled for password reset functionality
+                                <p>
+                                    @Html.ActionLink("Forgot your password?", "ForgotPassword")
+                                </p>*@
+                            <div class="col-md-12">
+                                <section id="socialLoginForm" style="padding: 10px;">
+                                    @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
+                                </section>
+                            </div>
+                        }
                     </div>
                 </div>
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Log in" class="btn btn-default" />
-                    </div>
-                </div>
-                <p>
-                    @Html.ActionLink("Register as a new user", "Register")
-                </p>
-                @* Enable this once you have account confirmation enabled for password reset functionality
-                    <p>
-                        @Html.ActionLink("Forgot your password?", "ForgotPassword")
-                    </p>*@
-            }
-        </section>
-    </div>
-    <div class="col-md-4">
-        <section id="socialLoginForm">
-            @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
-        </section>
-    </div>
-</div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.getElementById("btnWorker").addEventListener("click", function () {
+            setCheckboxValue(true);
+        })
+        document.getElementById("btnCompany").addEventListener("click", function () {
+            setCheckboxValue(false);
+        })
+        function setCheckboxValue(isWorkerSelected) {
+            document.getElementById("IsWorker").value = isWorkerSelected ? true : false;
+        }
+    </script>
+</body>
+</html>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+}
+
+@*@using JobSeekWeb.Models
+    @model LoginViewModel*@
+@{
+    ViewBag.Title = "Log in";
 }

@@ -76,14 +76,11 @@
           <Property Name="AccessFailedCount" Type="int" Nullable="false" />
           <Property Name="UserName" Type="nvarchar" MaxLength="256" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'Job.dbo.tbl_category' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="tbl_category">
           <Key>
             <PropertyRef Name="categoryId" />
-            <PropertyRef Name="title" />
           </Key>
-          <Property Name="categoryId" Type="int" Nullable="false" />
+          <Property Name="categoryId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="title" Type="varchar" MaxLength="200" Nullable="false" />
         </EntityType>
         <EntityType Name="tbl_chat">
@@ -190,7 +187,13 @@ warning 6002: The table/view 'Job.dbo.tbl_category' does not have a primary key 
           <Property Name="birthdate" Type="date" />
           <Property Name="gender" Type="varchar" MaxLength="10" />
           <Property Name="header" Type="varchar" MaxLength="100" />
+          <Property Name="cellnum" Type="varchar" MaxLength="12" />
+          <Property Name="region" Type="int" />
+          <Property Name="province" Type="int" />
+          <Property Name="city" Type="int" />
+          <Property Name="brgy" Type="int" />
           <Property Name="asp_user_Id" Type="int" Nullable="false" />
+          <Property Name="prof_path" Type="varchar" MaxLength="200" />
         </EntityType>
         <EntityType Name="tbl_worker_skill">
           <Key>
@@ -198,6 +201,7 @@ warning 6002: The table/view 'Job.dbo.tbl_category' does not have a primary key 
           </Key>
           <Property Name="workerSkillId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="skillId" Type="int" Nullable="false" />
+          <Property Name="workerId" Type="int" Nullable="false" />
         </EntityType>
         <Association Name="FK_dbo_tbl_asp_user_claim_dbo_tbl_asp_users_UserId">
           <End Role="tbl_asp_users" Type="Self.tbl_asp_users" Multiplicity="1">
@@ -255,6 +259,48 @@ warning 6002: The table/view 'Job.dbo.tbl_category' does not have a primary key 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="spCategories_getAll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="spCompany_getCompanyId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="asp_userId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="spSkill_addSkill" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="title" Type="varchar" Mode="In" />
+          <Parameter Name="categoryId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="spSkill_getSkillDetailsById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="skillId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="spSkill_getSkillDetailsByTitle" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="title" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="spSkills_getAll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="spWorker_addSkill" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="workerId" Type="int" Mode="In" />
+          <Parameter Name="skillId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="spWorker_Exist" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="asp_userId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="spWorker_getDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="asp_userId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="spWorker_getWorkerId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="asp_userId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="spWorker_updateDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="workerId" Type="int" Mode="In" />
+          <Parameter Name="fname" Type="varchar" Mode="In" />
+          <Parameter Name="mname" Type="varchar" Mode="In" />
+          <Parameter Name="lname" Type="varchar" Mode="In" />
+          <Parameter Name="birthdate" Type="datetime" Mode="In" />
+          <Parameter Name="gender" Type="varchar" Mode="In" />
+          <Parameter Name="header" Type="varchar" Mode="In" />
+          <Parameter Name="cellnum" Type="varchar" Mode="In" />
+          <Parameter Name="region" Type="int" Mode="In" />
+          <Parameter Name="province" Type="int" Mode="In" />
+          <Parameter Name="city" Type="int" Mode="In" />
+          <Parameter Name="brgy" Type="int" Mode="In" />
+        </Function>
         <EntityContainer Name="JobModelStoreContainer">
           <EntitySet Name="__MigrationHistory" EntityType="Self.__MigrationHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
@@ -263,6 +309,7 @@ warning 6002: The table/view 'Job.dbo.tbl_category' does not have a primary key 
           <EntitySet Name="tbl_asp_user_login" EntityType="Self.tbl_asp_user_login" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl_asp_user_role" EntityType="Self.tbl_asp_user_role" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl_asp_users" EntityType="Self.tbl_asp_users" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_category" EntityType="Self.tbl_category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl_chat" EntityType="Self.tbl_chat" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl_chat_attachment" EntityType="Self.tbl_chat_attachment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl_company" EntityType="Self.tbl_company" Schema="dbo" store:Type="Tables" />
@@ -274,12 +321,6 @@ warning 6002: The table/view 'Job.dbo.tbl_category' does not have a primary key 
           <EntitySet Name="tbl_skill" EntityType="Self.tbl_skill" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl_worker" EntityType="Self.tbl_worker" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl_worker_skill" EntityType="Self.tbl_worker_skill" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="tbl_category" EntityType="Self.tbl_category" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [tbl_category].[categoryId] AS [categoryId], 
-    [tbl_category].[title] AS [title]
-    FROM [dbo].[tbl_category] AS [tbl_category]</DefiningQuery>
-          </EntitySet>
           <AssociationSet Name="FK_dbo_tbl_asp_user_claim_dbo_tbl_asp_users_UserId" Association="Self.FK_dbo_tbl_asp_user_claim_dbo_tbl_asp_users_UserId">
             <End Role="tbl_asp_users" EntitySet="tbl_asp_users" />
             <End Role="tbl_asp_user_claim" EntitySet="tbl_asp_user_claim" />
@@ -316,8 +357,6 @@ warning 6002: The table/view 'Job.dbo.tbl_category' does not have a primary key 
           <EntitySet Name="tbl_project_participants" EntityType="JobModel.tbl_project_participants" />
           <EntitySet Name="tbl_requirements" EntityType="JobModel.tbl_requirements" />
           <EntitySet Name="tbl_skill" EntityType="JobModel.tbl_skill" />
-          <EntitySet Name="tbl_worker_skill" EntityType="JobModel.tbl_worker_skill" />
-          <EntitySet Name="tbl_category" EntityType="JobModel.tbl_category" />
           <AssociationSet Name="FK_dbo_tbl_asp_user_claim_dbo_tbl_asp_users_UserId" Association="JobModel.FK_dbo_tbl_asp_user_claim_dbo_tbl_asp_users_UserId">
             <End Role="tbl_asp_users" EntitySet="tbl_asp_users" />
             <End Role="tbl_asp_user_claim" EntitySet="tbl_asp_user_claim" />
@@ -331,7 +370,51 @@ warning 6002: The table/view 'Job.dbo.tbl_category' does not have a primary key 
             <End Role="tbl_asp_users" EntitySet="tbl_asp_users" />
           </AssociationSet>
           <EntitySet Name="tbl_company" EntityType="JobModel.tbl_company" />
+          <EntitySet Name="tbl_category" EntityType="JobModel.tbl_category" />
+          <FunctionImport Name="spWorker_Exist" ReturnType="Collection(Int32)">
+          <Parameter Name="asp_userId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="spWorker_getDetails" ReturnType="Collection(JobModel.spWorker_getDetails_Result)">
+          <Parameter Name="asp_userId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="spCompany_getCompanyId" ReturnType="Collection(Int32)">
+          <Parameter Name="asp_userId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="spWorker_getWorkerId" ReturnType="Collection(Int32)">
+          <Parameter Name="asp_userId" Mode="In" Type="Int32" />
+          </FunctionImport>
           <EntitySet Name="tbl_worker" EntityType="JobModel.tbl_worker" />
+          <FunctionImport Name="spCategories_getAll" ReturnType="Collection(JobModel.spCategories_getAll_Result)" />
+          <FunctionImport Name="spSkills_getAll" ReturnType="Collection(JobModel.spSkills_getAll_Result)" />
+          <FunctionImport Name="spWorker_updateDetails">
+            <Parameter Name="workerId" Mode="In" Type="Int32" />
+            <Parameter Name="fname" Mode="In" Type="String" />
+            <Parameter Name="mname" Mode="In" Type="String" />
+            <Parameter Name="lname" Mode="In" Type="String" />
+            <Parameter Name="birthdate" Mode="In" Type="DateTime" />
+            <Parameter Name="gender" Mode="In" Type="String" />
+            <Parameter Name="header" Mode="In" Type="String" />
+            <Parameter Name="cellnum" Mode="In" Type="String" />
+            <Parameter Name="region" Mode="In" Type="Int32" />
+            <Parameter Name="province" Mode="In" Type="Int32" />
+            <Parameter Name="city" Mode="In" Type="Int32" />
+            <Parameter Name="brgy" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="spSkill_addSkill">
+            <Parameter Name="title" Mode="In" Type="String" />
+            <Parameter Name="categoryId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="tbl_worker_skill" EntityType="JobModel.tbl_worker_skill" />
+          <FunctionImport Name="spWorker_addSkill">
+            <Parameter Name="workerId" Mode="In" Type="Int32" />
+            <Parameter Name="skillId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="spSkill_getSkillDetailsById" ReturnType="Collection(JobModel.spSkill_getSkillDetailsById_Result)">
+            <Parameter Name="skillId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="spSkill_getSkillDetailsByTitle" ReturnType="Collection(JobModel.spSkill_getSkillDetailsByTitle_Result)">
+            <Parameter Name="title" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="C__MigrationHistory">
           <Key>
@@ -484,21 +567,6 @@ warning 6002: The table/view 'Job.dbo.tbl_category' does not have a primary key 
           <Property Name="title" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="categoryId" Type="Int32" Nullable="false" />
         </EntityType>
-        <EntityType Name="tbl_worker_skill">
-          <Key>
-            <PropertyRef Name="workerSkillId" />
-          </Key>
-          <Property Name="workerSkillId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="skillId" Type="Int32" Nullable="false" />
-        </EntityType>
-        <EntityType Name="tbl_category">
-          <Key>
-            <PropertyRef Name="categoryId" />
-            <PropertyRef Name="title" />
-          </Key>
-          <Property Name="categoryId" Type="Int32" Nullable="false" />
-          <Property Name="title" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
-        </EntityType>
         <Association Name="FK_dbo_tbl_asp_user_claim_dbo_tbl_asp_users_UserId">
           <End Type="JobModel.tbl_asp_users" Role="tbl_asp_users" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -542,6 +610,23 @@ warning 6002: The table/view 'Job.dbo.tbl_category' does not have a primary key 
           <Property Name="categoryId" Type="Int32" />
           <Property Name="asp_user_Id" Type="Int32" Nullable="false" />
         </EntityType>
+        <EntityType Name="tbl_category">
+          <Key>
+            <PropertyRef Name="categoryId" />
+          </Key>
+          <Property Name="categoryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="title" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <ComplexType Name="spWorker_getDetails_Result">
+          <Property Type="Int32" Name="workerId" Nullable="false" />
+          <Property Type="String" Name="fname" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="mname" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="lname" Nullable="true" MaxLength="100" />
+          <Property Type="DateTime" Name="birthdate" Nullable="true" />
+          <Property Type="String" Name="gender" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="header" Nullable="true" MaxLength="100" />
+          <Property Type="Int32" Name="asp_user_Id" Nullable="false" />
+        </ComplexType>
         <EntityType Name="tbl_worker">
           <Key>
             <PropertyRef Name="workerId" />
@@ -553,8 +638,41 @@ warning 6002: The table/view 'Job.dbo.tbl_category' does not have a primary key 
           <Property Name="birthdate" Type="DateTime" Precision="0" />
           <Property Name="gender" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="header" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="cellnum" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
+          <Property Name="region" Type="Int32" />
+          <Property Name="province" Type="Int32" />
+          <Property Name="city" Type="Int32" />
+          <Property Name="brgy" Type="Int32" />
           <Property Name="asp_user_Id" Type="Int32" Nullable="false" />
+          <Property Name="prof_path" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
         </EntityType>
+        <ComplexType Name="spCategories_getAll_Result">
+          <Property Type="Int32" Name="categoryId" Nullable="false" />
+          <Property Type="String" Name="title" Nullable="false" MaxLength="200" />
+        </ComplexType>
+        <ComplexType Name="spSkills_getAll_Result">
+          <Property Type="Int32" Name="skillId" Nullable="false" />
+          <Property Type="String" Name="title" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="categoryId" Nullable="false" />
+        </ComplexType>
+        <EntityType Name="tbl_worker_skill">
+          <Key>
+            <PropertyRef Name="workerSkillId" />
+          </Key>
+          <Property Name="workerSkillId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="skillId" Type="Int32" Nullable="false" />
+          <Property Name="workerId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <ComplexType Name="spSkill_getSkillDetailsById_Result">
+          <Property Type="Int32" Name="skillId" Nullable="false" />
+          <Property Type="String" Name="title" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="categoryId" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="spSkill_getSkillDetailsByTitle_Result">
+          <Property Type="Int32" Name="skillId" Nullable="false" />
+          <Property Type="String" Name="title" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="categoryId" Nullable="false" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -717,22 +835,6 @@ warning 6002: The table/view 'Job.dbo.tbl_category' does not have a primary key 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="tbl_worker_skill">
-            <EntityTypeMapping TypeName="JobModel.tbl_worker_skill">
-              <MappingFragment StoreEntitySet="tbl_worker_skill">
-                <ScalarProperty Name="skillId" ColumnName="skillId" />
-                <ScalarProperty Name="workerSkillId" ColumnName="workerSkillId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tbl_category">
-            <EntityTypeMapping TypeName="JobModel.tbl_category">
-              <MappingFragment StoreEntitySet="tbl_category">
-                <ScalarProperty Name="title" ColumnName="title" />
-                <ScalarProperty Name="categoryId" ColumnName="categoryId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <AssociationSetMapping Name="tbl_asp_user_role" TypeName="JobModel.tbl_asp_user_role" StoreEntitySet="tbl_asp_user_role">
             <EndProperty Name="tbl_asp_users">
               <ScalarProperty Name="Id" ColumnName="UserId" />
@@ -753,10 +855,41 @@ warning 6002: The table/view 'Job.dbo.tbl_category' does not have a primary key 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="tbl_category">
+            <EntityTypeMapping TypeName="JobModel.tbl_category">
+              <MappingFragment StoreEntitySet="tbl_category">
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="categoryId" ColumnName="categoryId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="spWorker_Exist" FunctionName="JobModel.Store.spWorker_Exist" />
+          <FunctionImportMapping FunctionImportName="spWorker_getDetails" FunctionName="JobModel.Store.spWorker_getDetails">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="JobModel.spWorker_getDetails_Result">
+                <ScalarProperty Name="workerId" ColumnName="workerId" />
+                <ScalarProperty Name="fname" ColumnName="fname" />
+                <ScalarProperty Name="mname" ColumnName="mname" />
+                <ScalarProperty Name="lname" ColumnName="lname" />
+                <ScalarProperty Name="birthdate" ColumnName="birthdate" />
+                <ScalarProperty Name="gender" ColumnName="gender" />
+                <ScalarProperty Name="header" ColumnName="header" />
+                <ScalarProperty Name="asp_user_Id" ColumnName="asp_user_Id" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="spCompany_getCompanyId" FunctionName="JobModel.Store.spCompany_getCompanyId" />
+          <FunctionImportMapping FunctionImportName="spWorker_getWorkerId" FunctionName="JobModel.Store.spWorker_getWorkerId" />
           <EntitySetMapping Name="tbl_worker">
             <EntityTypeMapping TypeName="JobModel.tbl_worker">
               <MappingFragment StoreEntitySet="tbl_worker">
+                <ScalarProperty Name="prof_path" ColumnName="prof_path" />
                 <ScalarProperty Name="asp_user_Id" ColumnName="asp_user_Id" />
+                <ScalarProperty Name="brgy" ColumnName="brgy" />
+                <ScalarProperty Name="city" ColumnName="city" />
+                <ScalarProperty Name="province" ColumnName="province" />
+                <ScalarProperty Name="region" ColumnName="region" />
+                <ScalarProperty Name="cellnum" ColumnName="cellnum" />
                 <ScalarProperty Name="header" ColumnName="header" />
                 <ScalarProperty Name="gender" ColumnName="gender" />
                 <ScalarProperty Name="birthdate" ColumnName="birthdate" />
@@ -767,6 +900,53 @@ warning 6002: The table/view 'Job.dbo.tbl_category' does not have a primary key 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="spCategories_getAll" FunctionName="JobModel.Store.spCategories_getAll">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="JobModel.spCategories_getAll_Result">
+                <ScalarProperty Name="categoryId" ColumnName="categoryId" />
+                <ScalarProperty Name="title" ColumnName="title" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="spSkills_getAll" FunctionName="JobModel.Store.spSkills_getAll">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="JobModel.spSkills_getAll_Result">
+                <ScalarProperty Name="skillId" ColumnName="skillId" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="categoryId" ColumnName="categoryId" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="spWorker_updateDetails" FunctionName="JobModel.Store.spWorker_updateDetails" />
+          <FunctionImportMapping FunctionImportName="spSkill_addSkill" FunctionName="JobModel.Store.spSkill_addSkill" />
+          <EntitySetMapping Name="tbl_worker_skill">
+            <EntityTypeMapping TypeName="JobModel.tbl_worker_skill">
+              <MappingFragment StoreEntitySet="tbl_worker_skill">
+                <ScalarProperty Name="workerId" ColumnName="workerId" />
+                <ScalarProperty Name="skillId" ColumnName="skillId" />
+                <ScalarProperty Name="workerSkillId" ColumnName="workerSkillId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="spWorker_addSkill" FunctionName="JobModel.Store.spWorker_addSkill" />
+          <FunctionImportMapping FunctionImportName="spSkill_getSkillDetailsById" FunctionName="JobModel.Store.spSkill_getSkillDetailsById">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="JobModel.spSkill_getSkillDetailsById_Result">
+                <ScalarProperty Name="skillId" ColumnName="skillId" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="categoryId" ColumnName="categoryId" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="spSkill_getSkillDetailsByTitle" FunctionName="JobModel.Store.spSkill_getSkillDetailsByTitle">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="JobModel.spSkill_getSkillDetailsByTitle_Result">
+                <ScalarProperty Name="skillId" ColumnName="skillId" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="categoryId" ColumnName="categoryId" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

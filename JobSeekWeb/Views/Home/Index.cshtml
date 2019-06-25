@@ -33,60 +33,18 @@
                 <div id="navbarSupportedContent" class="collapse navbar-collapse">
                     <ul class="navbar-nav ml-auto">
 
-                        <li class="nav-item"> <a href="../Amad/Index" class="nav-link active">Home</a></li>
+                        <li class="custom_nav_item"> <a href="../Home/Index" class="custom-btnn active">Home</a></li>
 
-                        <li class="nav-item"> <a href="../Amad/FAQ" class="nav-link">FAQ</a></li>
+                        <li class="custom_nav_item"> <a href="../Home/FAQ" class="custom-btnn">FAQ</a></li>
 
-                        <li class="nav-item"> <a href="../Amad/Contact" class="nav-link">Contact</a></li>
+                        <li class="custom_nav_item"> <a href="../Home/Contact" class="custom-btnn">Contact</a></li>
 
                     </ul>
                     @Html.Partial("_LoginPartial")
-                    @*<a href="../Amad/Login" class="btn btn-primary navbar-btn ml-0 ml-lg-3">Login </a>*@
                 </div>
             </div>
         </nav>
     </header>
-
-    @*<div id="login" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade bd-example-modal-lg">
-            <div role="document" class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header border-bottom-0">
-                        <button type="button" data-dismiss="modal" aria-label="Close" class="close">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                    </div>
-                    <div class="modal-body p-4 p-lg-5">
-                        <form action="#" class="login-form text-left">
-                            <div class="form-group mb-4">
-                                <label>Email address</label>
-                                <input type="email" name="email" placeholder="name@company.com" class="form-control">
-                            </div>
-                            <div class="form-group mb-4">
-                                <label>Password</label>
-                                <input type="password" name="password" placeholder="Min 8 characters" class="form-control">
-                            </div>
-                            <div class="form-group">
-                                <center>
-                                    <input type="submit" value="         Login          " class="btn btn-primary">
-                                </center>
-
-
-                            </div>
-                            <div class="form-group mb-3">
-                                <center>
-                                    <label>Don't have account yet?</label>
-                                    <br>
-                                    <a href="Register" class="btn btn-primary">Create Account</a>
-                                </center>
-                            </div>
-                        </form>
-
-                    </div>
-                </div>
-            </div>
-        </div>*@
-
-
     <section class="hero">
         <div class="container mb-5">
             <div class="row align-items-center">
@@ -254,49 +212,13 @@
             </div>
         </div>
     </section>
-
-    @*<section class="bg-gray">
-            <div class="container text-center text-lg-left">
-                <div class="row align-items-center">
-                    <div class="col-lg-7">
-                        <h2 class="divider-heading">Curious how Company Unknown <br>works for large</h2>
-                        <div class="row">
-                            <div class="col-lg-10">
-                                <p class="lead divider-subtitle mt-2 text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing. Vitae animi mollitia cumque sunt soluta. consectetur adipisicing.</p>
-                            </div>
-                        </div><a href="#" class="btn btn-primary">Learn More</a>
-                    </div>
-                    <div class="col-lg-5 mt-5 mt-lg-0"><img src="~/Content/amade/imgs/illustration-2.svg" alt="" class="divider-image img-fluid"></div>
-                </div>
-            </div>
-        </section>*@
-
-    @*<section class="get-started">
-            <div class="container text-center">
-                <h2>Get started today</h2>
-                <div class="row">
-                    <div class="col-lg-8 m-auto">
-                        <p class="lead text-muted mt-2">If you can make a list or send an email, you can use Comapany Unknown. Lorem ipsum dolor sit amet, consectetur adipisicing.</p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-6 mx-auto">
-                        <form action="#" class="subscription-form mt-5">
-                            <div class="form-group">
-                                <input type="email" name="email" placeholder="Name@company.com" class="form-control">
-                                <button type="submit" class="btn btn-primary">Get Started</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </section>*@
-
     <footer class="main-footer">
         <div class="container">
             <div class="row">
                 <div class="col-lg-3 mb-5 mb-lg-0">
-                    <!--<div class="footer-logo"><img src="img/logo-footer.svg" alt="..." class="img-fluid"></div>-->
+                    <div class="footer-logo">
+                        <!--<img src="img/logo-footer.svg" alt="..." class="img-fluid">-->
+                    </div>
                 </div>
                 <div class="col-lg-3 mb-5 mb-lg-0">
                     <h5 class="footer-heading">Site pages</h5>
@@ -349,43 +271,5 @@
     <script src="~/Content/amade/ven/jquery.cookie/jquery.cookie.js"></script>
     <script src="~/Content/amade/ven/lightbox2/js/lightbox.js"></script>
     <script src="~/Content/amade/jesus/front.js"></script>
-
-
-
 </body>
-
 </html>
-
-
-
-@*@{
-        ViewBag.Title = "Home Page";
-    }
-
-    <div class="jumbotron">
-        <h1>ASP.NET</h1>
-        <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-        <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
-    </div>
-
-    <div class="row">
-        <div class="col-md-4">
-            <h2>Getting started</h2>
-            <p>
-                ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-                enables a clean separation of concerns and gives you full control over markup
-                for enjoyable, agile development.
-            </p>
-            <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-        </div>
-        <div class="col-md-4">
-            <h2>Get more libraries</h2>
-            <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-            <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-        </div>
-        <div class="col-md-4">
-            <h2>Web Hosting</h2>
-            <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-            <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-        </div>
-    </div>*@

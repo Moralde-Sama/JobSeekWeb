@@ -25,13 +25,12 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 </head>
 <body>
-
     <section class="hero">
         <div id="cons" tabindex="-1" role="dialog" aria-hidden="false">
             <div role="document" class=" modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header border-bottom-0">
-                        <a href="/" class="close" style="color: white; border-radius: 5px; text-align: center; padding-top: 3px">
+                        <a href="/" class="close" style="color: white; border-radius: 5px; text-align: center; padding: 4px 0 0 2px;">
                             X
                         </a>
                     </div>
@@ -52,7 +51,7 @@
                         {
                             @Html.AntiForgeryToken()
                             <hr />
-                            <input checked="checked" id="IsWorker" name="IsWorker" type="checkbox" value="true" style="opacity: 0;"/>
+                            <input checked="checked" id="IsWorker" name="IsWorker" type="checkbox" value="true" style="opacity: 0;" />
                             @Html.ValidationSummary("", new { @class = "text-danger" })
                             <div class="form-group" style="padding: 0 20px;">
                                 @Html.LabelFor(m => m.Email, new { @class = "control-label" })
@@ -86,14 +85,9 @@
         setCheckboxValue(false);
     })
     function setCheckboxValue(isWorkerSelected) {
-        if (isWorkerSelected) {
-            document.getElementById("IsWorker").value  = true;
-        } else {
-            document.getElementById("IsWorker").value  = false;
-        }
+        document.getElementById("IsWorker").value = isWorkerSelected ? true : false;
     }
 </script>
-
-    @section Scripts {
-        @Scripts.Render("~/bundles/jqueryval")
-    }
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -9,6 +9,8 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using JobSeekWeb.Models;
+using JobSeekWeb.Extensions;
+using JobSeekWeb.Models.MyClass;
 
 namespace JobSeekWeb.Controllers
 {
@@ -58,8 +60,15 @@ namespace JobSeekWeb.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
-            ViewBag.ReturnUrl = returnUrl;
-            return View();
+            if (!User.Identity.IsAuthenticated)
+            {
+                ViewBag.ReturnUrl = returnUrl;
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("PageByRole", "Home");
+            }
         }
 
         //
@@ -73,14 +82,14 @@ namespace JobSeekWeb.Controllers
             {
                 return View(model);
             }
-
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                    return RedirectToAction("PageByRole", "Home");
+                    //return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
@@ -162,6 +171,18 @@ namespace JobSeekWeb.Controllers
                         worker.asp_user_Id = user.Id;
                         db.tbl_worker.Add(worker);
                         await db.SaveChangesAsync();
+                        try
+                        {
+                            await UserManager.AddToRoleAsync(user.Id, "Worker");
+                        }
+                        catch
+                        {
+                            tbl_asp_role role = new tbl_asp_role();
+                            role.Name = "Worker";
+                            db.tbl_asp_role.Add(role);
+                            await db.SaveChangesAsync();
+                            await UserManager.AddToRoleAsync(user.Id, "Worker");
+                        }
                     }
                     else
                     {
@@ -169,6 +190,18 @@ namespace JobSeekWeb.Controllers
                         company.asp_user_Id = user.Id;
                         db.tbl_company.Add(company);
                         await db.SaveChangesAsync();
+                        try
+                        {
+                            await UserManager.AddToRoleAsync(user.Id, "Company");
+                        }
+                        catch
+                        {
+                            tbl_asp_role role = new tbl_asp_role();
+                            role.Name = "Company";
+                            db.tbl_asp_role.Add(role);
+                            await db.SaveChangesAsync();
+                            await UserManager.AddToRoleAsync(user.Id, "Company");
+                        }
                     }
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
                     
@@ -178,7 +211,7 @@ namespace JobSeekWeb.Controllers
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("PageByRole", "Home");
                 }
                 AddErrors(result);
             }
@@ -303,7 +336,7 @@ namespace JobSeekWeb.Controllers
         public async Task<ActionResult> SendCode(string returnUrl, bool rememberMe)
         {
             var userId = await SignInManager.GetVerifiedUserIdAsync();
-            if (userId == null)
+            if (userId < 0)
             {
                 return View("Error");
             }
