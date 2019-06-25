@@ -20,5 +20,9 @@ namespace JobSeekWeb.Models.MyClass
         {
             db.spWorker_addSkill(workerId, skillId);
         }
+        public static spSkill_getSkillDetailsByTitle_Result getSkillDetailsByTitle(string title)
+        {
+            return new JobEntities().spSkill_getSkillDetailsByTitle(title).FirstOrDefault();
+        }
     }
 }
