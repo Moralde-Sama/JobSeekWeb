@@ -24,5 +24,10 @@ namespace JobSeekWeb.Extensions
             var claim = ((ClaimsIdentity)identity).FindFirst("FullName");
             return (claim != null) ? claim.Value : string.Empty;
         }
+        public static string GetUserEmail(this IIdentity identity)
+        {
+            var claim = ((ClaimsIdentity)identity).FindFirst("Email");
+            return (claim != null) ? claim.Value : string.Empty;
+        }
     }
 }

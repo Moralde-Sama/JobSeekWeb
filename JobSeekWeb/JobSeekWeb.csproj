@@ -421,6 +421,7 @@
     <Content Include="Content\Moralde\css\custom-materialize.css" />
     <Content Include="Content\Moralde\css\worker-css.css" />
     <Content Include="Content\Moralde\Images\eriri.png" />
+    <Content Include="Content\Moralde\Images\kodaikanal-2836301.jpg" />
     <Content Include="Content\Moralde\select2\css\select2.css" />
     <Content Include="Content\Moralde\select2\css\select2.min.css" />
     <Content Include="Content\Moralde\select2\js\i18n\af.js" />

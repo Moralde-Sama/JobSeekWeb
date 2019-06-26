@@ -9,7 +9,8 @@ namespace JobSeekWeb.Models.MyClass
     {
         public static string GetWorkerName(int asp_userId)
         {
-            return new JobEntities().spWorker_GetFullName(asp_userId).FirstOrDefault();
+            var result = new JobEntities().spWorker_GetFullName(asp_userId).FirstOrDefault();
+            return result ?? "";
         }
         public static bool IsWorker(int asp_userId)
         {

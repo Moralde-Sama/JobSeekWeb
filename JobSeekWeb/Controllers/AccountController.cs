@@ -55,6 +55,45 @@ namespace JobSeekWeb.Controllers
             }
         }
 
+        #region Worker
+        [HttpPost]
+        [Authorize (Roles = "Worker")]
+        public JsonResult svProfDetails(Worker worker, int[] skillIds, string[] newskills)
+        {
+            //try
+            //{
+            worker.workerId = Convert.ToInt32(User.Identity.GetWorkerOrCompanyId());
+            worker.asp_user_Id = Convert.ToInt32(User.Identity.GetUserId<int>());
+            worker.prof_path = "/Content/Moralde/Images/eriri.png";
+            worker.header = "Test";
+            worker.UpdateProfileDetails();
+            if (skillIds != null)
+            {
+                foreach (int skillId in skillIds)
+                {
+                    worker.skillId = skillId;
+                    worker.AddSkill(worker.workerId);
+                }
+            }
+            if (newskills != null)
+            {
+                foreach (string title in newskills)
+                {
+                    worker.AddNewSkill(title);
+                    worker.skillId = Skills.getSkillDetailsByTitle(title).skillId;
+                    worker.AddSkill(worker.workerId);
+                }
+            }
+            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            return Json("Success", JsonRequestBehavior.AllowGet);
+            //}
+            //catch (Exception e)
+            //{
+            //    return Json("Error: " + e.Message, JsonRequestBehavior.AllowGet);
+            //}
+        }
+        #endregion
+
         //
         // GET: /Account/Login
         [AllowAnonymous]
@@ -207,9 +246,9 @@ namespace JobSeekWeb.Controllers
 
                     //For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     //Send an email with this link
-                    string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                    //string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                    //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                    //await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
                     return RedirectToAction("PageByRole", "Home");
                 }

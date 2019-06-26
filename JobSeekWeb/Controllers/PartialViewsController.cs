@@ -6,6 +6,7 @@ using System.Web.Mvc;
 
 namespace JobSeekWeb.Controllers
 {
+    [Authorize]
     public class PartialViewsController : Controller
     {
         #region Worker Partial Views

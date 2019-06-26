@@ -7,6 +7,7 @@ using JobSeekWeb.Models.MyClass;
 using Microsoft.AspNet.Identity;
 using System.Web.Mvc;
 using JobSeekWeb.Models;
+using System.Net;
 
 namespace JobSeekWeb.Controllers
 {
@@ -41,41 +42,6 @@ namespace JobSeekWeb.Controllers
             {
                 return View("~/Views/Shared/_WorkerLayout.cshtml");
             }
-        }
-
-        [HttpPost]
-        public JsonResult svProfDetails(Worker worker, int[] skillIds, string[] newskills)
-        {
-            //try
-            //{
-                worker.workerId = Convert.ToInt32(User.Identity.GetWorkerOrCompanyId());
-                worker.asp_user_Id = Convert.ToInt32(User.Identity.GetUserId<int>());
-                worker.prof_path = "/Content/Moralde/Images/eriri.png";
-                worker.header = "Test";
-                worker.UpdateProfileDetails();
-                if(skillIds != null)
-                {
-                    foreach (int skillId in skillIds)
-                    {
-                        worker.skillId = skillId;
-                        worker.AddSkill(worker.workerId);
-                    }
-                }
-                if(newskills != null)
-                {
-                    foreach (string title in newskills)
-                    {
-                        worker.AddNewSkill(title);
-                        worker.skillId = Skills.getSkillDetailsByTitle(title).skillId;
-                        worker.AddSkill(worker.workerId);
-                    }
-                }
-                return Json("Success", JsonRequestBehavior.AllowGet);
-            //}
-            //catch (Exception e)
-            //{
-            //    return Json("Error: " + e.Message, JsonRequestBehavior.AllowGet);
-            //}
         }
     }
 }
