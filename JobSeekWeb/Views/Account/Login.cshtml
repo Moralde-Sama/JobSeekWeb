@@ -21,8 +21,8 @@
     <link rel="stylesheet" href="~/Content/amade/cs/fontastic.css">
     <link href="~/Content/amade/cs/bootsrat.css" rel="stylesheet">
     <link href="~/Content/amade/cs/custom.css" rel="stylesheet">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>*@
 </head>
 <body>
 
@@ -30,13 +30,13 @@
         <div id="cons" tabindex="-1" role="dialog" aria-hidden="false">
             <div role="document" class=" modal-dialog">
                 <div class="modal-content">
-                    <div class="modal-header border-bottom-0">
+                    <div class="modal-header border-bottom-0" style="position: absolute; right: 0; top: 0; z-index: 2">
                         <a href="/" class="close" style="color: white; border-radius: 5px; text-align: center; padding: 4px 0 0 2px;">
                             X
                         </a>
                     </div>
                     <div class="modal-body p-4 p-lg-5">
-                        <div class="tabbable-line">
+                        <div class="tabbable-line" style="margin-top: 20px;">
                             <ul class="nav nav-pills nav-fill">
                                 <li class="nav-item active">
                                     <a id="btnWorker" data-toggle="tab" style="cursor: pointer;">Worker</a>
@@ -67,14 +67,14 @@
                                 @Html.LabelFor(m => m.RememberMe)
                             </div>
                             <center>
-                                <input type="submit" value="Log in" class="btn btn-primary" style="width: 145px;">
+                                <input type="submit" value="Log in" class="custom-btn" style="width: 145px; height: 35px; padding: 0;">
                             </center>
                             <br>
                             <div class="form-group mb-3">
                                 <center>
                                     <label>Don't have account yet?</label>
                                     <br>
-                                    <a href="../Account/Register" class="btn btn-primary">Create Account</a>
+                                    <a href="../Account/Register" class="custom-btn" style="height: 35px; padding: 7px;">Create Account</a>
                                 </center>
                             </div>
                             @* Enable this once you have account confirmation enabled for password reset functionality
@@ -93,6 +93,8 @@
         </div>
     </section>
 
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
     <script>
         document.getElementById("btnWorker").addEventListener("click", function () {
             setCheckboxValue(true);

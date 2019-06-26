@@ -9,6 +9,11 @@
     border: none;
     border-radius: 5px;
     -webkit-box-shadow: 0 2px 3px rgba(0, 0, 0, 0.08);
+    text-decoration: none !important;
+}
+.custom-btn:hover {
+    color: white;
+    cursor: pointer;
 }
 
 /*

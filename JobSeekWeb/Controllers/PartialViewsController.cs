@@ -18,6 +18,10 @@ namespace JobSeekWeb.Controllers
         {
             return View();
         }
+        public ActionResult WWorkerDashboard()
+        {
+            return View();
+        }
         #endregion
     }
 }

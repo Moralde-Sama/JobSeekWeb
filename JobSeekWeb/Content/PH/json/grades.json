@@ -1,0 +1,114 @@
+[
+    {
+        "id": 1,
+        "equivalent": 100
+    },
+    {
+        "id": 1.1,
+        "equivalent": 99
+    },
+    {
+        "id": 1.2,
+        "equivalent": 98
+    },
+    {
+        "id": 1.3,
+        "equivalent": 97
+    },
+    {
+        "id": 1.4,
+        "equivalent": 96
+    },
+    {
+        "id": 1.5,
+        "equivalent": 95
+    },
+    {
+        "id": 1.6,
+        "equivalent": 94
+    },
+    {
+        "id": 1.7,
+        "equivalent": 93
+    },
+    {
+        "id": 1.8,
+        "equivalent": 92
+    },
+    {
+        "id": 1.9,
+        "equivalent": 91
+    },
+    {
+        "id": 2,
+        "equivalent": 90
+    },
+    {
+        "id": 2.1,
+        "equivalent": 89
+    },
+    {
+        "id": 2.2,
+        "equivalent": 88
+    },
+    {
+        "id": 2.3,
+        "equivalent": 87
+    },
+    {
+        "id": 2.4,
+        "equivalent": 86
+    },
+    {
+        "id": 2.5,
+        "equivalent": 85
+    },
+    {
+        "id": 2.6,
+        "equivalent": 84
+    },
+    {
+        "id": 2.7,
+        "equivalent": 83
+    },
+    {
+        "id": 2.8,
+        "equivalent": 82
+    },
+    {
+        "id": 2.9,
+        "equivalent": 81
+    },
+    {
+        "id": 3,
+        "equivalent": 80
+    },
+    {
+        "id": 3.1,
+        "equivalent": 79
+    },
+    {
+        "id": 3.2,
+        "equivalent": 78
+    },
+    {
+        "id": 3.3,
+        "equivalent": 77
+    },
+    {
+        "id": 3.4,
+        "equivalent": 76
+    },
+    {
+        "id": 3.5,
+        "equivalent": 75
+    },
+    {
+        "id": 5,
+        "equivalent": "Failed"
+    },
+    {
+        "id": 9,
+        "equivalent": "Dropped"
+    }
+]

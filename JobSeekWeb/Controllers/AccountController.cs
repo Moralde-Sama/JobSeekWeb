@@ -60,8 +60,15 @@ namespace JobSeekWeb.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
-            ViewBag.ReturnUrl = returnUrl;
-            return View();
+            if (!User.Identity.IsAuthenticated)
+            {
+                ViewBag.ReturnUrl = returnUrl;
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("PageByRole", "Home");
+            }
         }
 
         //
@@ -164,6 +171,18 @@ namespace JobSeekWeb.Controllers
                         worker.asp_user_Id = user.Id;
                         db.tbl_worker.Add(worker);
                         await db.SaveChangesAsync();
+                        try
+                        {
+                            await UserManager.AddToRoleAsync(user.Id, "Worker");
+                        }
+                        catch
+                        {
+                            tbl_asp_role role = new tbl_asp_role();
+                            role.Name = "Worker";
+                            db.tbl_asp_role.Add(role);
+                            await db.SaveChangesAsync();
+                            await UserManager.AddToRoleAsync(user.Id, "Worker");
+                        }
                     }
                     else
                     {
@@ -171,16 +190,28 @@ namespace JobSeekWeb.Controllers
                         company.asp_user_Id = user.Id;
                         db.tbl_company.Add(company);
                         await db.SaveChangesAsync();
+                        try
+                        {
+                            await UserManager.AddToRoleAsync(user.Id, "Company");
+                        }
+                        catch
+                        {
+                            tbl_asp_role role = new tbl_asp_role();
+                            role.Name = "Company";
+                            db.tbl_asp_role.Add(role);
+                            await db.SaveChangesAsync();
+                            await UserManager.AddToRoleAsync(user.Id, "Company");
+                        }
                     }
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
-                    // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
-                    // Send an email with this link
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    return RedirectToAction("Index", "Home");
+                    //For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
+                    //Send an email with this link
+                    string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                    await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+
+                    return RedirectToAction("PageByRole", "Home");
                 }
                 AddErrors(result);
             }

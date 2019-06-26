@@ -206,8 +206,21 @@
       <DependentUpon>Job.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\MyClass\Skills.cs" />
     <Compile Include="Models\MyClass\Users.cs" />
     <Compile Include="Models\MyClass\Worker.cs" />
+    <Compile Include="Models\spCategories_getAll_Result.cs">
+      <DependentUpon>Job.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\spSkills_getAll_Result.cs">
+      <DependentUpon>Job.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\spSkill_getSkillDetailsById_Result.cs">
+      <DependentUpon>Job.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\spSkill_getSkillDetailsByTitle_Result.cs">
+      <DependentUpon>Job.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\spWorker_getDetails_Result.cs">
       <DependentUpon>Job.tt</DependentUpon>
     </Compile>
@@ -266,6 +279,43 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\assets\css\animate.min.css" />
+    <Content Include="Content\assets\css\bootstrap.min.css" />
+    <Content Include="Content\assets\css\demo.css" />
+    <Content Include="Content\assets\css\light-bootstrap-dashboard.css" />
+    <Content Include="Content\assets\css\pe-icon-7-stroke.css" />
+    <Content Include="Content\assets\fonts\Pe-icon-7-stroke.svg" />
+    <Content Include="Content\assets\img\default-avatar.png" />
+    <Content Include="Content\assets\img\faces\131-1312766_orihime-sky-flower-icon-circle-anime-girl-icon.png" />
+    <Content Include="Content\assets\img\faces\face-0.jpg" />
+    <Content Include="Content\assets\img\faces\face-1.jpg" />
+    <Content Include="Content\assets\img\faces\face-2.jpg" />
+    <Content Include="Content\assets\img\faces\face-3.jpg" />
+    <Content Include="Content\assets\img\faces\face-4.jpg" />
+    <Content Include="Content\assets\img\faces\face-5.jpg" />
+    <Content Include="Content\assets\img\faces\face-6.jpg" />
+    <Content Include="Content\assets\img\faces\face-7.jpg" />
+    <Content Include="Content\assets\img\faces\tim_vector.jpe" />
+    <Content Include="Content\assets\img\favicon.ico" />
+    <Content Include="Content\assets\img\full-screen-image-3.jpg" />
+    <Content Include="Content\assets\img\loading-bubbles.svg" />
+    <Content Include="Content\assets\img\mask.png" />
+    <Content Include="Content\assets\img\new_logo.png" />
+    <Content Include="Content\assets\img\Nicki-Minaj.jpg" />
+    <Content Include="Content\assets\img\photo-1496171367470-9ed9a91ea931.png" />
+    <Content Include="Content\assets\img\sidebar-1.jpg" />
+    <Content Include="Content\assets\img\sidebar-2.jpg" />
+    <Content Include="Content\assets\img\sidebar-3.jpg" />
+    <Content Include="Content\assets\img\sidebar-4.jpg" />
+    <Content Include="Content\assets\img\sidebar-5.jpg" />
+    <Content Include="Content\assets\img\tim_80x80.png" />
+    <Content Include="Content\assets\js\bootstrap-notify.js" />
+    <Content Include="Content\assets\js\bootstrap-select.js" />
+    <Content Include="Content\assets\js\bootstrap.min.js" />
+    <Content Include="Content\assets\js\chartist.min.js" />
+    <Content Include="Content\assets\js\demo.js" />
+    <Content Include="Content\assets\js\jquery.3.2.1.min.js" />
+    <Content Include="Content\assets\js\light-bootstrap-dashboard.js" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -358,8 +408,90 @@
     <Content Include="Content\amade\ven\popper.js\umd\popper-utils.min.js" />
     <Content Include="Content\amade\ven\popper.js\umd\popper.js" />
     <Content Include="Content\amade\ven\popper.js\umd\popper.min.js" />
+    <Content Include="Content\Moralde\bootstrap-4.3.1-dist\css\bootstrap-grid.css" />
+    <Content Include="Content\Moralde\bootstrap-4.3.1-dist\css\bootstrap-grid.min.css" />
+    <Content Include="Content\Moralde\bootstrap-4.3.1-dist\css\bootstrap-reboot.css" />
+    <Content Include="Content\Moralde\bootstrap-4.3.1-dist\css\bootstrap-reboot.min.css" />
+    <Content Include="Content\Moralde\bootstrap-4.3.1-dist\css\bootstrap.css" />
+    <Content Include="Content\Moralde\bootstrap-4.3.1-dist\css\bootstrap.min.css" />
+    <Content Include="Content\Moralde\bootstrap-4.3.1-dist\js\bootstrap.bundle.js" />
+    <Content Include="Content\Moralde\bootstrap-4.3.1-dist\js\bootstrap.bundle.min.js" />
+    <Content Include="Content\Moralde\bootstrap-4.3.1-dist\js\bootstrap.js" />
+    <Content Include="Content\Moralde\bootstrap-4.3.1-dist\js\bootstrap.min.js" />
     <Content Include="Content\Moralde\css\custom-materialize.css" />
+    <Content Include="Content\Moralde\css\worker-css.css" />
     <Content Include="Content\Moralde\Images\eriri.png" />
+    <Content Include="Content\Moralde\select2\css\select2.css" />
+    <Content Include="Content\Moralde\select2\css\select2.min.css" />
+    <Content Include="Content\Moralde\select2\js\i18n\af.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\ar.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\az.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\bg.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\bn.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\bs.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\ca.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\cs.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\da.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\de.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\dsb.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\el.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\en.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\es.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\et.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\eu.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\fa.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\fi.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\fr.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\gl.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\he.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\hi.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\hr.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\hsb.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\hu.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\hy.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\id.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\is.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\it.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\ja.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\ka.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\km.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\ko.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\lt.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\lv.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\mk.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\ms.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\nb.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\ne.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\nl.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\pl.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\ps.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\pt-BR.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\pt.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\ro.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\ru.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\sk.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\sl.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\sq.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\sr-Cyrl.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\sr.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\sv.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\th.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\tk.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\tr.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\uk.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\vi.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\zh-CN.js" />
+    <Content Include="Content\Moralde\select2\js\i18n\zh-TW.js" />
+    <Content Include="Content\Moralde\select2\js\select2.full.js" />
+    <Content Include="Content\Moralde\select2\js\select2.full.min.js" />
+    <Content Include="Content\Moralde\select2\js\select2.js" />
+    <Content Include="Content\Moralde\select2\js\select2.min.js" />
+    <Content Include="Content\Moralde\Swal\sweetalert2.all.js" />
+    <Content Include="Content\Moralde\Swal\sweetalert2.all.min.js" />
+    <Content Include="Content\Moralde\Swal\sweetalert2.css" />
+    <Content Include="Content\Moralde\Swal\sweetalert2.js" />
+    <Content Include="Content\Moralde\Swal\sweetalert2.min.css" />
+    <Content Include="Content\Moralde\Swal\sweetalert2.min.js" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -399,6 +531,57 @@
     <Content Include="Content\amade\ven\jquery.cookie\component.json" />
     <Content Include="Content\amade\ven\jquery.cookie\cookie.jquery.json" />
     <Content Include="Content\amade\ven\popper.js\umd\poppper.js.flow" />
+    <Content Include="Content\PH\json\city.json" />
+    <Content Include="Content\PH\json\grades.json" />
+    <Content Include="Content\PH\json\province.json" />
+    <Content Include="Content\PH\json\refbrgy.json" />
+    <Content Include="Content\PH\json\refcitymun.json" />
+    <Content Include="Content\PH\json\refprovince.json" />
+    <Content Include="Content\PH\json\refregion.json" />
+    <Content Include="Content\PH\json\region.json" />
+    <Content Include="Content\PH\json\regionselect2.json" />
+    <Content Include="Content\Moralde\bootstrap-4.3.1-dist\css\bootstrap-grid.css.map" />
+    <Content Include="Content\Moralde\bootstrap-4.3.1-dist\css\bootstrap-grid.min.css.map" />
+    <Content Include="Content\Moralde\bootstrap-4.3.1-dist\css\bootstrap-reboot.css.map" />
+    <Content Include="Content\Moralde\bootstrap-4.3.1-dist\css\bootstrap-reboot.min.css.map" />
+    <Content Include="Content\Moralde\bootstrap-4.3.1-dist\css\bootstrap.css.map" />
+    <Content Include="Content\Moralde\bootstrap-4.3.1-dist\css\bootstrap.min.css.map" />
+    <Content Include="Content\Moralde\bootstrap-4.3.1-dist\js\bootstrap.bundle.js.map" />
+    <Content Include="Content\Moralde\bootstrap-4.3.1-dist\js\bootstrap.bundle.min.js.map" />
+    <Content Include="Content\Moralde\bootstrap-4.3.1-dist\js\bootstrap.js.map" />
+    <Content Include="Content\Moralde\bootstrap-4.3.1-dist\js\bootstrap.min.js.map" />
+    <Content Include="Content\assets\fonts\Pe-icon-7-stroke.eot" />
+    <Content Include="Content\assets\fonts\Pe-icon-7-stroke.ttf" />
+    <Content Include="Content\assets\fonts\Pe-icon-7-stroke.woff" />
+    <Content Include="Content\assets\sass\lbd\mixins\_buttons.scss" />
+    <Content Include="Content\assets\sass\lbd\mixins\_cards.scss" />
+    <Content Include="Content\assets\sass\lbd\mixins\_chartist.scss" />
+    <Content Include="Content\assets\sass\lbd\mixins\_icons.scss" />
+    <Content Include="Content\assets\sass\lbd\mixins\_inputs.scss" />
+    <Content Include="Content\assets\sass\lbd\mixins\_labels.scss" />
+    <Content Include="Content\assets\sass\lbd\mixins\_morphing-buttons.scss" />
+    <Content Include="Content\assets\sass\lbd\mixins\_navbars.scss" />
+    <Content Include="Content\assets\sass\lbd\mixins\_social-buttons.scss" />
+    <Content Include="Content\assets\sass\lbd\mixins\_tabs.scss" />
+    <Content Include="Content\assets\sass\lbd\mixins\_transparency.scss" />
+    <Content Include="Content\assets\sass\lbd\mixins\_vendor-prefixes.scss" />
+    <Content Include="Content\assets\sass\lbd\_alerts.scss" />
+    <Content Include="Content\assets\sass\lbd\_buttons.scss" />
+    <Content Include="Content\assets\sass\lbd\_cards.scss" />
+    <Content Include="Content\assets\sass\lbd\_chartist.scss" />
+    <Content Include="Content\assets\sass\lbd\_checkbox-radio-switch.scss" />
+    <Content Include="Content\assets\sass\lbd\_dropdown.scss" />
+    <Content Include="Content\assets\sass\lbd\_footers.scss" />
+    <Content Include="Content\assets\sass\lbd\_inputs.scss" />
+    <Content Include="Content\assets\sass\lbd\_misc.scss" />
+    <Content Include="Content\assets\sass\lbd\_mixins.scss" />
+    <Content Include="Content\assets\sass\lbd\_navbars.scss" />
+    <Content Include="Content\assets\sass\lbd\_responsive.scss" />
+    <Content Include="Content\assets\sass\lbd\_sidebar-and-main-panel.scss" />
+    <Content Include="Content\assets\sass\lbd\_tables.scss" />
+    <Content Include="Content\assets\sass\lbd\_typography.scss" />
+    <Content Include="Content\assets\sass\lbd\_variables.scss" />
+    <Content Include="Content\assets\sass\light-bootstrap-dashboard.scss" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -410,6 +593,10 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\moment-with-locales.js" />
+    <Content Include="Scripts\moment-with-locales.min.js" />
+    <Content Include="Scripts\moment.js" />
+    <Content Include="Scripts\moment.min.js" />
     <Content Include="Views\Amad\vendor\bootstrap\css\bootstrap-grid.css" />
     <Content Include="Views\Amad\vendor\bootstrap\css\bootstrap-grid.min.css" />
     <Content Include="Views\Amad\vendor\bootstrap\css\bootstrap-reboot.css" />
@@ -505,6 +692,8 @@
     <Content Include="Views\PartialViews\WWorkerProfile.cshtml" />
     <Content Include="Views\Home\FAQ.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
+    <Content Include="Views\PartialViews\WWorkerDashboard.cshtml" />
+    <Content Include="Views\Amad\Dashboard.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -548,7 +737,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>50051</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:50051/</IISUrl>
+          <IISUrl>http://localhost:50052/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

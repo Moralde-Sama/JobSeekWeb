@@ -1,4 +1,5 @@
 ﻿
+
 @{
     Layout = "";
 }
@@ -9,46 +10,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Worker</title>
     <base href="/" />
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><link href="~/Content/Moralde/css/custom-materialize.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="~/Content/Moralde/bootstrap-4.3.1-dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/Moralde/css/worker-css.css" rel="stylesheet" />
+    <link href="~/Content/Moralde/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/Moralde/Swal/sweetalert2.css" rel="stylesheet" />
 </head>
 <body ng-app="Job">
-    <div class="navbar-fixed">
-        <nav>
-            <div class="nav-wrapper pink">
-                <a href="#!" class="brand-logo">Logo</a>
-                <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-                <ul class="right hide-on-med-and-down">
-                    <li><a href="sass.html">Sass</a></li>
-                    <li><a href="badges.html">Components</a></li>
-                    <li><a href="collapsible.html">Javascript</a></li>
-                    <li><a href="mobile.html">Mobile</a></li>
-                </ul>
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: white;">
+        <a class="navbar-brand" href="../">
+            <img src="https://getbootstrap.com/docs/4.3/assets/brand/bootstrap-solid.svg" width="30" height="30" class="d-inline-block align-top" alt="">
+            JobSeeker
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+            </ul>
+            <div class="form-inline my-2 my-lg-0" style="color: black;" ng-controller="LogoutCtrl">
+                @Html.AntiForgeryToken()
+                <button type="button" class="btn btn-outline-primary" ng-click="logout()">Logout</button>
             </div>
-        </nav>
-    </div>
-
-    <ul class="sidenav" id="mobile-demo">
-        <li><a href="sass.html">Sass</a></li>
-        <li><a href="badges.html">Components</a></li>
-        <li><a href="collapsible.html">Javascript</a></li>
-        <li><a href="mobile.html">Mobile</a></li>
-    </ul>
-    <div class="container">
-        <ng-view></ng-view>
-    </div>
+        </div>
+    </nav>
+    <ng-view></ng-view>
 
     <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <script src="~/Content/Moralde/Swal/sweetalert2.min.js"></script>
     <script src="~/Scripts/AngularJS/angular.min.js"></script>
     <script src="~/Scripts/AngularJS/angular-route.min.js"></script>
     <script src="~/Scripts/AngularJS/Module.js"></script>
     <script src="~/Scripts/AngularJS/Controllers/companies-controller.js"></script>
     <script src="~/Scripts/AngularJS/Router/worker.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $('.sidenav').sidenav();
-        });
-    </script>
+    <script src="~/Content/Moralde/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
+    <script src="~/Content/Moralde/select2/js/select2.min.js"></script>
+    <script src="~/Scripts/moment.min.js"></script>
+
 </body>
 </html>

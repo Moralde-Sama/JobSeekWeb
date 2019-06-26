@@ -1,0 +1,16 @@
+﻿body {
+    background-color: #F0F0F0;
+}
+.center_content {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+@media (max-width: 576px) {
+    .form-group.margin {
+        margin-top: 15px !important;
+    }
+    #lblprovince {
+        margin-top: 12px
+    }
+}

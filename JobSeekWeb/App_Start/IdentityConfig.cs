@@ -11,6 +11,8 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using JobSeekWeb.Models;
+using System.Net.Mail;
+using System.Net;
 
 namespace JobSeekWeb
 {
@@ -19,7 +21,34 @@ namespace JobSeekWeb
         public Task SendAsync(IdentityMessage message)
         {
             // Plug in your email service here to send an email.
-            return Task.FromResult(0);
+            var senderEmail = new MailAddress("animalotion@gmail.com", "Job Seeker Test");
+            var receiverEmail = new MailAddress(message.Destination, "Receiver");
+            var password = "testtesttest";
+
+            var smtp = new SmtpClient
+            {
+                Host = "smtp.gmail.com",
+                Port = 587,
+                EnableSsl = true,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(senderEmail.Address, password)
+            };
+            try
+            {
+                var mess = new MailMessage(senderEmail, receiverEmail)
+                {
+                    Subject = message.Subject,
+                    Body = message.Body,
+                    IsBodyHtml = true
+                };
+                return smtp.SendMailAsync(mess);
+
+            }
+            catch (Exception e)
+            {
+                return Task.FromResult(0);
+            }
         }
     }
 
