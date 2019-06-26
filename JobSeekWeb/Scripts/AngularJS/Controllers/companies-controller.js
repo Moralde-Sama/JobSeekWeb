@@ -16,6 +16,25 @@ module.service('workerService', function ($http) {
         return $http.get("../Home/GetCategoriesAndSkills");
     }
 })
+module.controller("LogoutCtrl", ["$scope", "$http", function (s, h) {
+    s.logout = () => {
+        var formdata = new FormData();
+        formdata.append("__RequestVerificationToken",
+            $('input:hidden[name=__RequestVerificationToken]').val());
+        h({
+            method: 'POST',
+            url: '/Account/LogOff',
+            data: formdata,
+            transformRequest: angular.identity,
+            headers: { 'Content-Type': undefined }
+
+        }).then((r) => {
+            window.location = "../Account/Login";
+        }, (er) => {
+            console.log(er);
+        })
+    }
+}])
 module.controller("CompaniesCtrl", ["$scope", "$http", function (s, h) {
     s.list = [0, 1, 2, 3, 4];
 }])
@@ -106,7 +125,7 @@ module.controller("WorkerProfileCtrl", ["$scope", "$http", "$q", "workerService"
                             cancelButtonColor: '#d33',
                             confirmButtonText: 'Ok'
                         }).then((result) => {
-                            window.location = "../Worker/Dashboard";
+                            window.location = "../Amad/Dashboard";
                         })
                     } else {
                         Swal.fire(

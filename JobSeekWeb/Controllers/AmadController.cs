@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using JobSeekWeb.Extensions;
+using JobSeekWeb.Models.MyClass;
 
 namespace JobSeekWeb.Controllers
 {
@@ -29,6 +31,7 @@ namespace JobSeekWeb.Controllers
         {
             return View();
         }
+        [Authorize (Roles = "Worker")]
         public ActionResult Dashboard()
         {
             return View();

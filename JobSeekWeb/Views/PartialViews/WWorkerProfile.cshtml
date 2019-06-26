@@ -76,10 +76,10 @@
                         </select>
                     </div>
                     <div class="col-sm-12 col-md-6" style="margin-top: 10px;">
-                        <label for="city">City/Municipatily</label>
+                        <label for="city">City/Municipality</label>
                         <select id="city" class="form-control" disabled ng-model="data.city" disable
                                 ng-change="optionChanged(data.city, 'City')">
-                            <option value="" disabled selected>Select your city/municipatily</option>
+                            <option value="" disabled selected>Select your city/Municipality</option>
                             <option ng-repeat="city in cities" value="{{city.citymunCode}}"
                                     ng-init="$last && finishedSelect('city')">
                                 {{city.citymunDesc}}

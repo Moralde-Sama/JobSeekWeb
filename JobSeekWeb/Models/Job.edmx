@@ -284,6 +284,9 @@
         <Function Name="spWorker_getDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="asp_userId" Type="int" Mode="In" />
         </Function>
+        <Function Name="spWorker_GetFullName" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="asp_userId" Type="int" Mode="In" />
+        </Function>
         <Function Name="spWorker_getWorkerId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="asp_userId" Type="int" Mode="In" />
         </Function>
@@ -415,6 +418,9 @@
           <Parameter Name="title" Mode="In" Type="String" />
           </FunctionImport>
           <EntitySet Name="tbl_worker" EntityType="JobModel.tbl_worker" />
+          <FunctionImport Name="spWorker_GetFullName" ReturnType="Collection(String)">
+            <Parameter Name="asp_userId" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="C__MigrationHistory">
           <Key>
@@ -947,6 +953,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="spWorker_GetFullName" FunctionName="JobModel.Store.spWorker_GetFullName" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

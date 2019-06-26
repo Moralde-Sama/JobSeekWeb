@@ -18,6 +18,7 @@ namespace JobSeekWeb.Models
             
             userIdentity.AddClaim(new Claim("IsWorker", Users.IsWorker(userIdentity.GetUserId<int>()).ToString()));
             userIdentity.AddClaim(new Claim("WorkCompanyId", Users.GetWorkerOrCompanyId(userIdentity.GetUserId<int>()).ToString()));
+            userIdentity.AddClaim(new Claim("FullName", Users.GetWorkerName(userIdentity.GetUserId<int>()).ToString()));
             return userIdentity;
         }
     }
