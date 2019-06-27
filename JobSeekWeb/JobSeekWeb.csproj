@@ -510,6 +510,7 @@
     <Content Include="Scripts\AngularJS\angular-route.min.js" />
     <Content Include="Scripts\AngularJS\angular.min.js" />
     <Content Include="Scripts\AngularJS\Controllers\companies-controller.js" />
+    <Content Include="Scripts\AngularJS\Controllers\worker-controller.js" />
     <Content Include="Scripts\AngularJS\Controllers\worker-details.js" />
     <Content Include="Scripts\AngularJS\module.js" />
     <Content Include="Scripts\AngularJS\Router\worker.js" />
