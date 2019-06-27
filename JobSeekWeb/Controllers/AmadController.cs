@@ -33,5 +33,9 @@ namespace JobSeekWeb.Controllers
         {
             return View();
         }
+        public ActionResult Company()
+        {
+            return View();
+        }
     }
 }
