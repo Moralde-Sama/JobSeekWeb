@@ -361,6 +361,13 @@
     <Content Include="Content\amade\ven\popper.js\umd\popper.min.js" />
     <Content Include="Content\Company\css\freelancer.css" />
     <Content Include="Content\Company\css\freelancer.min.css" />
+    <Content Include="Content\Company\css\roboto-font.css" />
+    <Content Include="Content\Company\css\style.css" />
+    <Content Include="Content\Company\fonts\font-awesome-5\css\fontawesome-all.min.css" />
+    <Content Include="Content\Company\fonts\font-awesome-5\webfonts\fa-brands-400.svg" />
+    <Content Include="Content\Company\fonts\font-awesome-5\webfonts\fa-regular-400.svg" />
+    <Content Include="Content\Company\fonts\font-awesome-5\webfonts\fa-solid-900.svg" />
+    <Content Include="Content\Company\fonts\Roboto\LICENSE.txt" />
     <Content Include="Content\Company\js\contact_me.js" />
     <Content Include="Content\Company\js\contact_me.min.js" />
     <Content Include="Content\Company\js\freelancer.js" />
@@ -455,6 +462,30 @@
     <Content Include="Content\Company\vendor\fontawesome-free\webfonts\fa-solid-900.woff2" />
     <Content Include="Content\Company\vendor\jquery\jquery.min.map" />
     <Content Include="Content\Company\vendor\jquery\jquery.slim.min.map" />
+    <Content Include="Content\Company\fonts\font-awesome-5\webfonts\fa-brands-400.eot" />
+    <Content Include="Content\Company\fonts\font-awesome-5\webfonts\fa-brands-400.ttf" />
+    <Content Include="Content\Company\fonts\font-awesome-5\webfonts\fa-brands-400.woff" />
+    <Content Include="Content\Company\fonts\font-awesome-5\webfonts\fa-brands-400.woff2" />
+    <Content Include="Content\Company\fonts\font-awesome-5\webfonts\fa-regular-400.eot" />
+    <Content Include="Content\Company\fonts\font-awesome-5\webfonts\fa-regular-400.ttf" />
+    <Content Include="Content\Company\fonts\font-awesome-5\webfonts\fa-regular-400.woff" />
+    <Content Include="Content\Company\fonts\font-awesome-5\webfonts\fa-regular-400.woff2" />
+    <Content Include="Content\Company\fonts\font-awesome-5\webfonts\fa-solid-900.eot" />
+    <Content Include="Content\Company\fonts\font-awesome-5\webfonts\fa-solid-900.ttf" />
+    <Content Include="Content\Company\fonts\font-awesome-5\webfonts\fa-solid-900.woff" />
+    <Content Include="Content\Company\fonts\font-awesome-5\webfonts\fa-solid-900.woff2" />
+    <Content Include="Content\Company\fonts\Roboto\Roboto-Black.ttf" />
+    <Content Include="Content\Company\fonts\Roboto\Roboto-BlackItalic.ttf" />
+    <Content Include="Content\Company\fonts\Roboto\Roboto-Bold.ttf" />
+    <Content Include="Content\Company\fonts\Roboto\Roboto-BoldItalic.ttf" />
+    <Content Include="Content\Company\fonts\Roboto\Roboto-Italic.ttf" />
+    <Content Include="Content\Company\fonts\Roboto\Roboto-Light.ttf" />
+    <Content Include="Content\Company\fonts\Roboto\Roboto-LightItalic.ttf" />
+    <Content Include="Content\Company\fonts\Roboto\Roboto-Medium.ttf" />
+    <Content Include="Content\Company\fonts\Roboto\Roboto-MediumItalic.ttf" />
+    <Content Include="Content\Company\fonts\Roboto\Roboto-Regular.ttf" />
+    <Content Include="Content\Company\fonts\Roboto\Roboto-Thin.ttf" />
+    <Content Include="Content\Company\fonts\Roboto\Roboto-ThinItalic.ttf" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -561,8 +592,8 @@
     <Content Include="Views\PartialViews\WWorkerProfile.cshtml" />
     <Content Include="Views\Home\FAQ.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
-    <Content Include="Views\Company\HomePage.cshtml" />
-    <Content Include="Views\Company\LandingPage.cshtml" />
+    <Content Include="Views\Company\CompanyDetails.cshtml" />
+    <Content Include="Views\Company\Dashboard.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

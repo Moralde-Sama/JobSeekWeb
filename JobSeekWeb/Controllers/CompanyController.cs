@@ -9,14 +9,15 @@ namespace JobSeekWeb.Controllers
     public class CompanyController : Controller
     {
         // GET: Company
-        public ActionResult HomePage()
+        public ActionResult CompanyDetails()
         {
             return View();
         }
-        public ActionResult LandingPage()
+        public ActionResult Dashboard()
         {
             return View();
         }
+        
 
     }
 }
