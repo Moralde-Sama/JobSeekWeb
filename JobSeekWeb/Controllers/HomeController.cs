@@ -35,7 +35,7 @@ namespace JobSeekWeb.Controllers
             if (Users.IsWorker(asp_userId))
             {
                 return datails_completed ? RedirectToAction("Dashboard", "Amad") :
-                    RedirectToAction("Profile", "Worker");
+                    RedirectToAction("Details", "Worker");
                         
             } 
             else

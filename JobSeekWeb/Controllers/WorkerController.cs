@@ -20,11 +20,11 @@ namespace JobSeekWeb.Controllers
         {
             if (Worker.IsDetailsCompleted(User.Identity.GetUserId<int>()))
             {
-                return View("~/Views/Shared/_WorkerLayout.cshtml");
+                return RedirectToAction("Dashboard", "Amad");
             }
             else
             {
-                return RedirectToAction("Profile", "Worker");
+                return RedirectToAction("Details", "Worker");
             }
         }
         [AllowAnonymous]
@@ -32,7 +32,7 @@ namespace JobSeekWeb.Controllers
         {
             return View("~/Views/Shared/_WorkerLayout.cshtml");
         }
-        public new ActionResult Profile()
+        public ActionResult Details()
         {
             if (Worker.IsDetailsCompleted(User.Identity.GetUserId<int>()))
             {
@@ -40,7 +40,7 @@ namespace JobSeekWeb.Controllers
             }
             else
             {
-                return View("~/Views/Shared/_WorkerLayout.cshtml");
+                return View();
             }
         }
     }
