@@ -691,11 +691,11 @@
     <Content Include="Views\Amad\vendor\jquery.cookie\cookie.jquery.json" />
     <Content Include="Views\Amad\vendor\popper.js\umd\poppper.js.flow" />
     <Content Include="Views\Shared\_WorkerLayout.cshtml" />
-    <Content Include="Views\PartialViews\WCompanies.cshtml" />
-    <Content Include="Views\PartialViews\WWorkerProfile.cshtml" />
+    <Content Include="Views\PartialViews\WCompany.cshtml" />
+    <Content Include="Views\PartialViews\WProfile.cshtml" />
     <Content Include="Views\Home\FAQ.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
-    <Content Include="Views\PartialViews\WWorkerDashboard.cshtml" />
+    <Content Include="Views\PartialViews\WDashboard.cshtml" />
     <Content Include="Views\Amad\Dashboard.cshtml" />
     <Content Include="Views\Worker\Details.cshtml" />
   </ItemGroup>

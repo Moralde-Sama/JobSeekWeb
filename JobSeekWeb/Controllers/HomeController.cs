@@ -34,7 +34,7 @@ namespace JobSeekWeb.Controllers
             bool datails_completed = Worker.IsDetailsCompleted(asp_userId);
             if (Users.IsWorker(asp_userId))
             {
-                return datails_completed ? RedirectToAction("Dashboard", "Amad") :
+                return datails_completed ? RedirectToAction("Dashboard", "Worker") :
                     RedirectToAction("Details", "Worker");
                         
             } 

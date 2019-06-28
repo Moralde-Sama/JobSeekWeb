@@ -45,7 +45,7 @@ namespace JobSeekWeb
                 return smtp.SendMailAsync(mess);
 
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return Task.FromResult(0);
             }

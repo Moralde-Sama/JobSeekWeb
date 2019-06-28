@@ -1,3 +1,4 @@
+
 /*!
  * Select2 4.0.7
  * https://select2.github.io
@@ -50,7 +51,6 @@ if (!S2) { S2 = {}; } else { require = S2; }
 //Going sloppy to avoid 'use strict' string cost, but strict practices should
 //be followed.
 /*global setTimeout: false */
-
 var requirejs, require, define;
 (function (undef) {
     var main, req, makeMap, handlers,
@@ -1567,17 +1567,28 @@ S2.define('select2/selection/single',[
 
   Utils.Extend(SingleSelection, BaseSelection);
 
-  SingleSelection.prototype.render = function () {
+  SingleSelection.prototype.render = function (isDisabled) {
     var $selection = SingleSelection.__super__.render.call(this);
 
     $selection.addClass('select2-selection--single');
 
-    $selection.html(
-      '<span class="select2-selection__rendered"></span>' +
-      '<span class="select2-selection__arrow" role="presentation">' +
-        '<b role="presentation"></b>' +
-      '</span>'
-    );
+      //here
+      if (isDisabled) {
+          $selection.html(
+              '<span class="select2-selection__rendered disabled"></span>' +
+              '<span class="select2-selection__arrow" role="presentation">' +
+              '<b role="presentation"></b>' +
+              '</span>'
+          );
+      } else {
+          $selection.html(
+              '<span class="select2-selection__rendered"></span>' +
+              '<span class="select2-selection__arrow" role="presentation">' +
+              '<b role="presentation"></b>' +
+              '</span>'
+          );
+      }
+    
 
     return $selection;
   };
@@ -3281,7 +3292,7 @@ S2.define('select2/data/select',[
 
       var matches = self.matches(params, option);
 
-      if (matches !== null) {
+      if (matches !== null) {option.disabled
         data.push(matches);
       }
     });
@@ -5217,7 +5228,7 @@ S2.define('select2/core',[
 
     var SelectionAdapter = this.options.get('selectionAdapter');
     this.selection = new SelectionAdapter($element, this.options);
-    this.$selection = this.selection.render();
+    this.$selection = this.selection.render(this.options.options.disabled);
 
     this.selection.position(this.$selection, $container);
 

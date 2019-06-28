@@ -1,0 +1,75 @@
+﻿@{
+    Layout = "";
+}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="header">
+                        <h4 class="title">Companies</h4>
+                    </div>
+                    <div class="content">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Search</label>
+                                    <input type="text" class="form-control" placeholder="Company name">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="category">Category</label>
+                                <select id="category" class="form-control" name="state">
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="skills">Skills</label>
+                                <select id="skills" class="form-control" multiple name="state">
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Female">Female</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="header">
+                        <h4 class="title">Results</h4>
+                    </div>
+                    <div class="content">
+                        <div class="row">
+                            <div class="col-md-4" ng-repeat="test in lists">
+                                <div class="card card-user">
+                                    <div class="image" style="height: 100px;">
+                                        <img src="~/Content/moral/Images/kodaikanal-2836301.jpg" alt="..." />
+                                    </div>
+                                    <div class="content">
+                                        <div style="display: flex; justify-content: center;">
+                                            <img class="avatar border-violet company" src="~/Content/moral/Images/eriri.png" alt="..." />
+                                        </div>
+                                        <p class="description text-center" style="margin-top: 10px;">
+                                            Web Developer Company
+                                        </p>
+                                    </div>
+                                    <hr>
+                                    <div class="text-center">
+                                        <button href="#" class="btn btn-simple"><i class="fa fa-facebook-square"></i></button>
+                                        <button href="#" class="btn btn-simple"><i class="fa fa-twitter"></i></button>
+                                        <button href="#" class="btn btn-simple"><i class="fa fa-google-plus-square"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
