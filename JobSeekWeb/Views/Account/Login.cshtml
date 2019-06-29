@@ -53,9 +53,9 @@
                             <input checked="checked" id="IsWorker" name="IsWorker" type="checkbox" value="true" style="opacity: 0;" />
                             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                             <div class="form-group" style="padding: 0 20px;">
-                                @Html.LabelFor(m => m.Email, new { @class = "control-label" })
-                                @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                                @Html.LabelFor(m => m.UserName, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
                             </div>
                             <div class="form-group" style="padding: 0 20px;">
                                 @Html.LabelFor(m => m.Password, new { @class = "control-label" })
