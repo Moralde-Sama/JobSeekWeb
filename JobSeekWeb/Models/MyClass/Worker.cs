@@ -51,5 +51,9 @@ namespace JobSeekWeb.Models.MyClass
             }
             return (completed.Contains(false)) ? false : true;
         }
+        public static spWorker_getDetails_Result GetWorkerDetails(int asp_userId)
+        {
+            return new JobEntities().spWorker_getDetails(asp_userId).FirstOrDefault();
+        }
     }
 }

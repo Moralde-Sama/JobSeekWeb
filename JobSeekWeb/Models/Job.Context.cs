@@ -197,5 +197,23 @@ namespace JobSeekWeb.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("spWorker_GetFullName", asp_userIdParameter);
         }
+    
+        public virtual ObjectResult<spWorker_getAllUserInfo_Result> spWorker_getAllUserInfo(Nullable<int> asp_userId)
+        {
+            var asp_userIdParameter = asp_userId.HasValue ?
+                new ObjectParameter("asp_userId", asp_userId) :
+                new ObjectParameter("asp_userId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spWorker_getAllUserInfo_Result>("spWorker_getAllUserInfo", asp_userIdParameter);
+        }
+    
+        public virtual ObjectResult<spWorker_getWorkerSkills_Result> spWorker_getWorkerSkills(Nullable<int> workerId)
+        {
+            var workerIdParameter = workerId.HasValue ?
+                new ObjectParameter("workerId", workerId) :
+                new ObjectParameter("workerId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spWorker_getWorkerSkills_Result>("spWorker_getWorkerSkills", workerIdParameter);
+        }
     }
 }

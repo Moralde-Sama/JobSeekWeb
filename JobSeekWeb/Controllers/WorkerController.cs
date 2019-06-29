@@ -51,5 +51,13 @@ namespace JobSeekWeb.Controllers
         {
             return View("~/Views/Shared/_WorkerLayout.cshtml");
         }
+        [HttpGet]
+        public JsonResult GetUserInfo()
+        {
+            int userId = User.Identity.GetUserId<int>();
+            var userinfo = db.spWorker_getAllUserInfo(userId).FirstOrDefault();
+            var skills = db.spWorker_getWorkerSkills(userinfo.workerId).FirstOrDefault();
+            return Json(new { userInfo = userinfo, skills = skills }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

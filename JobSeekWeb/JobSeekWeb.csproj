@@ -206,6 +206,7 @@
       <DependentUpon>Job.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\MyClass\Settings.cs" />
     <Compile Include="Models\MyClass\Skills.cs" />
     <Compile Include="Models\MyClass\Users.cs" />
     <Compile Include="Models\MyClass\Worker.cs" />
@@ -221,7 +222,13 @@
     <Compile Include="Models\spSkill_getSkillDetailsByTitle_Result.cs">
       <DependentUpon>Job.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\spWorker_getAllUserInfo_Result.cs">
+      <DependentUpon>Job.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\spWorker_getDetails_Result.cs">
+      <DependentUpon>Job.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\spWorker_getWorkerSkills_Result.cs">
       <DependentUpon>Job.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\sysdiagram.cs">
@@ -418,6 +425,7 @@
     <Content Include="Content\moral\bootstrap-4.3.1-dist\js\bootstrap.bundle.min.js" />
     <Content Include="Content\moral\bootstrap-4.3.1-dist\js\bootstrap.js" />
     <Content Include="Content\moral\bootstrap-4.3.1-dist\js\bootstrap.min.js" />
+    <Content Include="Content\moral\css\angular-animate.css" />
     <Content Include="Content\moral\css\custom-materialize.css" />
     <Content Include="Content\moral\css\worker-css.css" />
     <Content Include="Content\moral\Images\eriri.png" />
@@ -507,6 +515,7 @@
       <DependentUpon>Job.edmx</DependentUpon>
       <LastGenOutput>Job.cs</LastGenOutput>
     </Content>
+    <Content Include="Scripts\AngularJS\angular-animate.js" />
     <Content Include="Scripts\AngularJS\angular-route.min.js" />
     <Content Include="Scripts\AngularJS\angular.min.js" />
     <Content Include="Scripts\AngularJS\Controllers\companies-controller.js" />

@@ -1680,12 +1680,16 @@ S2.define('select2/selection/multiple',[
 
   MultipleSelection.prototype.render = function () {
     var $selection = MultipleSelection.__super__.render.call(this);
+      //here2
+      if (this.options.options.disabled) {
+          $selection.addClass('select2-selection--multiple disabled');
+      } else {
+          $selection.addClass('select2-selection--multiple');
+      }
+      $selection.html(
+          '<ul class="select2-selection__rendered"></ul>'
+      );
 
-    $selection.addClass('select2-selection--multiple');
-
-    $selection.html(
-      '<ul class="select2-selection__rendered"></ul>'
-    );
 
     return $selection;
   };

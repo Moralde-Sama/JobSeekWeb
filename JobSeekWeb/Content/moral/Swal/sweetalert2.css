@@ -1,4 +1,4 @@
-@charset "UTF-8";
+﻿@charset "UTF-8";
 @-webkit-keyframes swal2-show {
   0% {
     -webkit-transform: scale(0.7);
@@ -921,7 +921,8 @@ body.swal2-no-backdrop .swal2-shown.swal2-bottom-end, body.swal2-no-backdrop .sw
   border: 0;
   border-radius: 0.25em;
   background: initial;
-  background-color: #3085d6;
+  /*background-color: #3085d6;*/
+   background-color: #8553C6;
   color: #fff;
   font-size: 1.0625em;
 }

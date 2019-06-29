@@ -281,6 +281,9 @@
         <Function Name="spWorker_Exist" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="asp_userId" Type="int" Mode="In" />
         </Function>
+        <Function Name="spWorker_getAllUserInfo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="asp_userId" Type="int" Mode="In" />
+        </Function>
         <Function Name="spWorker_getDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="asp_userId" Type="int" Mode="In" />
         </Function>
@@ -289,6 +292,9 @@
         </Function>
         <Function Name="spWorker_getWorkerId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="asp_userId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="spWorker_getWorkerSkills" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="workerId" Type="int" Mode="In" />
         </Function>
         <Function Name="spWorker_updateDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="workerId" Type="int" Mode="In" />
@@ -419,7 +425,13 @@
           </FunctionImport>
           <EntitySet Name="tbl_worker" EntityType="JobModel.tbl_worker" />
           <FunctionImport Name="spWorker_GetFullName" ReturnType="Collection(String)">
+          <Parameter Name="asp_userId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="spWorker_getAllUserInfo" ReturnType="Collection(JobModel.spWorker_getAllUserInfo_Result)">
             <Parameter Name="asp_userId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="spWorker_getWorkerSkills" ReturnType="Collection(JobModel.spWorker_getWorkerSkills_Result)">
+            <Parameter Name="workerId" Mode="In" Type="Int32" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="C__MigrationHistory">
@@ -679,6 +691,29 @@
           <Property Name="asp_user_Id" Type="Int32" Nullable="false" />
           <Property Name="prof_path" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
         </EntityType>
+        <ComplexType Name="spWorker_getAllUserInfo_Result">
+          <Property Type="String" Name="Email" Nullable="true" MaxLength="256" />
+          <Property Type="String" Name="UserName" Nullable="false" MaxLength="256" />
+          <Property Type="Int32" Name="workerId" Nullable="false" />
+          <Property Type="String" Name="fname" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="mname" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="lname" Nullable="true" MaxLength="100" />
+          <Property Type="DateTime" Name="birthdate" Nullable="true" />
+          <Property Type="String" Name="gender" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="header" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="cellnum" Nullable="true" MaxLength="12" />
+          <Property Type="Int32" Name="region" Nullable="true" />
+          <Property Type="Int32" Name="province" Nullable="true" />
+          <Property Type="Int32" Name="city" Nullable="true" />
+          <Property Type="Int32" Name="brgy" Nullable="true" />
+          <Property Type="Int32" Name="asp_user_Id" Nullable="false" />
+          <Property Type="String" Name="prof_path" Nullable="true" MaxLength="200" />
+        </ComplexType>
+        <ComplexType Name="spWorker_getWorkerSkills_Result">
+          <Property Type="Int32" Name="workerSkillId" Nullable="false" />
+          <Property Type="Int32" Name="skillId" Nullable="false" />
+          <Property Type="Int32" Name="workerId" Nullable="false" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -954,6 +989,37 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="spWorker_GetFullName" FunctionName="JobModel.Store.spWorker_GetFullName" />
+          <FunctionImportMapping FunctionImportName="spWorker_getAllUserInfo" FunctionName="JobModel.Store.spWorker_getAllUserInfo">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="JobModel.spWorker_getAllUserInfo_Result">
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="workerId" ColumnName="workerId" />
+                <ScalarProperty Name="fname" ColumnName="fname" />
+                <ScalarProperty Name="mname" ColumnName="mname" />
+                <ScalarProperty Name="lname" ColumnName="lname" />
+                <ScalarProperty Name="birthdate" ColumnName="birthdate" />
+                <ScalarProperty Name="gender" ColumnName="gender" />
+                <ScalarProperty Name="header" ColumnName="header" />
+                <ScalarProperty Name="cellnum" ColumnName="cellnum" />
+                <ScalarProperty Name="region" ColumnName="region" />
+                <ScalarProperty Name="province" ColumnName="province" />
+                <ScalarProperty Name="city" ColumnName="city" />
+                <ScalarProperty Name="brgy" ColumnName="brgy" />
+                <ScalarProperty Name="asp_user_Id" ColumnName="asp_user_Id" />
+                <ScalarProperty Name="prof_path" ColumnName="prof_path" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="spWorker_getWorkerSkills" FunctionName="JobModel.Store.spWorker_getWorkerSkills">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="JobModel.spWorker_getWorkerSkills_Result">
+                <ScalarProperty Name="workerSkillId" ColumnName="workerSkillId" />
+                <ScalarProperty Name="skillId" ColumnName="skillId" />
+                <ScalarProperty Name="workerId" ColumnName="workerId" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

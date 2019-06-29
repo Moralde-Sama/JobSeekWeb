@@ -7,12 +7,14 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using JobSeekWeb.Models;
+using JobSeekWeb.Models.MyClass;
 
 namespace JobSeekWeb.Controllers
 {
     [Authorize]
     public class ManageController : Controller
     {
+        private JobEntities db = new JobEntities();
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
@@ -219,6 +221,42 @@ namespace JobSeekWeb.Controllers
         {
             return View();
         }
+
+        #region Worker
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Worker")]
+        public async Task<ActionResult> UpdateSettings(Settings settings)
+        {
+            var user = await UserManager.FindByIdAsync(User.Identity.GetUserId<int>());
+            tbl_worker worker = db.tbl_worker.Where(w => w.asp_user_Id == user.Id).FirstOrDefault();
+            bool test = String.IsNullOrEmpty(settings.newpassword);
+            if (user.UserName != settings.UserName)
+            {
+                user.UserName = settings.UserName;
+                await UserManager.UpdateAsync(user);
+            }
+            if (settings.header != worker.header)
+            {
+                worker.header = settings.header;
+                db.Entry(worker).State = System.Data.Entity.EntityState.Modified;
+                await db.SaveChangesAsync();
+            }
+            if (!String.IsNullOrEmpty(settings.newpassword))
+            {
+                var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId<int>(), settings.oldpassword, settings.newpassword);
+                if (result.Succeeded)
+                {
+                    if (user != null)
+                    {
+                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                    }
+                }
+            }
+            return Json(settings, JsonRequestBehavior.AllowGet);
+        }
+        #endregion
 
         //
         // POST: /Manage/ChangePassword
