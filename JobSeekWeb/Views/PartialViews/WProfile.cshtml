@@ -82,40 +82,49 @@
                                 </div>
                             </div>
                         </div>
+                        <form name="settingsform">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label ng-class="validateLabel(settingsform.UserName.$valid)">Username 
+                                        <span ng-hide="settingsform.UserName.$valid"> - Required</span></label>
+                                        <input id="username" name="UserName" ng-model="userInfo.UserName" type="text" 
+                                               ng-class="validateInput(settingsform.UserName.$valid)"
+                                               ng-disabled="settings" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label ng-class="validateLabel(settingsform.email.$valid)">Email 
+                                        <span ng-hide="settingsform.email.$valid"> - Required</span></label>
+                                        <input type="email" name="email" class="form-control" ng-model="userInfo.Email"
+                                               ng-class="validateInput(settingsform.email.$valid)"
+                                               ng-disabled="settings" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>New Password</label>
+                                        <input id="password" ng-model="userInfo.newpassword" type="password" class="form-control"
+                                               placeholder="Optional" ng-disabled="settings">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Repeat Password</label>
+                                        <input id="repassword" ng-model="userInfo.repassword" type="password" class="form-control"
+                                               placeholder="Optional" ng-disabled="settings">
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                         <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label>Username</label>
-                                    <input id="username" ng-model="userInfo.UserName" type="text" class="form-control"
-                                           ng-disabled="settings">
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label>New Password</label>
-                                    <input id="password" ng-model="userInfo.newpassword" type="password" class="form-control"
-                                            ng-disabled="settings">
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label>Repeat Password</label>
-                                    <input id="repassword" ng-model="userInfo.repassword" type="password" class="form-control"
-                                           value=""  ng-disabled="settings">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label>Header</label>
-                                    <textarea id="header" rows="2" cols="80" class="form-control"
-                                              ng-disabled="settings" ng-model="userInfo.header"></textarea>
-                                </div>
-                            </div>
                             <div class="col-md-12 text-center animate" ng-hide="settings">
                                 <a class="btn btn-mywarning" ng-click="cancel('settings')">Cancel</a>
-                                <a class="btn btn-violet" ng-click="update('settings', userInfo)">Update Settings</a>
+                                <a class="btn btn-violet" ng-click="update('settings', settingsform.$valid)"
+                                   ng-disabled="!settingsform.$valid">Update Settings</a>
                             </div>
                         </div>
                     </div>
@@ -152,15 +161,7 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label>Email</label>
-                                    <input type="email" class="form-control" ng-model="userInfo.Email"
-                                           ng-disabled="personal">
-                                </div>
-                            </div>
                             <div class="col-md-4">
                                 <label for="gender">Gender</label>
                                 <select id="gender" ng-model="userInfo.gender" class="form-control"
@@ -174,6 +175,22 @@
                                     <label>Cellphone Number</label>
                                     <input type="number" class="form-control"
                                            ng-model="userInfo.cellnum" ng-disabled="personal">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Birthdate</label>
+                                    <input type="date" class="form-control"
+                                           ng-model="userInfo.birthdate" ng-disabled="personal">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Header</label>
+                                    <textarea id="header" rows="2" cols="80" class="form-control"
+                                              ng-disabled="personal" ng-model="userInfo.header"></textarea>
                                 </div>
                             </div>
                         </div>

@@ -998,7 +998,7 @@ body.swal2-no-backdrop .swal2-shown.swal2-bottom-end, body.swal2-no-backdrop .sw
   z-index: 1;
   justify-content: center;
   margin: 0;
-  padding: 0;
+  padding: 0 20px;
   color: #545454;
   font-size: 1.125em;
   font-weight: 300;
@@ -1038,7 +1038,7 @@ body.swal2-no-backdrop .swal2-shown.swal2-bottom-end, body.swal2-no-backdrop .sw
 .swal2-input:focus,
 .swal2-file:focus,
 .swal2-textarea:focus {
-  border: 1px solid #b4dbed;
+  border: 1px solid #aaa;
   outline: none;
   box-shadow: 0 0 3px #c4e6f5;
 }
@@ -1092,6 +1092,7 @@ body.swal2-no-backdrop .swal2-shown.swal2-bottom-end, body.swal2-no-backdrop .sw
 .swal2-input {
   height: 2.625em;
   padding: 0 0.75em;
+  border: 1px solid #E3E3E3;
 }
 .swal2-input[type=number] {
   max-width: 10em;

@@ -230,31 +230,48 @@ namespace JobSeekWeb.Controllers
         public async Task<ActionResult> UpdateSettings(Settings settings)
         {
             var user = await UserManager.FindByIdAsync(User.Identity.GetUserId<int>());
-            tbl_worker worker = db.tbl_worker.Where(w => w.asp_user_Id == user.Id).FirstOrDefault();
-            bool test = String.IsNullOrEmpty(settings.newpassword);
-            if (user.UserName != settings.UserName)
+
+            if (UserManager.PasswordHasher.VerifyHashedPassword(user.PasswordHash, settings.oldpassword)
+                == PasswordVerificationResult.Success)
             {
-                user.UserName = settings.UserName;
-                await UserManager.UpdateAsync(user);
-            }
-            if (settings.header != worker.header)
-            {
-                worker.header = settings.header;
-                db.Entry(worker).State = System.Data.Entity.EntityState.Modified;
-                await db.SaveChangesAsync();
-            }
-            if (!String.IsNullOrEmpty(settings.newpassword))
-            {
-                var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId<int>(), settings.oldpassword, settings.newpassword);
-                if (result.Succeeded)
+                tbl_worker worker = db.tbl_worker.Where(w => w.asp_user_Id == user.Id).FirstOrDefault();
+                bool isModified = 
+                    settings.UserName != user.UserName || settings.Email != user.Email ? true : false;
+                if (user.UserName != settings.UserName)
+                    user.UserName = settings.UserName;
+                if (user.Email != settings.Email)
+                    user.Email = settings.Email;
+                if(isModified)
+                {
+                    var result = await UserManager.UpdateAsync(user);
+                    if(!result.Succeeded)
+                    {
+                        return Json(result.Errors, JsonRequestBehavior.AllowGet);
+                    }
+                }
+
+                if (!String.IsNullOrEmpty(settings.newpassword))
+                {
+                    var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId<int>(), settings.oldpassword, settings.newpassword);
+                    if (result.Succeeded)
+                    {
+                        if (user != null)
+                        {
+                            await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                        }
+                    }
+                } else
                 {
                     if (user != null)
                     {
                         await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                     }
                 }
+                return Json("Success", JsonRequestBehavior.AllowGet);
+            } else
+            {
+                return Json("Invalid Password.", JsonRequestBehavior.AllowGet);
             }
-            return Json(settings, JsonRequestBehavior.AllowGet);
         }
         #endregion
 

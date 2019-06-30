@@ -55,14 +55,11 @@ module.service("profileService", function ($http, $q) {
     }
     this.updateSettings = (data) => {
         var formdata = new FormData();
-        var dataKeys = Object.keys(data);
-        console.log(dataKeys);
         formdata.append("__RequestVerificationToken",
             $('input:hidden[name=__RequestVerificationToken]').val());
         angular.forEach(data, (value, keys) => {
             formdata.append(keys, value);
         })
-        console.log(formdata);
         return $http({
             method: 'POST',
             url: '/Manage/UpdateSettings',
@@ -174,6 +171,7 @@ module.controller("ProfileCtrl", ["$scope", "$http", "$q", "profileService", fun
         });
         s.userInfo = holders.userInfoHolder.userInfo;
         s.userInfo.cellnum = parseInt(s.userInfo.cellnum);
+        s.userInfo.birthdate = new Date(moment(s.userInfo.birthdate));
         s.regions = holders.regionHolder;
         s.provinces = holders.provinceHolder.filter((f) => f.regCode == s.userInfo.region);
         s.cities = holders.cityHolder.filter((f) => f.provCode == s.userInfo.province);
@@ -195,23 +193,53 @@ module.controller("ProfileCtrl", ["$scope", "$http", "$q", "profileService", fun
 
     }
 
-    s.update = (section, data) => {
+    s.update = (section, isValid) => {
         if (section === "settings") {
-            console.log(data);
-            swalUpdate('Are you sure you want to update the settings?', '', 'warning', (result) => {
+            if (isValid) {
+                var isPassEmpty = angular.isUndefined(s.userInfo.newpassword == undefined) ||
+                    !s.userInfo.newpassword;
+                var Valid = isPassEmpty ? true : s.userInfo.newpassword == s.userInfo.repassword;
+                if (Valid) {
+                    swalConfirmWithPassword('Are you sure you want to update your settings?', '', 'warning',
+                        (password) => {
+                            s.userInfo.oldpassword = password != "" ? password : "asdfjkjl";
+                            return service.updateSettings(s.userInfo);
+                        },
+                        (result) => {
+                            if (result.value) {
+                                if (result.value.data === "Success") {
+                                    swalSuccess("Updated", "", () => {
+                                        s.settings = true;
+                                        delete s.userInfo.newpassword;
+                                        delete s.userInfo.oldpassword;
+                                        delete s.userInfo.repassword;
+                                        s.$apply();
+                                    })
+                                } else {
+                                    swalError(result.value.data);
+                                }
+                            }
+                        });
+                } else {
+                    swalError(`New password doesnt match with confirmation password.`);
+                }
+            }
+        } else if (section === "personal") {
+            swalUpdate('Are you sure you want to update your personal information?',
+                '', 'warning', (result) => {
                 if (result) {
                     data.oldpassword = "moralde";
-                    service.updateSettings(data).then((result) => {
+                    service.updateSettings(data).then(() => {
                         swalSuccess("Updated", "", () => {
                             s.settings = true;
                             s.$apply();
                         })
-                    }, (error) => {
-                            Swal.fire({
-                                type: 'error',
-                                title: 'Oops...',
-                                text: error.message
-                            })
+                    }, () => {
+                        Swal.fire({
+                            type: 'error',
+                            title: 'Oops...',
+                            text: "Try to resubmit or try to check your internet connection."
+                        })
                     })
                 }
             });
@@ -225,7 +253,15 @@ module.controller("ProfileCtrl", ["$scope", "$http", "$q", "profileService", fun
         else if (section === "skills") { s.skills = s.skills ? false : true }
     }
     s.cancel = (section) => {
-        if (section === "settings") { s.disabled(section); }
+        if (section === "settings") {
+            service.getUserInfo(null).then((result) => {
+                holders.userInfoHolder = result.data;
+                s.userInfo = result.data.userInfo;
+                s.userInfo.cellnum = parseInt(s.userInfo.cellnum);
+                s.userInfo.birthdate = new Date(moment(s.userInfo.birthdate));
+            })
+            s.disabled(section);
+        }
         if (section === "personal") { s.disabled(section); }
         if (section === "address") { s.disabled(section); }
         if (section === "skills") { s.disabled(section); }
@@ -241,6 +277,12 @@ module.controller("ProfileCtrl", ["$scope", "$http", "$q", "profileService", fun
     }
     s.brgySelected = (brgycode) => {
         return brgycode == s.userInfo.brgy ? true : false;
+    }
+    s.validateLabel = (state) => {
+        return { 'red': !state };
+    }
+    s.validateInput = (state) => {
+        return { 'form-control': state, 'form-control invalid': !state };
     }
 
     function swalUpdate(title, text, type, callback) {
@@ -267,6 +309,43 @@ module.controller("ProfileCtrl", ["$scope", "$http", "$q", "profileService", fun
         }).then((result) => {
             callback()
         })
+    }
+    function swalConfirmWithPassword(title, text, type, passwordCallback, callback) {
+        Swal.fire({
+            title: title,
+            text: "Input your password for verification",
+            input: 'password',
+            inputAttributes: {
+                autocapitalize: 'off'
+            },
+            type: type,
+            showCancelButton: true,
+            confirmButtonColor: '#8553C6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes',
+            showLoaderOnConfirm: true,
+            preConfirm: (password) => {
+                return passwordCallback(password);
+            },
+            allowOutsideClick: () => !Swal.isLoading()
+        }).then((result) => {
+            callback(result);
+        })
+    }
+    function swalError(text) {
+        if (text == undefined) {
+            Swal.fire({
+                type: 'error',
+                title: 'Oops...',
+                text: "Try to resubmit or try to check your internet connection."
+            })
+        } else {
+            Swal.fire({
+                type: 'error',
+                title: 'Oops...',
+                text: text
+            })
+        }
     }
 
     $(document).ready(function () {
