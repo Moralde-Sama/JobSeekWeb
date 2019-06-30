@@ -200,7 +200,8 @@ module.controller("ProfileCtrl", ["$scope", "$http", "$q", "profileService", fun
                     !s.userInfo.newpassword;
                 var Valid = isPassEmpty ? true : s.userInfo.newpassword == s.userInfo.repassword;
                 if (Valid) {
-                    swalConfirmWithPassword('Are you sure you want to update your settings?', '', 'warning',
+                    swalConfirmWithPassword('Are you sure you want to update your account settings?',
+                        '', 'warning',
                         (password) => {
                             s.userInfo.oldpassword = password != "" ? password : "asdfjkjl";
                             return service.updateSettings(s.userInfo);
