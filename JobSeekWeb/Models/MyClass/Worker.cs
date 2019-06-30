@@ -35,21 +35,28 @@ namespace JobSeekWeb.Models.MyClass
         }
         public static bool IsDetailsCompleted(int asp_userId)
         {
-            var worker = new JobEntities().spWorker_getDetails(asp_userId).FirstOrDefault();
-            var properties = worker.GetType().GetProperties();
-            List<bool> completed = new List<bool>();
-            foreach(PropertyInfo property in properties)
+            try
             {
-               if (property.GetValue(worker) != null)
+                var worker = new JobEntities().spWorker_getDetails(asp_userId).FirstOrDefault();
+                var properties = worker.GetType().GetProperties();
+                List<bool> completed = new List<bool>();
+                foreach (PropertyInfo property in properties)
                 {
-                    completed.Add(true);
+                    if (property.GetValue(worker) != null)
+                    {
+                        completed.Add(true);
+                    }
+                    else
+                    {
+                        completed.Add(false);
+                    }
                 }
-                else
-                {
-                    completed.Add(false);
-                }
+                return (completed.Contains(false)) ? false : true;
             }
-            return (completed.Contains(false)) ? false : true;
+            catch (Exception)
+            {
+                return false;
+            }
         }
         public static spWorker_getDetails_Result GetWorkerDetails(int asp_userId)
         {

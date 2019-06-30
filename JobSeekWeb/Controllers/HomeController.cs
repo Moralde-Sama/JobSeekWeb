@@ -37,13 +37,17 @@ namespace JobSeekWeb.Controllers
                 return datails_completed ? RedirectToAction("Dashboard", "Worker") :
                     RedirectToAction("Details", "Worker");
                         
-            } 
+            }
+            else if(Users.IsCompany(asp_userId)) {
+                return RedirectToAction("CompanyDetails", "Company");
+            }
             else
             {
                 return RedirectToAction("Index");
             }
         }
         [HttpGet]
+        [Authorize]
         public JsonResult GetCategoriesAndSkills()
         {
             var category = db.spCategories_getAll();

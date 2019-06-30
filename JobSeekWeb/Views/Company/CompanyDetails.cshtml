@@ -1,0 +1,91 @@
+﻿
+@{
+    ViewBag.Title = "HomePage";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Company Information</title>
+   
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="~/Content/Company/css/roboto-font.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/Company/fonts/font-awesome-5/css/fontawesome-all.min.css">
+    <!-- Main Style Css -->
+    <link rel="stylesheet" href="~/Content/Company/css/style.css" />
+
+
+</head>
+<body class="form-v5">
+    <div class="page-content">
+        <div class="form-v5-content">
+            <form class="form-detail" action="#" method="post">
+                <h2>Company Basic Information</h2>
+                <div class="form-row">
+                    <label for="full-name">Display Name</label>
+                    <input type="text" name="display-name" id="full-name" class="input-text" placeholder="Display Name" required>
+                </div>
+                <div class="form-row">
+                    <label for="your-email">Line of Business</label>
+                    <input type="text" name="your-email" id="" class="input-text" placeholder="Line of Business" required>
+
+                </div>
+                <div class="form-row">
+                    <label for="password">Organization Description</label>
+                    <input type="text" name="description" id="description" class="input-text" placeholder="Description" required>
+
+                </div>
+                
+
+            </form>
+        </div>
+    </div>
+
+   
+        <div class="page-content">
+            <div class="form-v5-content">
+                <form class="form-detail" action="#" method="post">
+                    <h2>Company Contact Details</h2>
+                    <div class="form-row">
+                        <label for="full-name">Phone</label>
+                        <input type="tel" name="full-name" id="full-name" class="input-text" placeholder="Tel Number" required>
+
+                    </div>
+                    <div class="form-row">
+                        <label for="full-name">Address Line 1</label>
+                        <input type="text" name="full-name" id="address1" class="input-text" placeholder="Address1" required>
+
+                    </div>
+                    <div class="form-row">
+                        <label for="your-email">Address Line 2</label>
+                        <input type="text" name="your-email" id="address2" class="input-text" placeholder="Address2" required>
+                    </div>
+                    <div class="form-row">
+                        <label for="your-email">City</label>
+                        <input type="text" name="your-email" id="city" class="input-text" placeholder="City" required>
+
+                    </div>
+                    <div class="form-row">
+                        <label for="your-email">State Provice</label>
+                        <input type="text" name="your-email" id="state" class="input-text" placeholder="State Provice" required>
+
+                    </div>
+                    <div class="form-row">
+                        <label for="your-email">Zip/Postal Code</label>
+                        <input type="text" name="your-email" id="zip" class="input-text" placeholder="Postal Code" required>
+
+                    </div>
+
+                    <div class="form-row-last">
+                        <input type="submit" name="save-details" class="register" value="Save Details">
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </body>
+</html>
+

@@ -215,5 +215,14 @@ namespace JobSeekWeb.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spWorker_getWorkerSkills_Result>("spWorker_getWorkerSkills", workerIdParameter);
         }
+    
+        public virtual ObjectResult<Nullable<int>> spCompany_Exist(Nullable<int> asp_userId)
+        {
+            var asp_userIdParameter = asp_userId.HasValue ?
+                new ObjectParameter("asp_userId", asp_userId) :
+                new ObjectParameter("asp_userId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("spCompany_Exist", asp_userIdParameter);
+        }
     }
 }

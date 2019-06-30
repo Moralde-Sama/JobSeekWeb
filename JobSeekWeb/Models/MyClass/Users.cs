@@ -17,6 +17,11 @@ namespace JobSeekWeb.Models.MyClass
             Nullable<int> result = new JobEntities().spWorker_Exist(asp_userId).FirstOrDefault();
             return result == 1 ? true : false;
         }
+        public static bool IsCompany(int asp_userId)
+        {
+            Nullable<int> result = new JobEntities().spCompany_Exist(asp_userId).FirstOrDefault();
+            return result == 1 ? true : false;
+        }
         public static int GetWorkerOrCompanyId(int asp_userId)
         {
             Nullable<int> workerId = new JobEntities().spWorker_getWorkerId(asp_userId).FirstOrDefault();

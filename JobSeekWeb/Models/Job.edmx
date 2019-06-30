@@ -260,6 +260,9 @@
           </ReferentialConstraint>
         </Association>
         <Function Name="spCategories_getAll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="spCompany_Exist" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="asp_userId" Type="int" Mode="In" />
+        </Function>
         <Function Name="spCompany_getCompanyId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="asp_userId" Type="int" Mode="In" />
         </Function>
@@ -428,10 +431,13 @@
           <Parameter Name="asp_userId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="spWorker_getAllUserInfo" ReturnType="Collection(JobModel.spWorker_getAllUserInfo_Result)">
-            <Parameter Name="asp_userId" Mode="In" Type="Int32" />
+          <Parameter Name="asp_userId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="spWorker_getWorkerSkills" ReturnType="Collection(JobModel.spWorker_getWorkerSkills_Result)">
-            <Parameter Name="workerId" Mode="In" Type="Int32" />
+          <Parameter Name="workerId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="spCompany_Exist" ReturnType="Collection(Int32)">
+            <Parameter Name="asp_userId" Mode="In" Type="Int32" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="C__MigrationHistory">
@@ -1020,6 +1026,7 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="spCompany_Exist" FunctionName="JobModel.Store.spCompany_Exist" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
