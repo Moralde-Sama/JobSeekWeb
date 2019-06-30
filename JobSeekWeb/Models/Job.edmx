@@ -299,6 +299,13 @@
         <Function Name="spWorker_getWorkerSkills" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="workerId" Type="int" Mode="In" />
         </Function>
+        <Function Name="spWorker_updateAddress" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="asp_userId" Type="int" Mode="In" />
+          <Parameter Name="region" Type="int" Mode="In" />
+          <Parameter Name="province" Type="int" Mode="In" />
+          <Parameter Name="city" Type="int" Mode="In" />
+          <Parameter Name="brgy" Type="int" Mode="In" />
+        </Function>
         <Function Name="spWorker_updateDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="workerId" Type="int" Mode="In" />
           <Parameter Name="fname" Type="varchar" Mode="In" />
@@ -312,6 +319,16 @@
           <Parameter Name="province" Type="int" Mode="In" />
           <Parameter Name="city" Type="int" Mode="In" />
           <Parameter Name="brgy" Type="int" Mode="In" />
+        </Function>
+        <Function Name="spWorker_updatePersonalInfo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="workerId" Type="int" Mode="In" />
+          <Parameter Name="fname" Type="varchar" Mode="In" />
+          <Parameter Name="mname" Type="varchar" Mode="In" />
+          <Parameter Name="lname" Type="varchar" Mode="In" />
+          <Parameter Name="gender" Type="varchar" Mode="In" />
+          <Parameter Name="cellnum" Type="varchar" Mode="In" />
+          <Parameter Name="birthdate" Type="datetime" Mode="In" />
+          <Parameter Name="header" Type="varchar" Mode="In" />
         </Function>
         <EntityContainer Name="JobModelStoreContainer">
           <EntitySet Name="__MigrationHistory" EntityType="Self.__MigrationHistory" Schema="dbo" store:Type="Tables" />
@@ -437,7 +454,24 @@
           <Parameter Name="workerId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="spCompany_Exist" ReturnType="Collection(Int32)">
+          <Parameter Name="asp_userId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="spWorker_updatePersonalInfo">
+            <Parameter Name="workerId" Mode="In" Type="Int32" />
+            <Parameter Name="fname" Mode="In" Type="String" />
+            <Parameter Name="mname" Mode="In" Type="String" />
+            <Parameter Name="lname" Mode="In" Type="String" />
+            <Parameter Name="gender" Mode="In" Type="String" />
+            <Parameter Name="cellnum" Mode="In" Type="String" />
+            <Parameter Name="birthdate" Mode="In" Type="DateTime" />
+            <Parameter Name="header" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="spWorker_updateAddress">
             <Parameter Name="asp_userId" Mode="In" Type="Int32" />
+            <Parameter Name="region" Mode="In" Type="Int32" />
+            <Parameter Name="province" Mode="In" Type="Int32" />
+            <Parameter Name="city" Mode="In" Type="Int32" />
+            <Parameter Name="brgy" Mode="In" Type="Int32" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="C__MigrationHistory">
@@ -1027,6 +1061,8 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="spCompany_Exist" FunctionName="JobModel.Store.spCompany_Exist" />
+          <FunctionImportMapping FunctionImportName="spWorker_updatePersonalInfo" FunctionName="JobModel.Store.spWorker_updatePersonalInfo" />
+          <FunctionImportMapping FunctionImportName="spWorker_updateAddress" FunctionName="JobModel.Store.spWorker_updateAddress" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

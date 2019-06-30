@@ -78,7 +78,7 @@
                                     <button type="button" aria-hidden="true" class="close" data-dismiss="alert">
                                         <i class="pe-7s-close"></i>
                                     </button>
-                                    <span>Note: Only you who can see the settings.</span>
+                                    <span>Note: Only you who can see the account settings.</span>
                                 </div>
                             </div>
                         </div>
@@ -97,9 +97,8 @@
                                     <div class="form-group">
                                         <label ng-class="validateLabel(settingsform.email.$valid)">Email 
                                         <span ng-hide="settingsform.email.$valid"> - Required</span></label>
-                                        <input type="email" name="email" class="form-control" ng-model="userInfo.Email"
-                                               ng-class="validateInput(settingsform.email.$valid)"
-                                               ng-disabled="settings" required>
+                                        <input type="email" name="email" ng-class="validateInput(settingsform.email.$valid)"
+                                               ng-model="userInfo.Email" ng-disabled="settings" required>
                                     </div>
                                 </div>
                             </div>
@@ -107,15 +106,15 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>New Password</label>
-                                        <input id="password" ng-model="userInfo.newpassword" type="password" class="form-control"
-                                               placeholder="Optional" ng-disabled="settings">
+                                        <input id="password" ng-model="userInfo.newpassword" type="password" 
+                                               class="form-control" placeholder="Optional" ng-disabled="settings">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Repeat Password</label>
-                                        <input id="repassword" ng-model="userInfo.repassword" type="password" class="form-control"
-                                               placeholder="Optional" ng-disabled="settings">
+                                        <input id="repassword" ng-model="userInfo.repassword" type="password" 
+                                               class="form-control" placeholder="Optional" ng-disabled="settings">
                                     </div>
                                 </div>
                             </div>
@@ -123,7 +122,7 @@
                         <div class="row">
                             <div class="col-md-12 text-center animate" ng-hide="settings">
                                 <a class="btn btn-mywarning" ng-click="cancel('settings')">Cancel</a>
-                                <a class="btn btn-violet" ng-click="update('settings', settingsform.$valid)"
+                                <a class="btn btn-violet" ng-click="settingsform.$valid && update('settings')"
                                    ng-disabled="!settingsform.$valid">Update Account</a>
                             </div>
                         </div>
@@ -138,66 +137,76 @@
                            style="float: right;"></i></h4>
                     </div>
                     <div class="content">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label>First Name</label>
-                                    <input type="text" class="form-control" ng-model="userInfo.fname"
-                                           ng-disabled="personal">
+                        <form name="pnform">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label ng-class="validateLabel(pnform.fname.$valid)">First Name 
+                                        <span ng-hide="pnform.fname.$valid"> - Required</span></label>
+                                        <input type="text" ng-class="validateInput(pnform.fname.$valid)" name="fname" 
+                                               ng-model="userInfo.fname" ng-disabled="personal" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label ng-class="validateLabel(pnform.mname.$valid)">Middle Name 
+                                        <span ng-hide="pnform.mname.$valid"> - Required</span></label>
+                                        <input type="text" ng-class="validateInput(pnform.mname.$valid)" 
+                                               name="mname" ng-model="userInfo.mname" ng-disabled="personal" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label ng-class="validateLabel(pnform.lname.$valid)">Last Name 
+                                        <span ng-hide="pnform.lname.$valid"> - Required</span></label>
+                                        <input id="lastname" type="text" ng-class="validateInput(pnform.lname.$valid)"
+                                               name="lname" ng-model="userInfo.lname" ng-disabled="personal" required>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label>Middle Name</label>
-                                    <input type="text" class="form-control" ng-model="userInfo.mname"
-                                           ng-disabled="personal">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="gender">Gender</label>
+                                    <select id="gender" ng-model="userInfo.gender" class="form-control"
+                                            ng-disabled="personal">
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label ng-class="validateLabel(pnform.cellnum.$valid)">Cellphone Number
+                                        <span ng-hide="pnform.cellnum.$valid"> - Required</span></label>
+                                        <input type="number" ng-class="validateInput(pnform.cellnum.$valid)" name="cellnum"
+                                               ng-model="userInfo.cellnum" ng-disabled="personal" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label ng-class="validateLabel(pnform.birthdate.$valid)">Birthdate
+                                        <span ng-hide="pnform.birthdate.$valid"> - Required</span></label>
+                                        <input type="date" ng-class="validateInput(pnform.birthdate.$valid)" name="birthdate"
+                                               ng-model="userInfo.birthdate" ng-disabled="personal" required>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label>Last Name</label>
-                                    <input id="lastname" type="text" class="form-control" ng-model="userInfo.lname"
-                                           ng-disabled="personal">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label ng-class="validateLabel(pnform.header.$valid)">Header
+                                        <span ng-hide="pnform.header.$valid"> - Required</span></label>
+                                        <textarea id="header" rows="2" cols="80" name="header" ng-model="userInfo.header"
+                                                  ng-class="validateInput(pnform.header.$valid)"
+                                                  ng-disabled="personal" required></textarea>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <label for="gender">Gender</label>
-                                <select id="gender" ng-model="userInfo.gender" class="form-control"
-                                        ng-disabled="personal">
-                                    <option value="Male">Male</option>
-                                    <option value="Female">Female</option>
-                                </select>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label>Cellphone Number</label>
-                                    <input type="number" class="form-control"
-                                           ng-model="userInfo.cellnum" ng-disabled="personal">
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label>Birthdate</label>
-                                    <input type="date" class="form-control"
-                                           ng-model="userInfo.birthdate" ng-disabled="personal">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label>Header</label>
-                                    <textarea id="header" rows="2" cols="80" class="form-control"
-                                              ng-disabled="personal" ng-model="userInfo.header"></textarea>
-                                </div>
-                            </div>
-                        </div>
+                        </form>
                         <div class="row">
                             <div class="col-md-12 text-center animate" ng-hide="personal">
                                 <a class="btn btn-mywarning" ng-click="cancel('personal')">Cancel</a>
-                                <a class="btn btn-violet" ng-click="update('personal')">Update Personal Info</a>
+                                <a class="btn btn-violet" ng-click="pnform.$valid && update('personal')"
+                                   ng-disabled="!pnform.$valid">Update Personal Info</a>
                             </div>
                         </div>
                     </div>
@@ -215,49 +224,29 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <label for="region">Region</label>
-                                <select id="region" class="form-control" name="state" 
-                                        ng-disabled="address">
-                                    <option value="{{region.regCode}}" ng-repeat="region in regions"
-                                            ng-selected="regionSelected(region.regCode)">{{region.regDesc}}</option>
+                                <select id="region" class="form-control" ng-disabled="address">
                                 </select>
                             </div>
-                            <div class="col-md-4">
-                                <label for="province">Province</label>
-                                <select id="province" class="form-control" name="state" 
-                                        ng-disabled="address">
-                                    <option value="{{province.provCode}}" ng-repeat="province in provinces"
-                                            ng-selected="provinceSelected(province.provCode)">
-                                        {{province.provDesc}}
-                                    </option>
-                                </select>
+                            <div id="provinceContainer" class="col-md-4">
+                                <label class="select-valid">Province<span> - Required</span></label>
+                                <select id="province" class="form-control" ng-disabled="address"></select>
                             </div>
-                            <div class="col-md-4">
-                                <label for="city">City</label>
-                                <select id="city" class="form-control"
-                                        ng-disabled="address">
-                                    <option value="{{city.citymunCode}}" ng-repeat="city in cities"
-                                            ng-selected="citySelected(city.citymunCode)">
-                                        {{city.citymunDesc}}
-                                    </option>
-                                </select>
+                            <div id="cityContainer" class="col-md-4">
+                                 <label class="select-valid">City<span> - Required</span></label>
+                                <select id="city" class="form-control" ng-disabled="address"></select>
                             </div>
                         </div>
                         <div class="row" style="margin-bottom: 15px; margin-top: 13px;">
-                            <div class="col-md-4">
-                                <label for="brgy">Baranggay</label>
-                                <select id="brgy" class="form-control"
-                                        ng-disabled="address">
-                                    <option value="{{brgy.brgyCode}}" ng-repeat="brgy in brgys"
-                                            ng-selected="brgySelected(brgy.brgyCode)">
-                                        {{brgy.brgyDesc}}
-                                    </option>
-                                </select>
+                            <div id="brgyContainer" class="col-md-4">
+                                <label class="select-valid">Brgy<span> - Required</span></label>
+                                <select id="brgy" class="form-control" ng-disabled="address"></select>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12 text-center animate" ng-hide="address">
                                 <a class="btn btn-mywarning" ng-click="cancel('address')">Cancel</a>
-                                <a class="btn btn-violet" ng-click="update('address')">Update Address</a>
+                                <a class="btn btn-violet" ng-click="!addrssBtnDsbled && update('address')"
+                                   ng-disabled="addrssBtnDsbled">Update Address</a>
                             </div>
                         </div>
                     </div>

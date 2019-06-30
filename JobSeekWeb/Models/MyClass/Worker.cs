@@ -33,6 +33,13 @@ namespace JobSeekWeb.Models.MyClass
                 city, brgy
                 );
         }
+
+        public void UpdatePersonalInfo()
+        {
+            db.spWorker_updatePersonalInfo(workerId,
+                fname, mname, lname, gender, cellnum,
+                birthdate, header);
+        }
         public static bool IsDetailsCompleted(int asp_userId)
         {
             try

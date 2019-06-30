@@ -224,5 +224,67 @@ namespace JobSeekWeb.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("spCompany_Exist", asp_userIdParameter);
         }
+    
+        public virtual int spWorker_updatePersonalInfo(Nullable<int> workerId, string fname, string mname, string lname, string gender, string cellnum, Nullable<System.DateTime> birthdate, string header)
+        {
+            var workerIdParameter = workerId.HasValue ?
+                new ObjectParameter("workerId", workerId) :
+                new ObjectParameter("workerId", typeof(int));
+    
+            var fnameParameter = fname != null ?
+                new ObjectParameter("fname", fname) :
+                new ObjectParameter("fname", typeof(string));
+    
+            var mnameParameter = mname != null ?
+                new ObjectParameter("mname", mname) :
+                new ObjectParameter("mname", typeof(string));
+    
+            var lnameParameter = lname != null ?
+                new ObjectParameter("lname", lname) :
+                new ObjectParameter("lname", typeof(string));
+    
+            var genderParameter = gender != null ?
+                new ObjectParameter("gender", gender) :
+                new ObjectParameter("gender", typeof(string));
+    
+            var cellnumParameter = cellnum != null ?
+                new ObjectParameter("cellnum", cellnum) :
+                new ObjectParameter("cellnum", typeof(string));
+    
+            var birthdateParameter = birthdate.HasValue ?
+                new ObjectParameter("birthdate", birthdate) :
+                new ObjectParameter("birthdate", typeof(System.DateTime));
+    
+            var headerParameter = header != null ?
+                new ObjectParameter("header", header) :
+                new ObjectParameter("header", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("spWorker_updatePersonalInfo", workerIdParameter, fnameParameter, mnameParameter, lnameParameter, genderParameter, cellnumParameter, birthdateParameter, headerParameter);
+        }
+    
+        public virtual int spWorker_updateAddress(Nullable<int> asp_userId, Nullable<int> region, Nullable<int> province, Nullable<int> city, Nullable<int> brgy)
+        {
+            var asp_userIdParameter = asp_userId.HasValue ?
+                new ObjectParameter("asp_userId", asp_userId) :
+                new ObjectParameter("asp_userId", typeof(int));
+    
+            var regionParameter = region.HasValue ?
+                new ObjectParameter("region", region) :
+                new ObjectParameter("region", typeof(int));
+    
+            var provinceParameter = province.HasValue ?
+                new ObjectParameter("province", province) :
+                new ObjectParameter("province", typeof(int));
+    
+            var cityParameter = city.HasValue ?
+                new ObjectParameter("city", city) :
+                new ObjectParameter("city", typeof(int));
+    
+            var brgyParameter = brgy.HasValue ?
+                new ObjectParameter("brgy", brgy) :
+                new ObjectParameter("brgy", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("spWorker_updateAddress", asp_userIdParameter, regionParameter, provinceParameter, cityParameter, brgyParameter);
+        }
     }
 }

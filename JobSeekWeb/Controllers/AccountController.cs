@@ -60,37 +60,68 @@ namespace JobSeekWeb.Controllers
         [Authorize (Roles = "Worker")]
         public JsonResult svProfDetails(Worker worker, int[] skillIds, string[] newskills)
         {
-            //try
-            //{
-            worker.workerId = Convert.ToInt32(User.Identity.GetWorkerOrCompanyId());
-            worker.asp_user_Id = Convert.ToInt32(User.Identity.GetUserId<int>());
-            worker.prof_path = "/Content/Moralde/Images/eriri.png";
-            worker.header = "Test";
-            worker.UpdateProfileDetails();
-            if (skillIds != null)
+            try
             {
-                foreach (int skillId in skillIds)
+                worker.workerId = Convert.ToInt32(User.Identity.GetWorkerOrCompanyId());
+                worker.asp_user_Id = Convert.ToInt32(User.Identity.GetUserId<int>());
+                worker.prof_path = "/Content/Moralde/Images/eriri.png";
+                worker.header = "Test";
+                worker.UpdateProfileDetails();
+                if (skillIds != null)
                 {
-                    worker.skillId = skillId;
-                    worker.AddSkill(worker.workerId);
+                    foreach (int skillId in skillIds)
+                    {
+                        worker.skillId = skillId;
+                        worker.AddSkill(worker.workerId);
+                    }
                 }
+                if (newskills != null)
+                {
+                    foreach (string title in newskills)
+                    {
+                        worker.AddNewSkill(title);
+                        worker.skillId = Skills.getSkillDetailsByTitle(title).skillId;
+                        worker.AddSkill(worker.workerId);
+                    }
+                }
+                AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+                return Json("Success", JsonRequestBehavior.AllowGet);
             }
-            if (newskills != null)
+            catch (Exception e)
             {
-                foreach (string title in newskills)
-                {
-                    worker.AddNewSkill(title);
-                    worker.skillId = Skills.getSkillDetailsByTitle(title).skillId;
-                    worker.AddSkill(worker.workerId);
-                }
+                return Json(e.Message, JsonRequestBehavior.AllowGet);
             }
-            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            return Json("Success", JsonRequestBehavior.AllowGet);
-            //}
-            //catch (Exception e)
-            //{
-            //    return Json("Error: " + e.Message, JsonRequestBehavior.AllowGet);
-            //}
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize (Roles = "Worker")]
+        public JsonResult UpdatePersonalInfo(Worker worker)
+        {
+            try
+            {
+                worker.UpdatePersonalInfo();
+                return Json("Success", JsonRequestBehavior.AllowGet);
+            }
+            catch(Exception e)
+            {
+                return Json(e.Message, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize (Roles = "Worker")]
+        public JsonResult UpdateAddress(int[] address)
+        {
+            try
+            {
+                db.spWorker_updateAddress(User.Identity.GetUserId<int>(),
+                    address[0], address[1], address[2], address[3]);
+                return Json("Success", JsonRequestBehavior.AllowGet);
+            }
+            catch(Exception e)
+            {
+                return Json(e.Message, JsonRequestBehavior.AllowGet);
+            }
         }
         #endregion
 

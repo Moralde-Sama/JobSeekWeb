@@ -53,6 +53,7 @@ module.service("profileService", function ($http, $q) {
             return returnValueIfNotNull(holders.categoryAndSkillsHolder);
         }
     }
+
     this.updateSettings = (data) => {
         var formdata = new FormData();
         formdata.append("__RequestVerificationToken",
@@ -68,6 +69,39 @@ module.service("profileService", function ($http, $q) {
             headers: { 'Content-Type': undefined }
         })
     }
+    this.updatePersonalInfo = (data) => {
+        var formdata = new FormData();
+        data.birthdate = moment(data.birthdate).format("MM-DD-YYYY");
+        formdata.append("__RequestVerificationToken",
+            $('input:hidden[name=__RequestVerificationToken]').val());
+        angular.forEach(data, (value, keys) => {
+            formdata.append(keys, value);
+        })
+        data.birthdate = new Date(moment(data.birthdate));
+        return $http({
+            method: 'POST',
+            url: '/Account/UpdatePersonalInfo',
+            data: formdata,
+            transformRequest: angular.identity,
+            headers: { 'Content-Type': undefined }
+        })
+    }
+    this.updateAddress = (data) => {
+        var formdata = new FormData();
+        formdata.append("__RequestVerificationToken",
+            $('input:hidden[name=__RequestVerificationToken]').val());
+        angular.forEach(data, (value) => {
+            formdata.append('address', value);
+        })
+        return $http({
+            method: 'POST',
+            url: '/Account/UpdateAddress',
+            data: formdata,
+            transformRequest: angular.identity,
+            headers: { 'Content-Type': undefined }
+        })
+    }
+
     function returnValueIfNotNull(holder) {
         return $q(function (resolve, reject) {
             if (holder != null) {
@@ -158,6 +192,10 @@ module.controller("ProfileCtrl", ["$scope", "$http", "$q", "profileService", fun
     s.personal = true;
     s.address = true;
     s.skills = true;
+    s.addrssBtnDsbled = false;
+    var addressValue = {region: null, province: null, city: null, brgy: null};
+    var address = ["region", "province", "city", "brgy"];
+
     q.all([
         service.getRegion(holders.regionHolder),
         service.getProvince(holders.provinceHolder),
@@ -172,17 +210,25 @@ module.controller("ProfileCtrl", ["$scope", "$http", "$q", "profileService", fun
         s.userInfo = holders.userInfoHolder.userInfo;
         s.userInfo.cellnum = parseInt(s.userInfo.cellnum);
         s.userInfo.birthdate = new Date(moment(s.userInfo.birthdate));
-        s.regions = holders.regionHolder;
-        s.provinces = holders.provinceHolder.filter((f) => f.regCode == s.userInfo.region);
-        s.cities = holders.cityHolder.filter((f) => f.provCode == s.userInfo.province);
-        s.brgys = holders.brgyHolder.filter((f) => f.citymunCode == s.userInfo.city);
+        var filterbrgy = result[3].data.filter((f) => f.citymunCode == s.userInfo.city);
+        q.all([
+            convertValueToSelect2("region", result[0].data),
+            convertValueToSelect2("province", result[1].data),
+            convertValueToSelect2("city", result[2].data),
+            convertValueToSelect2("brgy", filterbrgy)
+        ]).then((results) => {
+            angular.forEach(results, (value, index) => {
+                var data;
+                if ((index - 1) != -1) {
+                    var selected = results[index - 1].data.filter((f) => f.selected == true);
+                    data = value.data.filter((f) => f.additional == selected[0].id);
+                } else {
+                    data = value.data;
+                }
+                initSelect2(value, index, data);
+            })
+        })
     })
-
-    var forms = {
-        settings: {
-            textbox: ["username", "password", "repassword", "header"]
-        }
-    }
 
     s.fullname = () => {
         if (s.userInfo != undefined) {
@@ -193,57 +239,79 @@ module.controller("ProfileCtrl", ["$scope", "$http", "$q", "profileService", fun
 
     }
 
-    s.update = (section, isValid) => {
+    s.update = (section) => {
         if (section === "settings") {
-            if (isValid) {
-                var isPassEmpty = angular.isUndefined(s.userInfo.newpassword == undefined) ||
-                    !s.userInfo.newpassword;
-                var Valid = isPassEmpty ? true : s.userInfo.newpassword == s.userInfo.repassword;
-                if (Valid) {
-                    swalConfirmWithPassword('Are you sure you want to update your account settings?',
-                        '', 'warning',
-                        (password) => {
-                            s.userInfo.oldpassword = password != "" ? password : "asdfjkjl";
-                            return service.updateSettings(s.userInfo);
-                        },
-                        (result) => {
-                            if (result.value) {
-                                if (result.value.data === "Success") {
-                                    swalSuccess("Updated", "", () => {
-                                        s.settings = true;
-                                        delete s.userInfo.newpassword;
-                                        delete s.userInfo.oldpassword;
-                                        delete s.userInfo.repassword;
-                                        s.$apply();
-                                    })
-                                } else {
-                                    swalError(result.value.data);
-                                }
+            var isPassEmpty = angular.isUndefined(s.userInfo.newpassword == undefined) ||
+                !s.userInfo.newpassword;
+            var Valid = isPassEmpty ? true : s.userInfo.newpassword == s.userInfo.repassword;
+            if (Valid) {
+                swalConfirmWithPassword('Are you sure you want to update your account settings?',
+                    'warning',
+                    (password) => {
+                        s.userInfo.oldpassword = password != "" ? password : "asdfjkjl";
+                        return service.updateSettings(s.userInfo);
+                    },
+                    (result) => {
+                        if (result.value) {
+                            if (result.value.data === "Success") {
+                                swalSuccess("Updated", "", () => {
+                                    s.settings = true;
+                                    delete s.userInfo.newpassword;
+                                    delete s.userInfo.oldpassword;
+                                    delete s.userInfo.repassword;
+                                    s.$apply();
+                                })
+                            } else {
+                                swalError(result.value.data);
                             }
-                        });
-                } else {
-                    swalError(`New password doesnt match with confirmation password.`);
-                }
+                        }
+                    });
+            } else {
+                swalError(`New password doesnt match with confirmation password.`);
             }
         } else if (section === "personal") {
-            swalUpdate('Are you sure you want to update your personal information?',
-                '', 'warning', (result) => {
-                if (result) {
-                    data.oldpassword = "moralde";
-                    service.updateSettings(data).then(() => {
-                        swalSuccess("Updated", "", () => {
-                            s.settings = true;
-                            s.$apply();
+            swalUpdate('Are you sure you want to update your personal information?', '', 'warning',
+                (result) => {
+                    if (result) {
+                        service.updatePersonalInfo(s.userInfo).then((result) => {
+                            if (result.data == "Success") {
+                                swalSuccess("Update", '', () => {
+                                    s.personal = true;
+                                    s.$apply();
+                                    angular.element("#userfullname")[0].innerText = s.fullname();
+                                });
+                            } else {
+                                swalError(result.data);
+                            }
                         })
-                    }, () => {
-                        Swal.fire({
-                            type: 'error',
-                            title: 'Oops...',
-                            text: "Try to resubmit or try to check your internet connection."
+                    }
+                });
+        } else if (section === "address") {
+            swalUpdate('Are you sure you want to update your address?', '', 'warning',
+                (result) => {
+                    if (result) {
+                        var addressArray = [];
+                        angular.forEach(addressValue, (value, key) => {
+                            if (value == null) {
+                                addressArray.push(s.userInfo[key]);
+                            } else {
+                                addressArray.push(value);
+                            }
                         })
-                    })
-                }
-            });
+                        service.updateAddress(addressArray).then((result) => {
+                            if (result.data == "Success") {
+                                swalSuccess("Update", '', () => {
+                                    s.address = true;
+                                    s.$apply();
+                                })
+                            } else {
+                                swalError(result.data);
+                            }
+                        }, () => {
+                            swalError();
+                        }) 
+                    }
+                });
         }
     }
 
@@ -254,18 +322,16 @@ module.controller("ProfileCtrl", ["$scope", "$http", "$q", "profileService", fun
         else if (section === "skills") { s.skills = s.skills ? false : true }
     }
     s.cancel = (section) => {
-        if (section === "settings") {
-            service.getUserInfo(null).then((result) => {
-                holders.userInfoHolder = result.data;
-                s.userInfo = result.data.userInfo;
-                s.userInfo.cellnum = parseInt(s.userInfo.cellnum);
-                s.userInfo.birthdate = new Date(moment(s.userInfo.birthdate));
-            })
-            s.disabled(section);
-        }
+        if (section === "settings") { s.disabled(section); }
         if (section === "personal") { s.disabled(section); }
         if (section === "address") { s.disabled(section); }
         if (section === "skills") { s.disabled(section); }
+        service.getUserInfo(null).then((result) => {
+            holders.userInfoHolder = result.data;
+            s.userInfo = result.data.userInfo;
+            s.userInfo.cellnum = parseInt(s.userInfo.cellnum);
+            s.userInfo.birthdate = new Date(moment(s.userInfo.birthdate));
+        })
     }
     s.regionSelected = (regCode) => {
         return regCode == s.userInfo.region ? true : false;
@@ -284,6 +350,18 @@ module.controller("ProfileCtrl", ["$scope", "$http", "$q", "profileService", fun
     }
     s.validateInput = (state) => {
         return { 'form-control': state, 'form-control invalid': !state };
+    }
+
+    s.finishedSelect = (selectId) => {
+        $(document).ready(function () {
+            var select = $(`#${selectId}`);
+            select.select2();
+            select.on('select2:select', function (e) {
+                var data = e.params.data;
+                console.log(data);
+                $("#province").empty().trigger('change');
+            });
+        })
     }
 
     function swalUpdate(title, text, type, callback) {
@@ -311,7 +389,7 @@ module.controller("ProfileCtrl", ["$scope", "$http", "$q", "profileService", fun
             callback()
         })
     }
-    function swalConfirmWithPassword(title, text, type, passwordCallback, callback) {
+    function swalConfirmWithPassword(title, type, passwordCallback, callback) {
         Swal.fire({
             title: title,
             text: "Input your password for verification",
@@ -348,9 +426,116 @@ module.controller("ProfileCtrl", ["$scope", "$http", "$q", "profileService", fun
             })
         }
     }
+    function select2Object(addressCode, addressText, userCode, additionalCode ) {
+        if (addressCode == userCode) {
+            return {
+                id: addressCode,
+                text: addressText,
+                selected: true,
+                additional: additionalCode
+            }
+        } else {
+            return {
+                id: addressCode,
+                text: addressText,
+                additional: additionalCode
+            }
+        }
+    }
+    function convertValueToSelect2(addressType, data) {
+        return q(function (resolve, reject) {
+            var select2Data = [];
+            if (addressType == "region") {
+                angular.forEach(data, (value) => {
+                    select2Data.push(select2Object(value.regCode, value.regDesc, s.userInfo.region,
+                    value.regCode));
+                })
+                holders.regionHolder = select2Data;
+            }
+            else if (addressType == "province") {
+                angular.forEach(data, (value) => {
+                    select2Data.push(select2Object(value.provCode, value.provDesc, s.userInfo.province,
+                        value.regCode));
+                })
+                holders.provinceHolder = select2Data;
+            }
+            else if (addressType == "city") {
+                angular.forEach(data, (value) => {
+                    select2Data.push(select2Object(value.citymunCode, value.citymunDesc,
+                        s.userInfo.city, value.provCode));
+                })
+                holders.cityHolder = select2Data;
+            }
+            else if (addressType == "brgy") {
+                angular.forEach(data, (value) => {
+                    select2Data.push(select2Object(value.brgyCode, value.brgyDesc,
+                        s.userInfo.brgy, value.citymunCode));
+                })
+            }
+            resolve({ data: select2Data, selectId: addressType });
+        })
+    }
+    function select2AddItem(data, selectId) {
+        $(`#${selectId}`).append(new Option(`Select a ${selectId}`, 0, false, false)).trigger('change');
+        angular.forEach(data, (value) => {
+            $(`#${selectId}`).append(new Option(value.text, value.id, false, false)).trigger('change');
+        })
+    }
+    function initSelect2(value, index, data) {
+        var select = $(`#${value.selectId}`);
+        select.select2({
+            data: data
+        })
+        select.on('select2:select', function (e) {
+            var result = e.params.data;
+            addressValue[value.selectId] = parseInt(result.id);
+            var filteredData;
+            if (holderObjects[index + 1] == "brgyHolder") {
+                convertValueToSelect2("brgy",
+                    holders[holderObjects[index + 1]].filter((f) => f.citymunCode == result.id))
+                    .then((result) => {
+                        select2AddItem(result.data, address[index + 1]);
+                    })
+            }
+            else {
+                if (index < 3)
+                    filteredData = holders[holderObjects[index + 1]].filter((f) => f.additional == result.id);
+            }
+            if (address[index] == "region") {
+                s.addrssBtnDsbled = true;
+                angular.forEach(address, (value, index) => {
+                    if (value != "region") {
+                        $(`#${value}`).empty().trigger('change');
+                        if (index > 0) {
+                            var children = angular.element(`#${value}Container`)[0].children;
+                            if (!angular.element(children[2].children[0].children[0]).hasClass("invalid")) {
+                                angular.element(children[2].children[0].children[0]).addClass("invalid");
+                                angular.element(children[0]).addClass("red");
+                            }
+                        }
+                    }
+                })
+            } else {
+                if (index < 4) {
+                    var children = angular.element(`#${address[index]}Container`)[0].children;
+                    if (angular.element(children[2].children[0].children[0]).hasClass("invalid")) {
+                        angular.element(children[2].children[0].children[0]).removeClass("invalid");
+                        angular.element(children[0]).removeClass("red");
+                    }
+                }
+            }
+            if (angular.element(".select-valid.red").length == 0) {
+                s.addrssBtnDsbled = false;
+            }
+            s.$apply();
+            console.log(addressValue);
+            if (holderObjects[index + 1] != "brgyHolder")
+                select2AddItem(filteredData, address[index + 1]);
+        });
+    }
 
     $(document).ready(function () {
-        $('#gender, #region, #province, #city, #brgy, #skills').select2();
+        $('#gender, #skills').select2();
     });
 }])
 module.controller("CompanyCtrl", ["$scope", "$http", function (s, h) {
