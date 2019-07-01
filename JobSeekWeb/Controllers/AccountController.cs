@@ -11,6 +11,7 @@ using Microsoft.Owin.Security;
 using JobSeekWeb.Models;
 using JobSeekWeb.Extensions;
 using JobSeekWeb.Models.MyClass;
+using System.IO;
 
 namespace JobSeekWeb.Controllers
 {
@@ -172,17 +173,37 @@ namespace JobSeekWeb.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Worker")]
-        public JsonResult UploadProfileImage(string blob)
+        public JsonResult UploadProfileImage(string base64)
         {
             try
             {
                 DateTime date = DateTime.Now;
-                byte[] data = Convert.FromBase64String(blob);
+                byte[] data = Convert.FromBase64String(base64);
                 string location = "/Uploads/Worker/Img/" + User.Identity.GetUserId<int>() +
-                    date.Month + date.Day + date.Year + date.Hour + date.Minute + date.Second + "." + GetFileExtension(blob);
+                    date.Month + date.Day + date.Year + date.Hour + date.Minute + date.Second + "." + GetFileExtension(base64);
                 System.IO.File.WriteAllBytes(Server.MapPath(location), data);
 
                 db.spWorker_updateProfilePic(User.Identity.GetUserId<int>(), location);
+                return Json("Success", JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                return Json(e.Message, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Worker")]
+        public JsonResult UpdateCoverPhoto(HttpPostedFileBase coverphoto)
+        {
+            try
+            {
+                DateTime date = DateTime.Now;
+                var file = coverphoto;
+                string extension = Path.GetExtension(file.FileName);
+                string location = "/Uploads/Worker/Img/" + User.Identity.GetUserId<int>() + date.Month + date.Day + date.Year + date.Hour + date.Minute + date.Second + extension;
+                file.SaveAs(Server.MapPath(location));
+                db.spWorker_updateCoverPhoto(User.Identity.GetUserId<int>(), location);
                 return Json("Success", JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)

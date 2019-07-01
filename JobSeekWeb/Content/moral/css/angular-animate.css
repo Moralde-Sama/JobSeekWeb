@@ -30,6 +30,11 @@ label span {
     transition: color 300ms linear;
 }
 
+.center_content {
+    display:flex;
+    justify-content:center;
+}
+
 .form-control.invalid {
     border-color: red !important;
 }

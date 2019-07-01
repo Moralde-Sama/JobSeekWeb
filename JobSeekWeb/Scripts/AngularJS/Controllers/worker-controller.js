@@ -122,14 +122,27 @@ module.service("profileService", function ($http, $q) {
             headers: { 'Content-Type': undefined }
         })
     }
-    this.updateSettings = (data) => {
+    this.updateProfilePic = (data) => {
         var formdata = new FormData();
         formdata.append("__RequestVerificationToken",
             $('input:hidden[name=__RequestVerificationToken]').val());
-        formdata.append("blob", data);
+        formdata.append("base64", data);
         return $http({
             method: 'POST',
             url: '/Account/UploadProfileImage',
+            data: formdata,
+            transformRequest: angular.identity,
+            headers: { 'Content-Type': undefined }
+        })
+    }
+    this.updateCoverPhoto = (data) => {
+        var formdata = new FormData();
+        formdata.append("__RequestVerificationToken",
+            $('input:hidden[name=__RequestVerificationToken]').val());
+        formdata.append("coverphoto", data);
+        return $http({
+            method: 'POST',
+            url: '/Account/UpdateCoverPhoto',
             data: formdata,
             transformRequest: angular.identity,
             headers: { 'Content-Type': undefined }
@@ -149,10 +162,6 @@ module.service("profileService", function ($http, $q) {
 
 //Controllers
 module.controller("NavigationCtrl", ["$scope", "$location", "$http", "profileService", function (s, l, h, service) {
-    var fullname = angular.element(".logo")[0].innerText;
-    service.getUserInfo(holders.userInfoHolder).then((result) => {
-        s.user = result.data.userInfo;
-    })
 
     s.fullname = () => {
         if (s.user != undefined) {
@@ -162,18 +171,22 @@ module.controller("NavigationCtrl", ["$scope", "$location", "$http", "profileSer
         }
 
     }
-    $.notify({
-        icon: "fa fa-heart",
-        message: `Welcome ${fullname}, have a nice day!`
 
-    }, {
-            type: "info",
-            timer: 2000,
-            placement: {
-                from: "top",
-                align: "right"
-            }
-    });
+    service.getUserInfo(holders.userInfoHolder).then((result) => {
+        s.user = result.data.userInfo;
+        $.notify({
+            icon: "fa fa-heart",
+            message: `Welcome ${s.fullname()}, have a nice day!`
+
+        }, {
+                type: "info",
+                timer: 2000,
+                placement: {
+                    from: "top",
+                    align: "right"
+                }
+            });
+    })
 
     var routepaths = ["/Worker/Dashboard", "/Worker/Profile", "/Worker/Company"];
     var currentIndex = 0;
@@ -251,7 +264,37 @@ module.controller("ProfileCtrl", ["$scope", "$http", "$q", "profileService", fun
 
     }
 
-    s.getImageFile = function (file) {
+    s.getImageFileC = (file) => {
+        if (file && file[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#coverPhoto')
+                    .attr('src', e.target.result);
+            };
+            reader.readAsDataURL(file[0]);
+
+            setTimeout(() => {
+                swalUpdate("Do you want to update your cover photo?", '', 'warning', (result) => {
+                    if (result) {
+                        service.updateCoverPhoto(file[0]).then((result) => {
+                            if (result.data == "Success") {
+                                swalSuccess("Update");
+                            } else {
+                                swalError(result.data);
+                            }
+                        }, () => {
+                            swalError();
+                        })
+                    } else {
+                        $("#coverPhoto").attr("src", s.userInfo.cover_path);
+                    }
+                })
+            }, 1500);
+        }
+    }
+
+    s.getImageFile = (file) => {
         s.imagefile = file[0];
         
         var cropper
@@ -268,7 +311,7 @@ module.controller("ProfileCtrl", ["$scope", "$http", "$q", "profileService", fun
         }).then((result) => {
             if (result.value) {
                 var base64string = cropper.getCroppedCanvas().toDataURL();
-                service.updateSettings(base64string.substring(22, base64string.length))
+                service.updateProfilePic(base64string.substring(22, base64string.length))
                     .then((result) => {
                         if (result.data == "Success") {
                             swalSuccess("Updated", '', () => {
@@ -292,6 +335,7 @@ module.controller("ProfileCtrl", ["$scope", "$http", "$q", "profileService", fun
                     .attr('src', e.target.result);
             };
 
+
             reader.readAsDataURL(file[0]);
 
             img = $(".swal2-image");
@@ -314,6 +358,11 @@ module.controller("ProfileCtrl", ["$scope", "$http", "$q", "profileService", fun
     s.profilePic = () => {
         document.getElementById("getFileProf").click();
     }
+
+    s.coverPhotoClick = () => {
+        document.getElementById("getFileCover").click();
+    }
+
 
     s.update = (section) => {
         if (section === "settings") {
@@ -763,6 +812,7 @@ module.controller("ProfileCtrl", ["$scope", "$http", "$q", "profileService", fun
                     initSelect2(value, index, data);
                 })
                 initSelect2Skills();
+                console.log(s.userInfo);
             })
         })
         $('#gender').select2();

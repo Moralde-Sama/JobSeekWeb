@@ -5,12 +5,17 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card card-user">
-                    <div class="image">
-                        <img src="~/Content/moral/Images/kodaikanal-2836301.jpg" alt="..." />
+                    <div class="image" style="position: relative;">
+                        <img id="coverPhoto" ng-src="{{userInfo.cover_path}}" alt="..." style="height: 100%;" />
+                        <div class="center_content">
+                            <button id="coverMobile" class="btn btn-violet coverphoto" ng-click="coverPhotoClick()">Update cover photo</button>
+                        </div>
                     </div>
                     <div class="content">
                         <div class="author">
-                            <input id="getFileProf" type="file" onchange="angular.element(this).scope().getImageFile(this.files)" style="display: none;"/>
+                            <button id="coverDesktop" class="btn btn-violet coverphoto" ng-click="coverPhotoClick()">Update cover photo</button>
+                            <input id="getFileCover" type="file" onchange="angular.element(this).scope().getImageFileC(this.files)" style="display: none;" />
+                            <input id="getFileProf" type="file" onchange="angular.element(this).scope().getImageFile(this.files)" style="display: none;" />
                             <img id="prof" ng-click="profilePic()" class="avatar border-violet" ng-src="{{userInfo.prof_path}}" style="cursor: pointer;" />
                             <h3 class="title">
                                 {{fullname()}}<br />
@@ -21,7 +26,7 @@
                             "{{userInfo.header}}"
                         </p>
                     </div>
-                    <hr>
+                    <hr />
                     <div class="text-center">
                         <button href="#" class="btn btn-simple"><i class="fa fa-facebook-square"></i>Moralde-Sama</button>
                         <button href="#" class="btn btn-simple"><i class="fa fa-twitter"></i>Moralde-Sama</button>

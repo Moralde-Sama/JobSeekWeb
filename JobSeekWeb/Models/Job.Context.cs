@@ -188,15 +188,6 @@ namespace JobSeekWeb.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("spWorker_GetFullName", asp_userIdParameter);
         }
     
-        public virtual ObjectResult<spWorker_getAllUserInfo_Result> spWorker_getAllUserInfo(Nullable<int> asp_userId)
-        {
-            var asp_userIdParameter = asp_userId.HasValue ?
-                new ObjectParameter("asp_userId", asp_userId) :
-                new ObjectParameter("asp_userId", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spWorker_getAllUserInfo_Result>("spWorker_getAllUserInfo", asp_userIdParameter);
-        }
-    
         public virtual ObjectResult<spWorker_getWorkerSkills_Result> spWorker_getWorkerSkills(Nullable<int> workerId)
         {
             var workerIdParameter = workerId.HasValue ?
@@ -307,6 +298,28 @@ namespace JobSeekWeb.Models
                 new ObjectParameter("profpath", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("spWorker_updateProfilePic", asp_userIdParameter, profpathParameter);
+        }
+    
+        public virtual int spWorker_updateCoverPhoto(Nullable<int> asp_userId, string coverpath)
+        {
+            var asp_userIdParameter = asp_userId.HasValue ?
+                new ObjectParameter("asp_userId", asp_userId) :
+                new ObjectParameter("asp_userId", typeof(int));
+    
+            var coverpathParameter = coverpath != null ?
+                new ObjectParameter("coverpath", coverpath) :
+                new ObjectParameter("coverpath", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("spWorker_updateCoverPhoto", asp_userIdParameter, coverpathParameter);
+        }
+    
+        public virtual ObjectResult<spWorker_getAllUserInfo_Result> spWorker_getAllUserInfo(Nullable<int> asp_userId)
+        {
+            var asp_userIdParameter = asp_userId.HasValue ?
+                new ObjectParameter("asp_userId", asp_userId) :
+                new ObjectParameter("asp_userId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spWorker_getAllUserInfo_Result>("spWorker_getAllUserInfo", asp_userIdParameter);
         }
     }
 }

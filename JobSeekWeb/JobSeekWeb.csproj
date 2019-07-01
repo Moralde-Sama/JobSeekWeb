@@ -928,6 +928,8 @@
     <Content Include="Scripts\moment-with-locales.min.js" />
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
+    <Content Include="Uploads\Worker\Img\eriri.png" />
+    <Content Include="Uploads\Worker\Img\kodaikana.jpg" />
     <Content Include="Views\Amad\vendor\bootstrap\css\bootstrap-grid.css" />
     <Content Include="Views\Amad\vendor\bootstrap\css\bootstrap-grid.min.css" />
     <Content Include="Views\Amad\vendor\bootstrap\css\bootstrap-reboot.css" />
@@ -1033,7 +1035,6 @@
     <Folder Include="App_Data\" />
     <Folder Include="Content\amade\ven\font-awesome\less\" />
     <Folder Include="Content\amade\ven\font-awesome\scss\" />
-    <Folder Include="Uploads\Worker\Img\" />
     <Folder Include="Views\Amad\vendor\font-awesome\less\" />
     <Folder Include="Views\Amad\vendor\font-awesome\scss\" />
   </ItemGroup>
