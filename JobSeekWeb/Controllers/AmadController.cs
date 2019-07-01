@@ -37,5 +37,6 @@ namespace JobSeekWeb.Controllers
         {
             return View();
         }
+      
     }
 }
