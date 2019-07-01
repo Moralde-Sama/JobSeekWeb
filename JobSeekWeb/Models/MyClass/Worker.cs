@@ -9,7 +9,6 @@ namespace JobSeekWeb.Models.MyClass
 {
     public class Worker : Skills
     {
-        public JobEntities db = new JobEntities();
         public int workerId { get; set; }
         public string fname { get; set; }
         public string mname { get; set; }

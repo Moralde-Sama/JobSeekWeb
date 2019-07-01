@@ -261,12 +261,18 @@
                         </h4>
                     </div>
                     <div class="content">
-                        <div class="row" style="margin-bottom: 15px; margin-top: 13px;">
+                        <div class="row">
                             <div class="col-md-12">
-                                <select id="skills" class="form-control" multiple name="state"
-                                        ng-disabled="skills">
-                                    <option value="Male" selected>Male</option>
-                                    <option value="Female" selected>Female</option>
+                                <label>Category</label>
+                                <select id="category" class="form-control" ng-disabled="skills">
+                                    <option value="0" disabled selected>Select a category</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-bottom: 15px; margin-top: 13px;">
+                            <div id="skillsContainer" class="col-md-12">
+                                <label class="select-valid">Skills<span> - Required</span></label>
+                                <select id="skills" class="form-control" multiple ng-disabled="skills">
                                 </select>
                             </div>
                         </div>

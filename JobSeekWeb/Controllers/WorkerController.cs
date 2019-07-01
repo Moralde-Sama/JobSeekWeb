@@ -56,7 +56,7 @@ namespace JobSeekWeb.Controllers
         {
             int userId = User.Identity.GetUserId<int>();
             var userinfo = db.spWorker_getAllUserInfo(userId).FirstOrDefault();
-            var skills = db.spWorker_getWorkerSkills(userinfo.workerId).FirstOrDefault();
+            var skills = db.spWorker_getWorkerSkills(userinfo.workerId).ToList();
             return Json(new { userInfo = userinfo, skills = skills }, JsonRequestBehavior.AllowGet);
         }
     }

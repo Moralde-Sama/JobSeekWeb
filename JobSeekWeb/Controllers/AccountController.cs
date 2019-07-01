@@ -123,6 +123,22 @@ namespace JobSeekWeb.Controllers
                 return Json(e.Message, JsonRequestBehavior.AllowGet);
             }
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Worker")]
+        public JsonResult UpdateSkills(Worker worker)
+        {
+            try
+            {
+                worker.AddSkill(worker.workerId);
+                worker.RemoveSkills();
+                return Json("Success", JsonRequestBehavior.AllowGet);
+            }
+            catch(Exception e)
+            {
+                return Json(e.Message, JsonRequestBehavior.AllowGet);
+            }
+        }
         #endregion
 
         //

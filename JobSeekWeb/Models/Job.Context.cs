@@ -82,16 +82,6 @@ namespace JobSeekWeb.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("spWorker_getWorkerId", asp_userIdParameter);
         }
     
-        public virtual ObjectResult<spCategories_getAll_Result> spCategories_getAll()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spCategories_getAll_Result>("spCategories_getAll");
-        }
-    
-        public virtual ObjectResult<spSkills_getAll_Result> spSkills_getAll()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spSkills_getAll_Result>("spSkills_getAll");
-        }
-    
         public virtual int spWorker_updateDetails(Nullable<int> workerId, string fname, string mname, string lname, Nullable<System.DateTime> birthdate, string gender, string header, string cellnum, Nullable<int> region, Nullable<int> province, Nullable<int> city, Nullable<int> brgy)
         {
             var workerIdParameter = workerId.HasValue ?
@@ -285,6 +275,25 @@ namespace JobSeekWeb.Models
                 new ObjectParameter("brgy", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("spWorker_updateAddress", asp_userIdParameter, regionParameter, provinceParameter, cityParameter, brgyParameter);
+        }
+    
+        public virtual ObjectResult<spCategories_getAll_Result2> spCategories_getAll()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spCategories_getAll_Result2>("spCategories_getAll");
+        }
+    
+        public virtual ObjectResult<spSkills_getAll_Result> spSkills_getAll()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spSkills_getAll_Result>("spSkills_getAll");
+        }
+    
+        public virtual int spWorker_deleteSkill(Nullable<int> workerSkillId)
+        {
+            var workerSkillIdParameter = workerSkillId.HasValue ?
+                new ObjectParameter("workerSkillId", workerSkillId) :
+                new ObjectParameter("workerSkillId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("spWorker_deleteSkill", workerSkillIdParameter);
         }
     }
 }

@@ -11,10 +11,9 @@ namespace JobSeekWeb.Models
 {
     using System;
     
-    public partial class spSkills_getAll_Result
+    public partial class spCategories_getAll_Result2
     {
         public int id { get; set; }
         public string text { get; set; }
-        public int categoryId { get; set; }
     }
 }
