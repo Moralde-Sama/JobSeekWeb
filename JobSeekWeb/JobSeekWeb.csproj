@@ -697,6 +697,10 @@
     <Content Include="Views\Amad\Dashboard.cshtml" />
     <Content Include="Views\Amad\Company.cshtml" />
     <Content Include="Views\Administrator\Index.cshtml" />
+    <Content Include="Views\Administrator\Changepassword.cshtml" />
+    <Content Include="Views\Administrator\RemoveWC.cshtml" />
+    <Content Include="Views\Administrator\RemovePost.cshtml" />
+    <Content Include="Views\Administrator\Display.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

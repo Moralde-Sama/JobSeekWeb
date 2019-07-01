@@ -13,5 +13,21 @@ namespace JobSeekWeb.Controllers
         {
             return View();
         }
+        public ActionResult Changepassword()
+        {
+            return View();
+        }
+        public ActionResult RemoveWC()
+        {
+            return View();
+        }
+        public ActionResult RemovePost()
+        {
+            return View();
+        }
+        public ActionResult Display()
+        {
+            return View();
+        }
     }
 }
