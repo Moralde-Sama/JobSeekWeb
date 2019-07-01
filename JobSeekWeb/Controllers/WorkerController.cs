@@ -7,6 +7,7 @@ using JobSeekWeb.Models.MyClass;
 using Microsoft.AspNet.Identity;
 using System.Web.Mvc;
 using JobSeekWeb.Models;
+using System.Net;
 
 namespace JobSeekWeb.Controllers
 {
@@ -23,7 +24,7 @@ namespace JobSeekWeb.Controllers
             }
             else
             {
-                return RedirectToAction("Profile", "Worker");
+                return RedirectToAction("Details", "Worker");
             }
         }
         [AllowAnonymous]
@@ -31,7 +32,7 @@ namespace JobSeekWeb.Controllers
         {
             return View("~/Views/Shared/_WorkerLayout.cshtml");
         }
-        public new ActionResult Profile()
+        public ActionResult Details()
         {
             if (Worker.IsDetailsCompleted(User.Identity.GetUserId<int>()))
             {
@@ -39,43 +40,24 @@ namespace JobSeekWeb.Controllers
             }
             else
             {
-                return View("~/Views/Shared/_WorkerLayout.cshtml");
+                return View();
             }
         }
-
-        [HttpPost]
-        public JsonResult svProfDetails(Worker worker, int[] skillIds, string[] newskills)
+        public ActionResult Company()
         {
-            //try
-            //{
-                worker.workerId = Convert.ToInt32(User.Identity.GetWorkerOrCompanyId());
-                worker.asp_user_Id = Convert.ToInt32(User.Identity.GetUserId<int>());
-                worker.prof_path = "/Content/Moralde/Images/eriri.png";
-                worker.header = "Test";
-                worker.UpdateProfileDetails();
-                if(skillIds != null)
-                {
-                    foreach (int skillId in skillIds)
-                    {
-                        worker.skillId = skillId;
-                        worker.AddSkill(worker.workerId);
-                    }
-                }
-                if(newskills != null)
-                {
-                    foreach (string title in newskills)
-                    {
-                        worker.AddNewSkill(title);
-                        worker.skillId = Skills.getSkillDetailsByTitle(title).skillId;
-                        worker.AddSkill(worker.workerId);
-                    }
-                }
-                return Json("Success", JsonRequestBehavior.AllowGet);
-            //}
-            //catch (Exception e)
-            //{
-            //    return Json("Error: " + e.Message, JsonRequestBehavior.AllowGet);
-            //}
+            return View("~/Views/Shared/_WorkerLayout.cshtml");
+        }
+        public new ActionResult Profile()
+        {
+            return View("~/Views/Shared/_WorkerLayout.cshtml");
+        }
+        [HttpGet]
+        public JsonResult GetUserInfo()
+        {
+            int userId = User.Identity.GetUserId<int>();
+            var userinfo = db.spWorker_getAllUserInfo(userId).FirstOrDefault();
+            var skills = db.spWorker_getWorkerSkills(userinfo.workerId).ToList();
+            return Json(new { userInfo = userinfo, skills = skills }, JsonRequestBehavior.AllowGet);
         }
     }
 }

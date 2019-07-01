@@ -28,5 +28,6 @@ namespace JobSeekWeb.Models
         public Nullable<int> brgy { get; set; }
         public int asp_user_Id { get; set; }
         public string prof_path { get; set; }
+        public string cover_path { get; set; }
     }
 }

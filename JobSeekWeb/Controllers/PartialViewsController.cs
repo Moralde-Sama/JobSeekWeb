@@ -10,15 +10,18 @@ namespace JobSeekWeb.Controllers
     {
         #region Worker Partial Views
         // GET: PartialViews
-        public ActionResult WCompanies()
+        [Authorize(Roles = "Worker")]
+        public ActionResult WCompany()
         {
             return View();
         }
-        public ActionResult WWorkerProfile()
+        [Authorize(Roles = "Worker")]
+        public ActionResult WProfile()
         {
             return View();
         }
-        public ActionResult WWorkerDashboard()
+        [Authorize(Roles = "Worker")]
+        public ActionResult WDashboard()
         {
             return View();
         }

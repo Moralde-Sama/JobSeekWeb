@@ -11,6 +11,7 @@ using Microsoft.Owin.Security;
 using JobSeekWeb.Models;
 using JobSeekWeb.Extensions;
 using JobSeekWeb.Models.MyClass;
+using System.IO;
 
 namespace JobSeekWeb.Controllers
 {
@@ -55,6 +56,163 @@ namespace JobSeekWeb.Controllers
             }
         }
 
+        #region Worker
+        [HttpPost]
+        [Authorize (Roles = "Worker")]
+        public JsonResult svProfDetails(Worker worker, int[] skillIds, string[] newskills)
+        {
+            try
+            {
+                worker.workerId = Convert.ToInt32(User.Identity.GetWorkerOrCompanyId());
+                worker.asp_user_Id = Convert.ToInt32(User.Identity.GetUserId<int>());
+                worker.prof_path = "/Content/Moralde/Images/eriri.png";
+                worker.header = "Test";
+                worker.UpdateProfileDetails();
+                if (skillIds != null)
+                {
+                    foreach (int skillId in skillIds)
+                    {
+                        worker.skillId = skillId;
+                        worker.AddSkill(worker.workerId);
+                    }
+                }
+                if (newskills != null)
+                {
+                    foreach (string title in newskills)
+                    {
+                        worker.AddNewSkill(title);
+                        worker.skillId = Skills.getSkillDetailsByTitle(title).skillId;
+                        worker.AddSkill(worker.workerId);
+                    }
+                }
+                AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+                return Json("Success", JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                return Json(e.Message, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize (Roles = "Worker")]
+        public JsonResult UpdatePersonalInfo(Worker worker)
+        {
+            try
+            {
+                worker.UpdatePersonalInfo();
+                return Json("Success", JsonRequestBehavior.AllowGet);
+            }
+            catch(Exception e)
+            {
+                return Json(e.Message, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize (Roles = "Worker")]
+        public JsonResult UpdateAddress(int[] address)
+        {
+            try
+            {
+                db.spWorker_updateAddress(User.Identity.GetUserId<int>(),
+                    address[0], address[1], address[2], address[3]);
+                return Json("Success", JsonRequestBehavior.AllowGet);
+            }
+            catch(Exception e)
+            {
+                return Json(e.Message, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Worker")]
+        public JsonResult UpdateSkills(Worker worker)
+        {
+            try
+            {
+                worker.AddSkill(worker.workerId);
+                worker.RemoveSkills();
+                return Json("Success", JsonRequestBehavior.AllowGet);
+            }
+            catch(Exception e)
+            {
+                return Json(e.Message, JsonRequestBehavior.AllowGet);
+            }
+        }
+        private string GetFileExtension(string base64String)
+        {
+            var data = base64String.Substring(0, 5);
+
+            switch (data.ToUpper())
+            {
+                case "IVBOR":
+                    return "png";
+                case "/9J/4":
+                    return "jpg";
+                case "AAAAF":
+                    return "mp4";
+                case "JVBER":
+                    return "pdf";
+                case "AAABA":
+                    return "ico";
+                case "UMFYI":
+                    return "rar";
+                case "E1XYD":
+                    return "rtf";
+                case "U1PKC":
+                    return "txt";
+                case "MQOWM":
+                case "77U/M":
+                    return "srt";
+                default:
+                    return string.Empty;
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Worker")]
+        public JsonResult UploadProfileImage(string base64)
+        {
+            try
+            {
+                DateTime date = DateTime.Now;
+                byte[] data = Convert.FromBase64String(base64);
+                string location = "/Uploads/Worker/Img/" + User.Identity.GetUserId<int>() +
+                    date.Month + date.Day + date.Year + date.Hour + date.Minute + date.Second + "." + GetFileExtension(base64);
+                System.IO.File.WriteAllBytes(Server.MapPath(location), data);
+
+                db.spWorker_updateProfilePic(User.Identity.GetUserId<int>(), location);
+                return Json("Success", JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                return Json(e.Message, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Worker")]
+        public JsonResult UpdateCoverPhoto(HttpPostedFileBase coverphoto)
+        {
+            try
+            {
+                DateTime date = DateTime.Now;
+                var file = coverphoto;
+                string extension = Path.GetExtension(file.FileName);
+                string location = "/Uploads/Worker/Img/" + User.Identity.GetUserId<int>() + date.Month + date.Day + date.Year + date.Hour + date.Minute + date.Second + extension;
+                file.SaveAs(Server.MapPath(location));
+                db.spWorker_updateCoverPhoto(User.Identity.GetUserId<int>(), location);
+                return Json("Success", JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                return Json(e.Message, JsonRequestBehavior.AllowGet);
+            }
+        }
+        #endregion
+
         //
         // GET: /Account/Login
         [AllowAnonymous]
@@ -84,7 +242,7 @@ namespace JobSeekWeb.Controllers
             }
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            var result = await SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -207,9 +365,9 @@ namespace JobSeekWeb.Controllers
 
                     //For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     //Send an email with this link
-                    string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                    //string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                    //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                    //await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
                     return RedirectToAction("PageByRole", "Home");
                 }

@@ -13,8 +13,8 @@ namespace JobSeekWeb.Models
     
     public partial class spSkills_getAll_Result
     {
-        public int skillId { get; set; }
-        public string title { get; set; }
+        public int id { get; set; }
+        public string text { get; set; }
         public int categoryId { get; set; }
     }
 }

@@ -1,1 +1,1 @@
-﻿const module = angular.module("Job", ["ngRoute"]);
+﻿const module = angular.module("Job", []);

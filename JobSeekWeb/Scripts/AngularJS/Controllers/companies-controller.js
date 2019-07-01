@@ -110,7 +110,7 @@ module.controller("WorkerProfileCtrl", ["$scope", "$http", "$q", "workerService"
                         skillIds.push(parseInt(value.id));
                     }
                 });
-                sendDataHttp("../Worker/svProfDetails", {
+                sendDataHttp("../Account/svProfDetails", {
                     worker: s.data,
                     skillIds: skillIds,
                     newskills: skillsNew
@@ -119,13 +119,13 @@ module.controller("WorkerProfileCtrl", ["$scope", "$http", "$q", "workerService"
                     if (result == "Success") {
                         Swal.fire({
                             title: 'Saved Successfully!',
-                            text: "",
+                            text: "You will be redirected to login page.",
                             type: 'success',
                             confirmButtonColor: '#3085d6',
                             cancelButtonColor: '#d33',
                             confirmButtonText: 'Ok'
                         }).then((result) => {
-                            window.location = "../Amad/Dashboard";
+                            window.location = "../Account/Login";
                         })
                     } else {
                         Swal.fire(

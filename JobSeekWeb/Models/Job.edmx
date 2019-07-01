@@ -194,6 +194,7 @@
           <Property Name="brgy" Type="int" />
           <Property Name="asp_user_Id" Type="int" Nullable="false" />
           <Property Name="prof_path" Type="varchar" MaxLength="200" />
+          <Property Name="cover_path" Type="varchar" MaxLength="200" />
         </EntityType>
         <EntityType Name="tbl_worker_skill">
           <Key>
@@ -260,6 +261,9 @@
           </ReferentialConstraint>
         </Association>
         <Function Name="spCategories_getAll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="spCompany_Exist" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="asp_userId" Type="int" Mode="In" />
+        </Function>
         <Function Name="spCompany_getCompanyId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="asp_userId" Type="int" Mode="In" />
         </Function>
@@ -278,7 +282,13 @@
           <Parameter Name="workerId" Type="int" Mode="In" />
           <Parameter Name="skillId" Type="int" Mode="In" />
         </Function>
+        <Function Name="spWorker_deleteSkill" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="workerSkillId" Type="int" Mode="In" />
+        </Function>
         <Function Name="spWorker_Exist" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="asp_userId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="spWorker_getAllUserInfo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="asp_userId" Type="int" Mode="In" />
         </Function>
         <Function Name="spWorker_getDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -289,6 +299,20 @@
         </Function>
         <Function Name="spWorker_getWorkerId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="asp_userId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="spWorker_getWorkerSkills" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="workerId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="spWorker_updateAddress" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="asp_userId" Type="int" Mode="In" />
+          <Parameter Name="region" Type="int" Mode="In" />
+          <Parameter Name="province" Type="int" Mode="In" />
+          <Parameter Name="city" Type="int" Mode="In" />
+          <Parameter Name="brgy" Type="int" Mode="In" />
+        </Function>
+        <Function Name="spWorker_updateCoverPhoto" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="asp_userId" Type="int" Mode="In" />
+          <Parameter Name="coverpath" Type="varchar" Mode="In" />
         </Function>
         <Function Name="spWorker_updateDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="workerId" Type="int" Mode="In" />
@@ -303,6 +327,20 @@
           <Parameter Name="province" Type="int" Mode="In" />
           <Parameter Name="city" Type="int" Mode="In" />
           <Parameter Name="brgy" Type="int" Mode="In" />
+        </Function>
+        <Function Name="spWorker_updatePersonalInfo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="workerId" Type="int" Mode="In" />
+          <Parameter Name="fname" Type="varchar" Mode="In" />
+          <Parameter Name="mname" Type="varchar" Mode="In" />
+          <Parameter Name="lname" Type="varchar" Mode="In" />
+          <Parameter Name="gender" Type="varchar" Mode="In" />
+          <Parameter Name="cellnum" Type="varchar" Mode="In" />
+          <Parameter Name="birthdate" Type="datetime" Mode="In" />
+          <Parameter Name="header" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="spWorker_updateProfilePic" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="asp_userId" Type="int" Mode="In" />
+          <Parameter Name="profpath" Type="varchar" Mode="In" />
         </Function>
         <EntityContainer Name="JobModelStoreContainer">
           <EntitySet Name="__MigrationHistory" EntityType="Self.__MigrationHistory" Schema="dbo" store:Type="Tables" />
@@ -386,8 +424,6 @@
           <FunctionImport Name="spWorker_getWorkerId" ReturnType="Collection(Int32)">
           <Parameter Name="asp_userId" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="spCategories_getAll" ReturnType="Collection(JobModel.spCategories_getAll_Result)" />
-          <FunctionImport Name="spSkills_getAll" ReturnType="Collection(JobModel.spSkills_getAll_Result)" />
           <FunctionImport Name="spWorker_updateDetails">
             <Parameter Name="workerId" Mode="In" Type="Int32" />
             <Parameter Name="fname" Mode="In" Type="String" />
@@ -417,8 +453,47 @@
           <FunctionImport Name="spSkill_getSkillDetailsByTitle" ReturnType="Collection(JobModel.spSkill_getSkillDetailsByTitle_Result)">
           <Parameter Name="title" Mode="In" Type="String" />
           </FunctionImport>
-          <EntitySet Name="tbl_worker" EntityType="JobModel.tbl_worker" />
           <FunctionImport Name="spWorker_GetFullName" ReturnType="Collection(String)">
+          <Parameter Name="asp_userId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="spWorker_getWorkerSkills" ReturnType="Collection(JobModel.spWorker_getWorkerSkills_Result)">
+          <Parameter Name="workerId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="spCompany_Exist" ReturnType="Collection(Int32)">
+          <Parameter Name="asp_userId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="spWorker_updatePersonalInfo">
+            <Parameter Name="workerId" Mode="In" Type="Int32" />
+            <Parameter Name="fname" Mode="In" Type="String" />
+            <Parameter Name="mname" Mode="In" Type="String" />
+            <Parameter Name="lname" Mode="In" Type="String" />
+            <Parameter Name="gender" Mode="In" Type="String" />
+            <Parameter Name="cellnum" Mode="In" Type="String" />
+            <Parameter Name="birthdate" Mode="In" Type="DateTime" />
+            <Parameter Name="header" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="spWorker_updateAddress">
+            <Parameter Name="asp_userId" Mode="In" Type="Int32" />
+            <Parameter Name="region" Mode="In" Type="Int32" />
+            <Parameter Name="province" Mode="In" Type="Int32" />
+            <Parameter Name="city" Mode="In" Type="Int32" />
+            <Parameter Name="brgy" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="spCategories_getAll" ReturnType="Collection(JobModel.spCategories_getAll_Result2)" />
+          <FunctionImport Name="spSkills_getAll" ReturnType="Collection(JobModel.spSkills_getAll_Result)" />
+          <FunctionImport Name="spWorker_deleteSkill">
+          <Parameter Name="workerSkillId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="spWorker_updateProfilePic">
+            <Parameter Name="asp_userId" Mode="In" Type="Int32" />
+            <Parameter Name="profpath" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="tbl_worker" EntityType="JobModel.tbl_worker" />
+          <FunctionImport Name="spWorker_updateCoverPhoto">
+            <Parameter Name="asp_userId" Mode="In" Type="Int32" />
+            <Parameter Name="coverpath" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="spWorker_getAllUserInfo" ReturnType="Collection(JobModel.spWorker_getAllUserInfo_Result)">
             <Parameter Name="asp_userId" Mode="In" Type="Int32" />
           </FunctionImport>
         </EntityContainer>
@@ -637,11 +712,6 @@
           <Property Type="Int32" Name="categoryId" Nullable="false" />
           <Property Type="String" Name="title" Nullable="false" MaxLength="200" />
         </ComplexType>
-        <ComplexType Name="spSkills_getAll_Result">
-          <Property Type="Int32" Name="skillId" Nullable="false" />
-          <Property Type="String" Name="title" Nullable="false" MaxLength="50" />
-          <Property Type="Int32" Name="categoryId" Nullable="false" />
-        </ComplexType>
         <EntityType Name="tbl_worker_skill">
           <Key>
             <PropertyRef Name="workerSkillId" />
@@ -658,6 +728,24 @@
         <ComplexType Name="spSkill_getSkillDetailsByTitle_Result">
           <Property Type="Int32" Name="skillId" Nullable="false" />
           <Property Type="String" Name="title" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="categoryId" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="spWorker_getWorkerSkills_Result">
+          <Property Type="Int32" Name="workerSkillId" Nullable="false" />
+          <Property Type="Int32" Name="skillId" Nullable="false" />
+          <Property Type="Int32" Name="workerId" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="spCategories_getAll_Result1">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="text" Nullable="false" MaxLength="200" />
+        </ComplexType>
+        <ComplexType Name="spCategories_getAll_Result2">
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="String" Name="text" Nullable="false" MaxLength="200" />
+        </ComplexType>
+        <ComplexType Name="spSkills_getAll_Result">
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="String" Name="text" Nullable="false" MaxLength="50" />
           <Property Type="Int32" Name="categoryId" Nullable="false" />
         </ComplexType>
         <EntityType Name="tbl_worker">
@@ -678,7 +766,27 @@
           <Property Name="brgy" Type="Int32" />
           <Property Name="asp_user_Id" Type="Int32" Nullable="false" />
           <Property Name="prof_path" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="cover_path" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
         </EntityType>
+        <ComplexType Name="spWorker_getAllUserInfo_Result">
+          <Property Type="String" Name="Email" Nullable="true" MaxLength="256" />
+          <Property Type="String" Name="UserName" Nullable="false" MaxLength="256" />
+          <Property Type="Int32" Name="workerId" Nullable="false" />
+          <Property Type="String" Name="fname" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="mname" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="lname" Nullable="true" MaxLength="100" />
+          <Property Type="DateTime" Name="birthdate" Nullable="true" />
+          <Property Type="String" Name="gender" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="header" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="cellnum" Nullable="true" MaxLength="12" />
+          <Property Type="Int32" Name="region" Nullable="true" />
+          <Property Type="Int32" Name="province" Nullable="true" />
+          <Property Type="Int32" Name="city" Nullable="true" />
+          <Property Type="Int32" Name="brgy" Nullable="true" />
+          <Property Type="Int32" Name="asp_user_Id" Nullable="false" />
+          <Property Type="String" Name="prof_path" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="cover_path" Nullable="true" MaxLength="200" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -886,23 +994,6 @@
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="spCompany_getCompanyId" FunctionName="JobModel.Store.spCompany_getCompanyId" />
           <FunctionImportMapping FunctionImportName="spWorker_getWorkerId" FunctionName="JobModel.Store.spWorker_getWorkerId" />
-          <FunctionImportMapping FunctionImportName="spCategories_getAll" FunctionName="JobModel.Store.spCategories_getAll">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="JobModel.spCategories_getAll_Result">
-                <ScalarProperty Name="categoryId" ColumnName="categoryId" />
-                <ScalarProperty Name="title" ColumnName="title" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="spSkills_getAll" FunctionName="JobModel.Store.spSkills_getAll">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="JobModel.spSkills_getAll_Result">
-                <ScalarProperty Name="skillId" ColumnName="skillId" />
-                <ScalarProperty Name="title" ColumnName="title" />
-                <ScalarProperty Name="categoryId" ColumnName="categoryId" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="spWorker_updateDetails" FunctionName="JobModel.Store.spWorker_updateDetails" />
           <FunctionImportMapping FunctionImportName="spSkill_addSkill" FunctionName="JobModel.Store.spSkill_addSkill" />
           <EntitySetMapping Name="tbl_worker_skill">
@@ -933,9 +1024,42 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="spWorker_GetFullName" FunctionName="JobModel.Store.spWorker_GetFullName" />
+          <FunctionImportMapping FunctionImportName="spWorker_getWorkerSkills" FunctionName="JobModel.Store.spWorker_getWorkerSkills">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="JobModel.spWorker_getWorkerSkills_Result">
+                <ScalarProperty Name="workerSkillId" ColumnName="workerSkillId" />
+                <ScalarProperty Name="skillId" ColumnName="skillId" />
+                <ScalarProperty Name="workerId" ColumnName="workerId" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="spCompany_Exist" FunctionName="JobModel.Store.spCompany_Exist" />
+          <FunctionImportMapping FunctionImportName="spWorker_updatePersonalInfo" FunctionName="JobModel.Store.spWorker_updatePersonalInfo" />
+          <FunctionImportMapping FunctionImportName="spWorker_updateAddress" FunctionName="JobModel.Store.spWorker_updateAddress" />
+          <FunctionImportMapping FunctionImportName="spCategories_getAll" FunctionName="JobModel.Store.spCategories_getAll">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="JobModel.spCategories_getAll_Result2">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="text" ColumnName="text" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="spSkills_getAll" FunctionName="JobModel.Store.spSkills_getAll">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="JobModel.spSkills_getAll_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="text" ColumnName="text" />
+                <ScalarProperty Name="categoryId" ColumnName="categoryId" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="spWorker_deleteSkill" FunctionName="JobModel.Store.spWorker_deleteSkill" />
+          <FunctionImportMapping FunctionImportName="spWorker_updateProfilePic" FunctionName="JobModel.Store.spWorker_updateProfilePic" />
           <EntitySetMapping Name="tbl_worker">
             <EntityTypeMapping TypeName="JobModel.tbl_worker">
               <MappingFragment StoreEntitySet="tbl_worker">
+                <ScalarProperty Name="cover_path" ColumnName="cover_path" />
                 <ScalarProperty Name="prof_path" ColumnName="prof_path" />
                 <ScalarProperty Name="asp_user_Id" ColumnName="asp_user_Id" />
                 <ScalarProperty Name="brgy" ColumnName="brgy" />
@@ -953,7 +1077,30 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="spWorker_GetFullName" FunctionName="JobModel.Store.spWorker_GetFullName" />
+          <FunctionImportMapping FunctionImportName="spWorker_updateCoverPhoto" FunctionName="JobModel.Store.spWorker_updateCoverPhoto" />
+          <FunctionImportMapping FunctionImportName="spWorker_getAllUserInfo" FunctionName="JobModel.Store.spWorker_getAllUserInfo">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="JobModel.spWorker_getAllUserInfo_Result">
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="workerId" ColumnName="workerId" />
+                <ScalarProperty Name="fname" ColumnName="fname" />
+                <ScalarProperty Name="mname" ColumnName="mname" />
+                <ScalarProperty Name="lname" ColumnName="lname" />
+                <ScalarProperty Name="birthdate" ColumnName="birthdate" />
+                <ScalarProperty Name="gender" ColumnName="gender" />
+                <ScalarProperty Name="header" ColumnName="header" />
+                <ScalarProperty Name="cellnum" ColumnName="cellnum" />
+                <ScalarProperty Name="region" ColumnName="region" />
+                <ScalarProperty Name="province" ColumnName="province" />
+                <ScalarProperty Name="city" ColumnName="city" />
+                <ScalarProperty Name="brgy" ColumnName="brgy" />
+                <ScalarProperty Name="asp_user_Id" ColumnName="asp_user_Id" />
+                <ScalarProperty Name="prof_path" ColumnName="prof_path" />
+                <ScalarProperty Name="cover_path" ColumnName="cover_path" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

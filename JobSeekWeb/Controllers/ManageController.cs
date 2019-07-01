@@ -7,12 +7,14 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using JobSeekWeb.Models;
+using JobSeekWeb.Models.MyClass;
 
 namespace JobSeekWeb.Controllers
 {
     [Authorize]
     public class ManageController : Controller
     {
+        private JobEntities db = new JobEntities();
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
@@ -219,6 +221,59 @@ namespace JobSeekWeb.Controllers
         {
             return View();
         }
+
+        #region Worker
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Worker")]
+        public async Task<ActionResult> UpdateSettings(Settings settings)
+        {
+            var user = await UserManager.FindByIdAsync(User.Identity.GetUserId<int>());
+
+            if (UserManager.PasswordHasher.VerifyHashedPassword(user.PasswordHash, settings.oldpassword)
+                == PasswordVerificationResult.Success)
+            {
+                tbl_worker worker = db.tbl_worker.Where(w => w.asp_user_Id == user.Id).FirstOrDefault();
+                bool isModified = 
+                    settings.UserName != user.UserName || settings.Email != user.Email ? true : false;
+                if (user.UserName != settings.UserName)
+                    user.UserName = settings.UserName;
+                if (user.Email != settings.Email)
+                    user.Email = settings.Email;
+                if(isModified)
+                {
+                    var result = await UserManager.UpdateAsync(user);
+                    if(!result.Succeeded)
+                    {
+                        return Json(result.Errors, JsonRequestBehavior.AllowGet);
+                    }
+                }
+
+                if (!String.IsNullOrEmpty(settings.newpassword))
+                {
+                    var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId<int>(), settings.oldpassword, settings.newpassword);
+                    if (result.Succeeded)
+                    {
+                        if (user != null)
+                        {
+                            await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                        }
+                    }
+                } else
+                {
+                    if (user != null)
+                    {
+                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                    }
+                }
+                return Json("Success", JsonRequestBehavior.AllowGet);
+            } else
+            {
+                return Json("Invalid Password.", JsonRequestBehavior.AllowGet);
+            }
+        }
+        #endregion
 
         //
         // POST: /Manage/ChangePassword

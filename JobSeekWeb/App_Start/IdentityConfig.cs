@@ -23,7 +23,7 @@ namespace JobSeekWeb
             // Plug in your email service here to send an email.
             var senderEmail = new MailAddress("animalotion@gmail.com", "Job Seeker Test");
             var receiverEmail = new MailAddress(message.Destination, "Receiver");
-            var password = "testtesttest";
+            var password = "moraldedummy";
 
             var smtp = new SmtpClient
             {
@@ -45,7 +45,7 @@ namespace JobSeekWeb
                 return smtp.SendMailAsync(mess);
 
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return Task.FromResult(0);
             }
