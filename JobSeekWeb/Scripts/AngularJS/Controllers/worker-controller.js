@@ -446,24 +446,39 @@ module.controller("ProfileCtrl", ["$scope", "$http", "$q", "profileService", fun
         return q(function (resolve, reject) {
             var select2Data = [];
             if (addressType == "region") {
-                angular.forEach(data, (value) => {
-                    select2Data.push(select2Object(value.regCode, value.regDesc, s.userInfo.region,
-                    value.regCode));
-                })
+                for (var i = 0; i < data.length; i++) {
+                    if (!angular.isUndefined(data[i].regCode)) {
+                        select2Data.push(select2Object(data[i].regCode, data[i].regDesc, s.userInfo.region,
+                            data[i].regCode));
+                    } else {
+                        select2Data = holders.regionHolder;
+                        break;
+                    }
+                }
                 holders.regionHolder = select2Data;
             }
             else if (addressType == "province") {
-                angular.forEach(data, (value) => {
-                    select2Data.push(select2Object(value.provCode, value.provDesc, s.userInfo.province,
-                        value.regCode));
-                })
+                for (var i = 0; i < data.length; i++) {
+                    if (!angular.isUndefined(data[i].provCode)) {
+                        select2Data.push(select2Object(data[i].provCode, data[i].provDesc, s.userInfo.province,
+                            data[i].regCode));
+                    } else {
+                        select2Data = holders.provinceHolder;
+                        break;
+                    }
+                }
                 holders.provinceHolder = select2Data;
             }
             else if (addressType == "city") {
-                angular.forEach(data, (value) => {
-                    select2Data.push(select2Object(value.citymunCode, value.citymunDesc,
-                        s.userInfo.city, value.provCode));
-                })
+                for (var i = 0; i < data.length; i++) {
+                    if (!angular.isUndefined(data[i].citymunCode)) {
+                        select2Data.push(select2Object(data[i].citymunCode, data[i].citymunDesc,
+                            s.userInfo.city, data[i].provCode));
+                    } else {
+                        select2Data = holders.cityHolder;
+                        break;
+                    }
+                }
                 holders.cityHolder = select2Data;
             }
             else if (addressType == "brgy") {
