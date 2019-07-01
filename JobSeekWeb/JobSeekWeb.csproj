@@ -529,11 +529,18 @@
     <Content Include="Content\moral\bootstrap-4.3.1-dist\js\bootstrap.bundle.min.js" />
     <Content Include="Content\moral\bootstrap-4.3.1-dist\js\bootstrap.js" />
     <Content Include="Content\moral\bootstrap-4.3.1-dist\js\bootstrap.min.js" />
+    <Content Include="Content\moral\cropper\cropper.common.js" />
+    <Content Include="Content\moral\cropper\cropper.css" />
+    <Content Include="Content\moral\cropper\cropper.esm.js" />
+    <Content Include="Content\moral\cropper\cropper.js" />
+    <Content Include="Content\moral\cropper\cropper.min.css" />
+    <Content Include="Content\moral\cropper\cropper.min.js" />
     <Content Include="Content\moral\css\angular-animate.css" />
     <Content Include="Content\moral\css\custom-materialize.css" />
     <Content Include="Content\moral\css\worker-css.css" />
     <Content Include="Content\moral\Images\eriri.png" />
     <Content Include="Content\moral\Images\kodaikanal-2836301.jpg" />
+    <Content Include="Content\moral\requireJs\require.js" />
     <Content Include="Content\moral\select2\css\select2.css" />
     <Content Include="Content\moral\select2\css\select2.min.css" />
     <Content Include="Content\moral\select2\js\i18n\af.js" />
@@ -1026,6 +1033,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Content\amade\ven\font-awesome\less\" />
     <Folder Include="Content\amade\ven\font-awesome\scss\" />
+    <Folder Include="Uploads\Worker\Img\" />
     <Folder Include="Views\Amad\vendor\font-awesome\less\" />
     <Folder Include="Views\Amad\vendor\font-awesome\scss\" />
   </ItemGroup>

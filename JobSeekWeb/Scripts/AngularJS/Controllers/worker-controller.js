@@ -122,7 +122,19 @@ module.service("profileService", function ($http, $q) {
             headers: { 'Content-Type': undefined }
         })
     }
-
+    this.updateSettings = (data) => {
+        var formdata = new FormData();
+        formdata.append("__RequestVerificationToken",
+            $('input:hidden[name=__RequestVerificationToken]').val());
+        formdata.append("blob", data);
+        return $http({
+            method: 'POST',
+            url: '/Account/UploadProfileImage',
+            data: formdata,
+            transformRequest: angular.identity,
+            headers: { 'Content-Type': undefined }
+        })
+    }
     function returnValueIfNotNull(holder) {
         return $q(function (resolve, reject) {
             if (holder != null) {
@@ -136,9 +148,20 @@ module.service("profileService", function ($http, $q) {
 })
 
 //Controllers
-module.controller("NavigationCtrl", ["$scope", "$location", "$http", function (s, l, h) {
+module.controller("NavigationCtrl", ["$scope", "$location", "$http", "profileService", function (s, l, h, service) {
     var fullname = angular.element(".logo")[0].innerText;
+    service.getUserInfo(holders.userInfoHolder).then((result) => {
+        s.user = result.data.userInfo;
+    })
 
+    s.fullname = () => {
+        if (s.user != undefined) {
+            return `${s.user.fname} ${s.user.mname.substring(0, 1)}. ${s.user.lname}`;
+        } else {
+            return "";
+        }
+
+    }
     $.notify({
         icon: "fa fa-heart",
         message: `Welcome ${fullname}, have a nice day!`
@@ -226,6 +249,70 @@ module.controller("ProfileCtrl", ["$scope", "$http", "$q", "profileService", fun
             return "";
         }
 
+    }
+
+    s.getImageFile = function (file) {
+        s.imagefile = file[0];
+        
+        var cropper
+        var img;
+        Swal.fire({
+            title: 'Crop image.',
+            text: 'Are you sure you want to update your profile picture?',
+            imageUrl: '',
+            imageAlt: 'Profile Picture',
+            showCancelButton: true,
+            confirmButtonColor: '#8553C6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result.value) {
+                var base64string = cropper.getCroppedCanvas().toDataURL();
+                service.updateSettings(base64string.substring(22, base64string.length))
+                    .then((result) => {
+                        if (result.data == "Success") {
+                            swalSuccess("Updated", '', () => {
+                                $("#sideProf").attr("src", cropper.getCroppedCanvas().toDataURL());
+                                $("#prof").attr("src", cropper.getCroppedCanvas().toDataURL());
+                            });
+                        } else {
+                            swalError(result.data);
+                        }
+                    }, () => {
+                            swalError();
+                        })
+            }
+        })
+
+        if (file && file[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('.swal2-image')
+                    .attr('src', e.target.result);
+            };
+
+            reader.readAsDataURL(file[0]);
+
+            img = $(".swal2-image");
+            img.on("load", () => {
+                var image = document.querySelector('.swal2-image');
+                cropper = new Cropper(image, {
+                    aspectRatio: 1 / 1,
+                    minContainerWidth: 300,
+                    minContainerHeight: 250,
+                    ready: function (event) {
+                        // Zoom the image to its natural size
+                        cropper.zoomTo(1);
+                    }
+                });
+            })
+        }
+        //readURL2(file, "file", 350, 250);
+    }
+
+    s.profilePic = () => {
+        document.getElementById("getFileProf").click();
     }
 
     s.update = (section) => {

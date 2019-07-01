@@ -10,7 +10,8 @@
                     </div>
                     <div class="content">
                         <div class="author">
-                            <img class="avatar border-violet" src="~/Content/moral/Images/eriri.png" />
+                            <input id="getFileProf" type="file" onchange="angular.element(this).scope().getImageFile(this.files)" style="display: none;"/>
+                            <img id="prof" ng-click="profilePic()" class="avatar border-violet" ng-src="{{userInfo.prof_path}}" style="cursor: pointer;" />
                             <h3 class="title">
                                 {{fullname()}}<br />
                                 <small>@@{{userInfo.UserName}}</small>

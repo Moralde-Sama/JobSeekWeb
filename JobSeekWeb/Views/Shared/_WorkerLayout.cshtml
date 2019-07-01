@@ -20,22 +20,23 @@
     <link href="~/Content/moral/Swal/sweetalert2.css" rel="stylesheet" />
     <link href="~/Content/moral/select2/css/select2.css" rel="stylesheet" />
     <link href="~/Content/moral/css/angular-animate.css" rel="stylesheet" />
+    <link href="~/Content/moral/cropper/cropper.css" rel="stylesheet" />
 </head>
 <body ng-app="Job">
     <div class="wrapper">
         <div class="sidebar" data-color="purple" data-image="Content/assets/img/sidebar-5.jpg">
-            <div class="sidebar-wrapper">
+            <div class="sidebar-wrapper"  ng-controller="NavigationCtrl">
                 <div class="logo" style="font-weight: 600;">
                     <center>
-                        <img src="~/Content/moral/Images/eriri.png" width="110" height="110"
+                        <img id="sideProf" ng-src="{{user.prof_path}}" width="110" height="110"
                              style="margin-bottom: 15px; border-radius: 50%;  border: 5px solid #dbccee;" alt="...">
                     </center>
                     <center id="userfullname">
-                        @HttpContext.Current.User.Identity.GetUserFullName()
+                        {{fullname()}}
                     </center>
                 </div>
                 @Html.AntiForgeryToken()
-                <ul id="navItem" class="nav" ng-controller="NavigationCtrl">
+                <ul id="navItem" class="nav">
                     <li>
                         <a href="Worker/Dashboard" ng-click="changeView(0)">
                             <i class="pe-7s-graph"></i>
@@ -119,11 +120,12 @@
     <script src="~/Content/assets/js/light-bootstrap-dashboard.js?v=1.4.0"></script>
     <script src="~/Content/moral/select2/js/select2.js"></script>
     <script src="~/Content/moral/Swal/sweetalert2.js"></script>
+    <script src="~/Content/moral/cropper/cropper.min.js"></script>
+    <script src="~/Scripts/moment.min.js"></script>
     <script src="~/Scripts/AngularJS/angular.min.js"></script>
     <script src="~/Scripts/AngularJS/angular-animate.js"></script>
     <script src="~/Scripts/AngularJS/angular-route.min.js"></script>
     <script src="~/Scripts/AngularJS/Controllers/worker-controller.js"></script>
     <script src="~/Scripts/AngularJS/Router/worker.js"></script>
-    <script src="~/Scripts/moment.min.js"></script>
 </body>
 </html>

@@ -295,5 +295,18 @@ namespace JobSeekWeb.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("spWorker_deleteSkill", workerSkillIdParameter);
         }
+    
+        public virtual int spWorker_updateProfilePic(Nullable<int> asp_userId, string profpath)
+        {
+            var asp_userIdParameter = asp_userId.HasValue ?
+                new ObjectParameter("asp_userId", asp_userId) :
+                new ObjectParameter("asp_userId", typeof(int));
+    
+            var profpathParameter = profpath != null ?
+                new ObjectParameter("profpath", profpath) :
+                new ObjectParameter("profpath", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("spWorker_updateProfilePic", asp_userIdParameter, profpathParameter);
+        }
     }
 }

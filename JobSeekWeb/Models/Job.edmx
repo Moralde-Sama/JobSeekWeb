@@ -333,6 +333,10 @@
           <Parameter Name="birthdate" Type="datetime" Mode="In" />
           <Parameter Name="header" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="spWorker_updateProfilePic" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="asp_userId" Type="int" Mode="In" />
+          <Parameter Name="profpath" Type="varchar" Mode="In" />
+        </Function>
         <EntityContainer Name="JobModelStoreContainer">
           <EntitySet Name="__MigrationHistory" EntityType="Self.__MigrationHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
@@ -477,7 +481,11 @@
           <FunctionImport Name="spCategories_getAll" ReturnType="Collection(JobModel.spCategories_getAll_Result2)" />
           <FunctionImport Name="spSkills_getAll" ReturnType="Collection(JobModel.spSkills_getAll_Result)" />
           <FunctionImport Name="spWorker_deleteSkill">
-            <Parameter Name="workerSkillId" Mode="In" Type="Int32" />
+          <Parameter Name="workerSkillId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="spWorker_updateProfilePic">
+            <Parameter Name="asp_userId" Mode="In" Type="Int32" />
+            <Parameter Name="profpath" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="C__MigrationHistory">
@@ -1078,6 +1086,7 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="spWorker_deleteSkill" FunctionName="JobModel.Store.spWorker_deleteSkill" />
+          <FunctionImportMapping FunctionImportName="spWorker_updateProfilePic" FunctionName="JobModel.Store.spWorker_updateProfilePic" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
