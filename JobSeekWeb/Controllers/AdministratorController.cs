@@ -17,17 +17,17 @@ namespace JobSeekWeb.Controllers
         {
             return View();
         }
-        public ActionResult RemoveWC()
-        {
-            return View();
-        }
-        public ActionResult RemovePost()
-        {
-            return View();
-        }
         public ActionResult Display()
         {
             return View();
+        }
+        public ActionResult Post()
+        {
+            return View();
+        }
+        public ActionResult Posting()
+        {
+        return View();
         }
     }
 }
