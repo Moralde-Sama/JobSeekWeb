@@ -188,7 +188,8 @@ module.controller("NavigationCtrl", ["$scope", "$location", "$http", "profileSer
             });
     })
 
-    var routepaths = ["/Worker/Dashboard", "/Worker/Profile", "/Worker/Company"];
+    var routepaths = ["/Worker/Dashboard", "/Worker/Profile", "/Worker/Company", "/Worker/Projects",
+        "/Worker/Messages"];
     var currentIndex = 0;
     s.changeView = (liIndex) => {
         var children = angular.element("#navItem")[0].children;
@@ -827,4 +828,8 @@ module.controller("CompanyCtrl", ["$scope", "$http", function (s, h) {
             placeholder: "Select skills"
         });
     })
+}])
+module.controller("MessageCtrl", ["$scope", "$http", function (s, h) {
+    s.lists = [0, 1, 2, 3, 4]
+
 }])

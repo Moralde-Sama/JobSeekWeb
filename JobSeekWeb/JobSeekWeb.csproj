@@ -1030,6 +1030,7 @@
     <Content Include="Views\PartialViews\WDashboard.cshtml" />
     <Content Include="Views\Amad\Dashboard.cshtml" />
     <Content Include="Views\Worker\Details.cshtml" />
+    <Content Include="Views\PartialViews\WMessages.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

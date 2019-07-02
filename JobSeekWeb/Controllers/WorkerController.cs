@@ -43,6 +43,10 @@ namespace JobSeekWeb.Controllers
                 return View();
             }
         }
+        public ActionResult Messages()
+        {
+            return View("~/Views/Shared/_WorkerLayout.cshtml");
+        }
         public ActionResult Company()
         {
             return View("~/Views/Shared/_WorkerLayout.cshtml");
