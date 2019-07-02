@@ -319,7 +319,7 @@ namespace JobSeekWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new JobUser { UserName = model.Email, Email = model.Email };
+                var user = new JobUser { UserName = model.UserName, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
