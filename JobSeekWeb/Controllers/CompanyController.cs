@@ -17,6 +17,16 @@ namespace JobSeekWeb.Controllers
         {
             return View();
         }
+        public ActionResult Profile()
+        {
+
+            return View();
+        }
+        public ActionResult PostJob()
+        {
+            return View();
+           
+        }
         
 
     }

@@ -75,6 +75,12 @@ hr {
   overflow: visible;
 }
 
+
+
+
+
+
+
 h1,
 h2,
 h3,
@@ -2164,13 +2170,13 @@ pre code {
   border: 0;
 }
 
-.form-control:focus {
-  color: #495057;
-  background-color: rgba(0, 0, 0, 0);
-  border-color: #9acffa;
-  outline: 0;
-  box-shadow: none, 0 0 0 0.2rem rgba(33, 150, 243, 0.25);
-}
+    .form-control:focus {
+        color: #8553C6;
+        background-color: rgba(0, 0, 0, 0);
+        border-color: #9acffa;
+        outline: 0;
+        box-shadow: none, 0 0 0 0.2rem rgba(255, 255, 255, 0.23);
+    }
 
 .form-control::placeholder {
   color: #6c757d;
@@ -13110,7 +13116,7 @@ fieldset[disabled] .form-group .form-control {
 .navbar .navbar-nav .nav-item.active .nav-link:hover,
 .navbar .navbar-nav .nav-item.active .nav-link:focus {
   color: inherit;
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.23);
 }
 
 .navbar .btn,
@@ -14779,10 +14785,10 @@ fieldset[disabled] .form-group.is-focused .togglebutton label {
   box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(156, 39, 176, 0.4);
 }
 
-.sidebar[data-color="azure"] li.active>a {
-  background-color: #00bcd4;
-  box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(0, 188, 212, 0.4);
-}
+    .sidebar[data-color="azure"] li.active > a {
+        background-color: #3BB9FF;
+        box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(0, 188, 212, 0.4);
+    }
 
 .sidebar[data-color="green"] li.active>a {
   background-color: #4caf50;
