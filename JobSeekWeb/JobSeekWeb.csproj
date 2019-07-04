@@ -207,6 +207,7 @@
       <DependentUpon>Job.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\MyClass\Project.cs" />
     <Compile Include="Models\MyClass\Settings.cs" />
     <Compile Include="Models\MyClass\Skills.cs" />
     <Compile Include="Models\MyClass\Users.cs" />
@@ -236,9 +237,6 @@
       <DependentUpon>Job.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\spWorker_getWorkerSkills_Result.cs">
-      <DependentUpon>Job.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\sysdiagram.cs">
       <DependentUpon>Job.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_asp_role.cs">
@@ -271,10 +269,19 @@
     <Compile Include="Models\tbl_notification.cs">
       <DependentUpon>Job.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\tbl_personal_project.cs">
+      <DependentUpon>Job.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tbl_pproject_skill.cs">
+      <DependentUpon>Job.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\tbl_project.cs">
       <DependentUpon>Job.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_project_participants.cs">
+      <DependentUpon>Job.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tbl_proj_screenshots.cs">
       <DependentUpon>Job.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_requirements.cs">
@@ -928,6 +935,7 @@
     <Content Include="Scripts\moment-with-locales.min.js" />
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
+    <Content Include="Scripts\MyJs\autocomplete.js" />
     <Content Include="Uploads\Worker\Img\eriri.png" />
     <Content Include="Uploads\Worker\Img\kodaikana.jpg" />
     <Content Include="Views\Amad\vendor\bootstrap\css\bootstrap-grid.css" />
@@ -1031,11 +1039,13 @@
     <Content Include="Views\Amad\Dashboard.cshtml" />
     <Content Include="Views\Worker\Details.cshtml" />
     <Content Include="Views\PartialViews\WMessages.cshtml" />
+    <Content Include="Views\PartialViews\WProjects.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\amade\ven\font-awesome\less\" />
     <Folder Include="Content\amade\ven\font-awesome\scss\" />
+    <Folder Include="Uploads\Screenshots\" />
     <Folder Include="Views\Amad\vendor\font-awesome\less\" />
     <Folder Include="Views\Amad\vendor\font-awesome\scss\" />
   </ItemGroup>

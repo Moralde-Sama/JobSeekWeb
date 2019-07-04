@@ -80,7 +80,8 @@ namespace JobSeekWeb.Controllers
                 {
                     foreach (string title in newskills)
                     {
-                        worker.AddNewSkill(title);
+                        worker.title = title;
+                        worker.AddNewSkill();
                         worker.skillId = Skills.getSkillDetailsByTitle(title).skillId;
                         worker.AddSkill(worker.workerId);
                     }

@@ -56,6 +56,11 @@
     width: 100%;
     display: flex;
     justify-content: center;
+    color: red !important;
+    -webkit-transition: background-color 300ms linear;
+    -moz-transition: background-color 300ms linear;
+    -o-transition: background-color 300ms linear;
+    transition: background-color 300ms linear;
 }
 .card.content_center.active {
     background-color: #8553C6;
@@ -765,6 +770,31 @@ fieldset[disabled] .btn-success.active {
     border-color: #8553C6;
     color: white;
 }
+.btn.btn-white.list-btns {
+    margin-left: 2px;
+    padding: 5px 10px;
+    border: none;
+    border: 1px solid #888888;
+}
+.btn.btn-white.list-btns:hover {
+    background-color: #F7F7F8;
+}
+.btn.btn-white.list-btns:active {
+    background-color: #7F4AC2;
+    border: 1px solid #7F4AC2;
+}
+.btn.btn-white.list-btns:active i {
+    color: white;
+}
+.btn.btn-white.list-btns i {
+    color: black;
+    margin-top: 3px;
+    font-size: 19px;
+    -webkit-transition: color 100ms linear;
+    -moz-transition: color 100ms linear;
+    -o-transition: color 100ms linear;
+    transition: color 100ms linear;
+}
 .btn-violet.coverphoto {
     background-color: #8553C6;
     position: absolute;
@@ -778,6 +808,12 @@ fieldset[disabled] .btn-success.active {
 }
 .btn-violet.coverphoto:active {
     background-color: #AF8EE1;
+}
+.btns-holder {
+    position: absolute;
+    right: 30px;
+    top: 15px;
+    cursor: default;
 }
 
 .btn-info:hover, .btn-info:focus, .btn-info:active, .btn-info.active,
@@ -977,6 +1013,7 @@ fieldset[disabled] .btn-neutral.active {
 .btn:disabled, .btn[disabled], .btn.disabled {
     opacity: 0.5;
     filter: alpha(opacity=50);
+    pointer-events: none;
 }
 
 .btn-round {
@@ -1363,6 +1400,7 @@ fieldset[disabled] .btn-neutral.active {
 
 .table > tbody > tr {
     position: relative;
+    cursor: pointer;
 }
 
 .table > tbody > tr:hover .td-actions .btn {

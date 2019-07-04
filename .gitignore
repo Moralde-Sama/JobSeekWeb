@@ -260,3 +260,4 @@ paket-files/
 __pycache__/
 *.pyc
 /JobSeekWeb/Uploads/Worker/Img
+/JobSeekWeb/Uploads/Screenshots

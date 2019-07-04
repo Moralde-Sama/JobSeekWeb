@@ -46,12 +46,8 @@ module.service("profileService", function ($http, $q) {
             return returnValueIfNotNull(holders.brgyHolder);
         }
     }
-    this.getCategoriesandSkills = (holder) => {
-        if (holder == null) {
-            return $http.get("../Home/GetCategoriesAndSkills");
-        } else {
-            return returnValueIfNotNull(holders.categoryAndSkillsHolder);
-        }
+    this.getCategoriesandSkills = () => {
+        return $http.get("../Home/GetCategoriesAndSkills");
     }
 
     this.updateSettings = (data) => {
@@ -159,6 +155,39 @@ module.service("profileService", function ($http, $q) {
         });
     }
 })
+module.service("projectService", function ($http) {
+    this.addNewPersonalProj = (data) => {
+        var formdata = new FormData();
+        formdata.append("__RequestVerificationToken",
+            $('input:hidden[name=__RequestVerificationToken]').val());
+        angular.forEach(data, (value, key) => {
+            if (key !== "files") {
+                if (angular.isArray(value)) {
+                    angular.forEach(value, (arVal) => {
+                        formdata.append(key, arVal);
+                    })
+                } else {
+                    formdata.append(key, value);
+                }
+            } else {
+                if (!angular.isUndefined(data.files.length)) {
+                    for (f = 0; f < data.files.length; f++) {
+                        formdata.append("files", data.files[f]);
+                    }  
+                }
+            }
+        })
+        
+        console.log(formdata.values());
+        return $http({
+            method: 'POST',
+            data: formdata,
+            url: '/Worker/AddNewPersonalProj',
+            transformRequest: angular.identity,
+            headers: { 'Content-Type': undefined }
+        })
+    }
+})
 
 //Controllers
 module.controller("NavigationCtrl", ["$scope", "$location", "$http", "profileService", function (s, l, h, service) {
@@ -173,6 +202,7 @@ module.controller("NavigationCtrl", ["$scope", "$location", "$http", "profileSer
     }
 
     service.getUserInfo(holders.userInfoHolder).then((result) => {
+        holders.userInfoHolder = result.data;
         s.user = result.data.userInfo;
         $.notify({
             icon: "fa fa-heart",
@@ -240,6 +270,130 @@ module.controller("NavigationCtrl", ["$scope", "$location", "$http", "profileSer
             }
         })
     }
+}])
+module.controller("ModalCtrl", ["$scope", "$http", "profileService", "projectService",
+    function (s, h, service, pService) {
+
+    var projSkills = $("#skillsproj");
+    var privacy = $("#privacyP");
+    var newSkills = [];
+    var addSkills = [];
+
+    s.save = (data) => {
+        console.log(projSkills.select2("data"));
+        data.privacy = privacy.select2("data")[0].id;
+        data.created = moment(data.pcreated).format("MM-DD-YYYY");
+        data.completed = moment(data.pcompleted).format("MM-DD-YYYY");
+        delete data.pcreated, data.pcompleted;
+        data.files = s.screenShots;
+        data.ownerId = holders.userInfoHolder.userInfo.workerId;
+        data.isWorkerProj = true;
+        angular.forEach(projSkills.select2("data"), (value) => {
+            if (isNaN(value.id)) {
+                newSkills.push(value.id);
+            } else {
+                addSkills.push(parseInt(value.id));
+            }
+        })
+        data.newSkills = newSkills;
+        data.addSkills = addSkills;
+        swalConfirmation("Are you sure want to save this project?", '', 'warning', (result) => {
+            pService.addNewPersonalProj(data).then((result) => {
+                if (result.data == "Success") {
+                    swalSuccess("Update", '', () => {
+                        data = null;
+                    })
+                }
+            })
+        })
+    }
+    s.validateLabel = (state) => {
+        return { 'red': !state };
+    }
+    s.validateInput = (state) => {
+        return { 'form-control': state, 'form-control invalid': !state };
+    }
+    s.getImageFile = (file) => {
+        s.screenShots = file;
+        console.log(file);
+        var count = 0;
+        if (file && file[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $("#sscontainer").append(`<div class="row"><div class="col-md-12 center_content"><img src="${e.target.result}" style="max-width: 100%; margin: 5px 0; border: 2px solid #dbccee; border-radius: 5px;" />` +
+                    "</div></div>");
+                count++;
+                if (file[count]) {
+                    reader.readAsDataURL(file[count]);
+                }
+            };
+            reader.readAsDataURL(file[count]);
+        }
+    }
+
+    function clearModal() {
+        s.data = null;
+        s.data = {
+            projTitle: null,
+            projDesc: null,
+            pcreated: null,
+            pcompleted: null
+        };
+        s.screenShots = null;
+        $("#projscreenshots").val('');
+        $("#sscontainer").empty();
+        $("#sscontainer").append('<div class="row"><div class="col-md-12 center_content"><label style="font-weight: bold; font-size: 20px;">Screenshots</label>' +
+            '</div></div>');
+        s.$apply();
+        projSkills.val(null).trigger('change');
+        privacy.val('Public').trigger('change');
+        var children = angular.element('#skillsContainerP')[0].children;
+        if (!angular.element(children[0]).hasClass("red")) {
+            angular.element(children[2].children[0].children[0]).addClass("invalid");
+            angular.element(children[0]).addClass("red");
+        }
+    }
+
+    $(document).ready(() => {
+
+        privacy.select2();
+
+        service.getCategoriesandSkills().then((result) => {
+            holders.categoryAndSkillsHolder = result.data;
+            projSkills.select2({
+                data: result.data.skills,
+                minimumInputLength: 3,
+                minimumResultsForSearch: 20,
+                tags: true
+            });
+
+            var children = angular.element('#skillsContainerP')[0].children;
+            if (!angular.element(children[0]).hasClass("red")) {
+                angular.element(children[2].children[0].children[0]).addClass("invalid");
+                angular.element(children[0]).addClass("red");
+            }
+
+            projSkills.on("select2:select", (e) => {
+                var value = e.params.data;
+                if (projSkills.select2("data").length > 0) {
+                    if (angular.element(children[0]).hasClass("red")) {
+                        angular.element(children[2].children[0].children[0]).removeClass("invalid");
+                        angular.element(children[0]).removeClass("red");
+                    }
+                }
+            })
+            projSkills.on("select2:unselect", () => {
+                if (projSkills.select2("data").length == 0) {
+                    if (!angular.element(children[0]).hasClass("red")) {
+                        angular.element(children[2].children[0].children[0]).addClass("invalid");
+                        angular.element(children[0]).addClass("red");
+                    }
+                }
+            })
+        })
+    })
+
 }])
 module.controller("DashboardCtrl", ["$scope", "$http", function (s, h) {
 
@@ -545,18 +699,6 @@ module.controller("ProfileCtrl", ["$scope", "$http", "$q", "profileService", fun
             callback(result.value)
         })
     }
-    function swalSuccess(title, text, callback) {
-        Swal.fire({
-            title: `${title} Successfully!`,
-            text: text,
-            type: 'success',
-            confirmButtonColor: '#8553C6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes'
-        }).then((result) => {
-            callback()
-        })
-    }
     function swalConfirmWithPassword(title, type, passwordCallback, callback) {
         Swal.fire({
             title: title,
@@ -579,21 +721,7 @@ module.controller("ProfileCtrl", ["$scope", "$http", "$q", "profileService", fun
             callback(result);
         })
     }
-    function swalError(text) {
-        if (text == undefined) {
-            Swal.fire({
-                type: 'error',
-                title: 'Oops...',
-                text: "Try to resubmit or try to check your internet connection."
-            })
-        } else {
-            Swal.fire({
-                type: 'error',
-                title: 'Oops...',
-                text: text
-            })
-        }
-    }
+
     function select2Object(addressCode, addressText, userCode, additionalCode ) {
         if (addressCode == userCode) {
             return {
@@ -786,7 +914,7 @@ module.controller("ProfileCtrl", ["$scope", "$http", "$q", "profileService", fun
             service.getProvince(holders.provinceHolder),
             service.getCity(holders.cityHolder),
             service.getBrgy(holders.brgyHolder),
-            service.getCategoriesandSkills(holders.categoryAndSkillsHolder),
+            service.getCategoriesandSkills(),
             service.getUserInfo(holders.userInfoHolder)
         ]).then((result) => {
             angular.forEach(result, (value, key) => {
@@ -829,7 +957,72 @@ module.controller("CompanyCtrl", ["$scope", "$http", function (s, h) {
         });
     })
 }])
+module.controller("ProjectCtrl", ["$scope", "$http", function (s, h) {
+    s.lists = [0, 1, 2, 3, 4]
+    s.myprojects = false;
+    //$("#myprojectscard").css("min-height", `${window.innerHeight - 200}px`);
+    s.selectMyProjects = (isProject) => {
+        s.myprojects = !isProject;
+    }
+
+    s.navClass = (elementName) => {
+        if (elementName == 'my') {
+            return { 'list-btn active': !s.myprojects, 'list-btn': s.myprojects }
+        } else {
+            return { 'list-btn active': s.myprojects, 'list-btn': !s.myprojects }
+        }
+    }
+    s.navCard = (elementName) => {
+        if (elementName == 'my') {
+            return { 'card content_center active': !s.myprojects, 'card content_center': s.myprojects }
+        } else {
+            return { 'card content_center active': s.myprojects, 'card content_center': !s.myprojects }
+        }
+    }
+}])
 module.controller("MessageCtrl", ["$scope", "$http", function (s, h) {
     s.lists = [0, 1, 2, 3, 4]
-
+    $("#messageCard").height(window.innerHeight - 310);
+    $("#contacts").height(window.innerHeight - 199);
 }])
+
+function swalConfirmation(title, text, type, callback) {
+    Swal.fire({
+        title: title,
+        text: text,
+        type: type,
+        showCancelButton: true,
+        confirmButtonColor: '#8553C6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes'
+    }).then((result) => {
+        callback(result.value)
+    })
+}
+function swalError(text) {
+    if (text == undefined) {
+        Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: "Try to resubmit or try to check your internet connection."
+        })
+    } else {
+        Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: text
+        })
+    }
+}
+function swalSuccess(title, text, callback) {
+    Swal.fire({
+        title: `${title} Successfully!`,
+        text: text,
+        type: 'success',
+        confirmButtonColor: '#8553C6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes'
+    }).then((result) => {
+        callback()
+    })
+}

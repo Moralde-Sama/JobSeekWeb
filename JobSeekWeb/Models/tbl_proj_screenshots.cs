@@ -12,12 +12,11 @@ namespace JobSeekWeb.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class sysdiagram
+    public partial class tbl_proj_screenshots
     {
-        public string name { get; set; }
-        public int principal_id { get; set; }
-        public int diagram_id { get; set; }
-        public Nullable<int> version { get; set; }
-        public byte[] definition { get; set; }
+        public int ssId { get; set; }
+        public string path { get; set; }
+        public int projectId { get; set; }
+        public byte isPersonalProj { get; set; }
     }
 }

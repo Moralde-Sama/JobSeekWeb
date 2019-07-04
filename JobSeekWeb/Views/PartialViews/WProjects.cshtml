@@ -1,0 +1,126 @@
+﻿
+@{
+    Layout = null;
+}
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+                <div ng-class="navCard('my')">
+                    <div class="content">
+                        <a ng-class="navClass('my')" ng-click="selectMyProjects(true)">
+                            <i class="pe-7s-user"></i>
+                            <p>My Projects</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-6">
+                <div ng-class="navCard('company')" ng-click="selectMyProjects(false)">
+                    <div class="content">
+                        <a ng-class="navClass('company')">
+                            <i class="pe-7s-note2"></i>
+                            <p>Company Projects</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" ng-hide="myprojects">
+            <div class="col-md-12">
+                <div id="myprojectscard" class="card">
+                    <div class="content" style="padding-bottom: 0;">
+                        <div class="card card-plain table-plain-bg" style="margin-top: -25px;">
+                            <div class="card-header ">
+                                <h4 class="card-title">My Projects</h4>
+                                <div class="btns-holder">
+                                    <a class="btn btn-white list-btns" data-toggle="modal" data-target="#myModal1"
+                                       ng-disabled="false"><i class="pe-7s-plus"></i></a>
+                                    <a class="btn btn-white list-btns" ng-disabled="true"><i class="pe-7s-pen"></i></a>
+                                    <a class="btn btn-white list-btns" ng-disabled="true"><i class="pe-7s-trash"></i></a>
+                                    <a class="btn btn-white list-btns" ng-disabled="true"><i class="pe-7s-look"></i></a>
+                                </div>
+                            </div>
+                            <div class="card-body table-full-width table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Project name</th>
+                                            <th>Date created</th>
+                                            <th>Date modified</th>
+                                            <th>Privacy</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>JobSeek</td>
+                                            <td>July 02, 2019</td>
+                                            <td>July 02, 2019</td>
+                                            <td>Public</td>
+                                        </tr>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>JobSeek</td>
+                                            <td>July 02, 2019</td>
+                                            <td>July 02, 2019</td>
+                                            <td>Public</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" ng-hide="!myprojects">
+            <div class="col-md-12">
+                <div id="myprojectscard" class="card">
+                    <div class="content" style="padding-bottom: 0;">
+                        <div class="card card-plain table-plain-bg" style="margin-top: -25px;">
+                            <div class="card-header ">
+                                <h4 class="card-title">Company Projects</h4>
+                                <div class="btns-holder">
+                                <a class="btn btn-white list-btns disabled"><i class="pe-7s-look"></i></a>
+                            </div>
+                            </div>
+                            <div class="card-body table-full-width table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Project name</th>
+                                            <th>Date created</th>
+                                            <th>Date modified</th>
+                                            <th>Privacy</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>JobSeek</td>
+                                            <td>July 02, 2019</td>
+                                            <td>July 02, 2019</td>
+                                            <td>Public</td>
+                                            <td>In Progress</td>
+                                        </tr>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>JobSeek</td>
+                                            <td>July 02, 2019</td>
+                                            <td>July 02, 2019</td>
+                                            <td>Public</td>
+                                            <td>In Progress</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

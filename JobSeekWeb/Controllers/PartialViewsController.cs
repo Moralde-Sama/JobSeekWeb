@@ -31,6 +31,11 @@ namespace JobSeekWeb.Controllers
         {
             return View();
         }
+        [Authorize(Roles = "Worker")]
+        public ActionResult WProjects()
+        {
+            return View();
+        }
         #endregion
     }
 }
