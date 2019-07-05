@@ -221,6 +221,15 @@
     <Compile Include="Models\spCategories_getAll_Result2.cs">
       <DependentUpon>Job.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\spProject_getAllPersonalProj_Result.cs">
+      <DependentUpon>Job.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\spProject_getScreenShots_Result.cs">
+      <DependentUpon>Job.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\spProject_getSkills_Result.cs">
+      <DependentUpon>Job.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\spSkills_getAll_Result.cs">
       <DependentUpon>Job.tt</DependentUpon>
     </Compile>

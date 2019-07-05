@@ -7,6 +7,7 @@
     userInfoHolder: null
 }
 var holderObjects = Object.keys(holders);
+var selectedElem = null;
 
 var module = angular.module("Job", ["ngRoute", "ngAnimate"]);
 
@@ -49,7 +50,6 @@ module.service("profileService", function ($http, $q) {
     this.getCategoriesandSkills = () => {
         return $http.get("../Home/GetCategoriesAndSkills");
     }
-
     this.updateSettings = (data) => {
         var formdata = new FormData();
         formdata.append("__RequestVerificationToken",
@@ -144,6 +144,7 @@ module.service("profileService", function ($http, $q) {
             headers: { 'Content-Type': undefined }
         })
     }
+
     function returnValueIfNotNull(holder) {
         return $q(function (resolve, reject) {
             if (holder != null) {
@@ -161,7 +162,7 @@ module.service("projectService", function ($http) {
         formdata.append("__RequestVerificationToken",
             $('input:hidden[name=__RequestVerificationToken]').val());
         angular.forEach(data, (value, key) => {
-            if (key !== "files") {
+            if (key !== 'files') {
                 if (angular.isArray(value)) {
                     angular.forEach(value, (arVal) => {
                         formdata.append(key, arVal);
@@ -170,10 +171,8 @@ module.service("projectService", function ($http) {
                     formdata.append(key, value);
                 }
             } else {
-                if (!angular.isUndefined(data.files.length)) {
-                    for (f = 0; f < data.files.length; f++) {
-                        formdata.append("files", data.files[f]);
-                    }  
+                for (var i = 0; i < value.length; i++) {
+                    formdata.append(key, value[i]);
                 }
             }
         })
@@ -186,6 +185,45 @@ module.service("projectService", function ($http) {
             transformRequest: angular.identity,
             headers: { 'Content-Type': undefined }
         })
+    }
+    this.updatePersonalProj = (data) => {
+        var formdata = new FormData();
+        formdata.append("__RequestVerificationToken",
+            $('input:hidden[name=__RequestVerificationToken]').val());
+        angular.forEach(data, (value, key) => {
+            if (key !== 'files') {
+                if (angular.isArray(value)) {
+                    angular.forEach(value, (arVal) => {
+                        formdata.append(key, arVal);
+                    })
+                } else {
+                    formdata.append(key, value);
+                }
+            } else {
+                for (var i = 0; i < value.length; i++) {
+                    formdata.append(key, value[i]);
+                }
+            }
+        })
+        return $http({
+            method: 'POST',
+            data: formdata,
+            url: '/Worker/UpdatePersonalProj',
+            transformRequest: angular.identity,
+            headers: { 'Content-Type': undefined }
+        })
+    }
+    this.getPersonalProjects = () => {
+        return $http.get("../Worker/GetWorkerPersonalProj");
+    }
+})
+
+module.factory("modalFactory", function () {
+    return {
+        screenshots: null,
+        skills: null,
+        isEdit: false,
+        projectHolder: null
     }
 })
 
@@ -271,41 +309,103 @@ module.controller("NavigationCtrl", ["$scope", "$location", "$http", "profileSer
         })
     }
 }])
-module.controller("ModalCtrl", ["$scope", "$http", "profileService", "projectService",
-    function (s, h, service, pService) {
+module.controller("ModalCtrl", ["$scope", "$q", "profileService", "projectService", "$rootScope", "modalFactory",
+    function (s, q, service, pService, r, modalFactory) {
 
     var projSkills = $("#skillsproj");
     var privacy = $("#privacyP");
     var newSkills = [];
     var addSkills = [];
-
-    s.save = (data) => {
-        console.log(projSkills.select2("data"));
+    var removeSkill = [];
+    var filelist = [];
+    var ssPosition = 0;
+    var screenshots = null;
+    var removeScreenShots = [];
+    var ssRemoved = 0;
+    r.d = null;
+    
+    s.saveUpdate = (data) => {
         data.privacy = privacy.select2("data")[0].id;
         data.created = moment(data.pcreated).format("MM-DD-YYYY");
         data.completed = moment(data.pcompleted).format("MM-DD-YYYY");
-        delete data.pcreated, data.pcompleted;
-        data.files = s.screenShots;
-        data.ownerId = holders.userInfoHolder.userInfo.workerId;
+        data.files = filelist;
         data.isWorkerProj = true;
         angular.forEach(projSkills.select2("data"), (value) => {
             if (isNaN(value.id)) {
                 newSkills.push(value.id);
             } else {
-                addSkills.push(parseInt(value.id));
+                console.log(modalFactory.isEdit);
+                if (modalFactory.isEdit) {
+                    if (removeSkill.length > 0) {
+                        if (removeSkill.filter((f) => f.skillId == value.id).length == 0) {
+                            if (modalFactory.skills.filter((f) => f.skillId != value.id)) {
+                                addSkills.push(parseInt(value.id));
+                            }
+                        }
+                    } else {
+                        if (modalFactory.skills.filter((f) => f.skillId == value.id).length == 0) {
+                            addSkills.push(parseInt(value.id));
+                        }
+                    }
+                } else {
+                    addSkills.push(parseInt(value.id));
+                }
+                
             }
         })
         data.newSkills = newSkills;
         data.addSkills = addSkills;
-        swalConfirmation("Are you sure want to save this project?", '', 'warning', (result) => {
-            pService.addNewPersonalProj(data).then((result) => {
-                if (result.data == "Success") {
-                    swalSuccess("Update", '', () => {
-                        data = null;
-                    })
-                }
+
+        if (modalFactory.isEdit) {
+            data.removeScreenShots = [];
+            data.removeSkill = [];
+            angular.forEach(removeScreenShots, (value) => {
+                data.removeScreenShots.push(value.ssId);
             })
-        })
+            angular.forEach(removeSkill, (value) => {
+                data.removeSkill.push(value.pprojectSkillId);
+            })
+            console.log(data.removeScreenShots);
+            swalConfirmation("Are you sure you want to update this project?", '', 'warning', () => {
+                return pService.updatePersonalProj(data);
+            }, (result) => {
+                if (result) {
+                    if (result.data == "Success") {
+                        swalSuccess("Update", '', () => {
+                            clearModal();
+                            $('#myModal1').modal('toggle');
+                            pService.getPersonalProjects().then((result) => {
+                                modalFactory.projectHolder = result.data;
+                                r.personalProjs = result.data.personalProj;
+                            })
+                        })
+                    }
+                    else {
+                        swalError(result.data);
+                    }
+                }
+            });
+        } else {
+            
+            console.log(data);
+            swalConfirmation("Are you sure want to save this project?", '', 'warning', () => {
+                return pService.addNewPersonalProj(data);
+            }, (result) => {
+                    if (result) {
+                        if (result.data == "Success") {
+                            swalSuccess("Saved", '', () => {
+                                clearModal();
+                                $('#myModal1').modal('toggle');
+                                pService.getPersonalProjects().then((result) => {
+                                    r.personalProjs = result.data.personalProj;
+                                })
+                            })
+                        } else {
+                            swalError(result.data);
+                        }
+                    }
+                });
+        }
     }
     s.validateLabel = (state) => {
         return { 'red': !state };
@@ -314,33 +414,78 @@ module.controller("ModalCtrl", ["$scope", "$http", "profileService", "projectSer
         return { 'form-control': state, 'form-control invalid': !state };
     }
     s.getImageFile = (file) => {
-        s.screenShots = file;
-        console.log(file);
         var count = 0;
         if (file && file[0]) {
             var reader = new FileReader();
 
             reader.onload = function (e) {
-                $("#sscontainer").append(`<div class="row"><div class="col-md-12 center_content"><img src="${e.target.result}" style="max-width: 100%; margin: 5px 0; border: 2px solid #dbccee; border-radius: 5px;" />` +
+                angular.element('#sscontainer').append(`<div class="row">
+                    <div class="col-md-12 center_content">
+                        <a class="close_screenshot" onClick="angular.element(this).scope().removeSS(${ssPosition}, '${filelist[ssPosition].name}')"><i class="pe-7s-close"></i></a>
+                        <img src="${e.target.result}" style="max-width: 100%; margin: 5px 0; border: 2px solid #dbccee; border-radius: 5px;" />` +
                     "</div></div>");
                 count++;
+                ssPosition++;
                 if (file[count]) {
                     reader.readAsDataURL(file[count]);
                 }
             };
-            reader.readAsDataURL(file[count]);
+
+            angular.forEach(file, (value) => {
+                filelist.push(value);
+                if (file.length == 1) {
+                    reader.readAsDataURL(value);
+                }
+            });
+
+            if (file.length > 1) {
+                reader.readAsDataURL(filelist[count]);
+            }
         }
+        }
+    s.closeModal = () => {
+        swalConfirmation('Are you sure?', 'closing this will clear all your data you input.', 'warning', () => { }, (result) => {
+            if (result) {
+                $('#myModal1').modal('toggle');
+                clearModal();
+            }
+        })
+     }
+    s.removeSS = (position, id) => {
+        if (modalFactory.isEdit) {
+            if (screenshots == null) {
+                screenshots = modalFactory.screenshots;
+            }
+            var remove = screenshots[screenshots.indexOf(screenshots.filter((f) => f.ssId == id)[0])];
+            removeScreenShots.push(remove);
+            console.log(removeScreenShots);
+        } else {
+            console.log(id);
+            var filFile = filelist.filter((f) => f.name === id);
+            filelist.splice(filelist.indexOf(filFile));
+        }
+        angular.element(angular.element('#sscontainer')[0].children[(position - ssRemoved) + 1]).remove();
+        ssRemoved++;
+        ssPosition--;
+        }
+    s.submitLabel = () => {
+        return modalFactory.isEdit ? 'Update' : "Save";
     }
 
     function clearModal() {
-        s.data = null;
-        s.data = {
+        r.d = null;
+        r.d = {
             projTitle: null,
             projDesc: null,
             pcreated: null,
             pcompleted: null
         };
-        s.screenShots = null;
+        filelist = [];
+        ssPosition = 0;
+        screenshots = null;
+        removeScreenShots = [];
+        ssRemoved = 0;
+        modalFactory.isEdit = false;
         $("#projscreenshots").val('');
         $("#sscontainer").empty();
         $("#sscontainer").append('<div class="row"><div class="col-md-12 center_content"><label style="font-weight: bold; font-size: 20px;">Screenshots</label>' +
@@ -359,10 +504,12 @@ module.controller("ModalCtrl", ["$scope", "$http", "profileService", "projectSer
 
         privacy.select2();
 
-        service.getCategoriesandSkills().then((result) => {
+        q.all([
+            service.getCategoriesandSkills()
+        ]).then((result) => {
             holders.categoryAndSkillsHolder = result.data;
             projSkills.select2({
-                data: result.data.skills,
+                data: result[0].data.skills,
                 minimumInputLength: 3,
                 minimumResultsForSearch: 20,
                 tags: true
@@ -375,20 +522,31 @@ module.controller("ModalCtrl", ["$scope", "$http", "profileService", "projectSer
             }
 
             projSkills.on("select2:select", (e) => {
-                var value = e.params.data;
+                var val = e.params.data;
                 if (projSkills.select2("data").length > 0) {
                     if (angular.element(children[0]).hasClass("red")) {
                         angular.element(children[2].children[0].children[0]).removeClass("invalid");
                         angular.element(children[0]).removeClass("red");
                     }
                 }
+                if (modalFactory.isEdit) {
+                    var remove = removeSkill.filter((f) => f.skillId == val.id)[0];
+                    if (!angular.isUndefined(remove)) {
+                        removeSkill.splice(remove);
+                    }
+                }
             })
-            projSkills.on("select2:unselect", () => {
+            projSkills.on("select2:unselect", (e) => {
+                var val = e.params.data;
                 if (projSkills.select2("data").length == 0) {
                     if (!angular.element(children[0]).hasClass("red")) {
                         angular.element(children[2].children[0].children[0]).addClass("invalid");
                         angular.element(children[0]).addClass("red");
                     }
+                }
+                if (modalFactory.isEdit) {
+                    var remove = modalFactory.skills.filter((f) => f.skillId == val.id)[0];
+                    removeSkill.push(remove);
                 }
             })
         })
@@ -448,7 +606,6 @@ module.controller("ProfileCtrl", ["$scope", "$http", "$q", "profileService", fun
             }, 1500);
         }
     }
-
     s.getImageFile = (file) => {
         s.imagefile = file[0];
         
@@ -509,16 +666,12 @@ module.controller("ProfileCtrl", ["$scope", "$http", "$q", "profileService", fun
         }
         //readURL2(file, "file", 350, 250);
     }
-
     s.profilePic = () => {
         document.getElementById("getFileProf").click();
     }
-
     s.coverPhotoClick = () => {
         document.getElementById("getFileCover").click();
     }
-
-
     s.update = (section) => {
         if (section === "settings") {
             var isPassEmpty = angular.isUndefined(s.userInfo.newpassword == undefined) ||
@@ -633,7 +786,6 @@ module.controller("ProfileCtrl", ["$scope", "$http", "$q", "profileService", fun
                 });
         }
     }
-
     s.disabled = (section) => {
         if (section === "settings") { s.settings = s.settings ? false : true }
         else if (section === "personal") { s.personal = s.personal ? false : true }
@@ -721,7 +873,6 @@ module.controller("ProfileCtrl", ["$scope", "$http", "$q", "profileService", fun
             callback(result);
         })
     }
-
     function select2Object(addressCode, addressText, userCode, additionalCode ) {
         if (addressCode == userCode) {
             return {
@@ -957,9 +1108,11 @@ module.controller("CompanyCtrl", ["$scope", "$http", function (s, h) {
         });
     })
 }])
-module.controller("ProjectCtrl", ["$scope", "$http", function (s, h) {
+module.controller("ProjectCtrl", ["$scope", "$http", "projectService", "$rootScope", "modalFactory", function (s, h, pservice, r, modalFactory) {
     s.lists = [0, 1, 2, 3, 4]
     s.myprojects = false;
+    s.projBtns = true;
+    var projectHolder;
     //$("#myprojectscard").css("min-height", `${window.innerHeight - 200}px`);
     s.selectMyProjects = (isProject) => {
         s.myprojects = !isProject;
@@ -979,6 +1132,53 @@ module.controller("ProjectCtrl", ["$scope", "$http", function (s, h) {
             return { 'card content_center active': s.myprojects, 'card content_center': !s.myprojects }
         }
     }
+    s.getDate = (date) => {
+        return moment(date).format("MMMM DD, YYYY");
+    }
+    s.clickProject = (event, data) => {
+        if (selectedElem == null) {
+            selectedElem = angular.element(event.currentTarget).css('background-color', '#F5F5F5');
+        } else {
+            angular.element(selectedElem).css('background-color', '#FFFFFF');
+            selectedElem = angular.element(event.currentTarget).css('background-color', '#F5F5F5');
+        }
+        s.projBtns = false;
+        data.projTitle = data.title;
+        data.pcreated = new Date(moment(data.created));
+        data.pcompleted = new Date(moment(data.completed));
+        r.d = data; 
+
+        var projSkills = [];
+        var filterskills = modalFactory.projectHolder.projSkills.filter((f) => f.perprojectId == data.perprojectId);
+        angular.forEach(filterskills, (value) => {
+            projSkills.push(value.skillId);
+        });
+        $("#privacyP").val(data.privacy).trigger('change');
+        $("#skillsproj").val(projSkills).trigger('change');
+        modalFactory.skills = filterskills;
+        var children = angular.element('#skillsContainerP')[0].children;
+        if (angular.element(children[0]).hasClass("red")) {
+            angular.element(children[2].children[0].children[0]).removeClass("invalid");
+            angular.element(children[0]).removeClass("red");
+        }
+        var screenshots = modalFactory.projectHolder.screenshots.filter((f) => f.projectId == data.perprojectId);
+        modalFactory.screenshots = screenshots;
+        modalFactory.isEdit = true;
+        $("#sscontainer").empty();
+        $("#sscontainer").append('<div class="row"><div class="col-md-12 center_content"><label style="font-weight: bold; font-size: 20px;">Screenshots</label>' +
+            '</div></div>');
+        angular.forEach(screenshots, (value, index) => {
+            $("#sscontainer").append(`<div class="row"><div class="col-md-12 center_content">
+                <a class="close_screenshot" onClick="angular.element(this).scope().removeSS(${index},${value.ssId})"><i class="pe-7s-close"></i></a>
+                <img src="${value.path}" style="max-width: 100%; margin: 5px 0; border: 2px solid #dbccee; border-radius: 5px;" />` +
+                "</div></div>");
+        })
+    }
+
+    pservice.getPersonalProjects(holders.personalProjHolder).then((result) => {
+        modalFactory.projectHolder = result.data;
+        r.personalProjs = result.data.personalProj
+    })
 }])
 module.controller("MessageCtrl", ["$scope", "$http", function (s, h) {
     s.lists = [0, 1, 2, 3, 4]
@@ -986,7 +1186,7 @@ module.controller("MessageCtrl", ["$scope", "$http", function (s, h) {
     $("#contacts").height(window.innerHeight - 199);
 }])
 
-function swalConfirmation(title, text, type, callback) {
+function swalConfirmation(title, text, type, precallback, callback) {
     Swal.fire({
         title: title,
         text: text,
@@ -994,10 +1194,16 @@ function swalConfirmation(title, text, type, callback) {
         showCancelButton: true,
         confirmButtonColor: '#8553C6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes'
+        confirmButtonText: 'Yes',
+        showLoaderOnConfirm: true,
+        preConfirm: function () {
+            return precallback();
+        }
     }).then((result) => {
         callback(result.value)
-    })
+    }, () => {
+            swalError();
+        });
 }
 function swalError(text) {
     if (text == undefined) {
@@ -1025,4 +1231,4 @@ function swalSuccess(title, text, callback) {
     }).then((result) => {
         callback()
     })
-}
+}   

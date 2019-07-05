@@ -16,9 +16,9 @@
                 </div>
             </div>
             <div class="col-sm-12 col-md-6">
-                <div ng-class="navCard('company')" ng-click="selectMyProjects(false)">
+                <div ng-class="navCard('company')">
                     <div class="content">
-                        <a ng-class="navClass('company')">
+                        <a ng-class="navClass('company')" ng-click="selectMyProjects(false)">
                             <i class="pe-7s-note2"></i>
                             <p>Company Projects</p>
                         </a>
@@ -35,10 +35,11 @@
                                 <h4 class="card-title">My Projects</h4>
                                 <div class="btns-holder">
                                     <a class="btn btn-white list-btns" data-toggle="modal" data-target="#myModal1"
-                                       ng-disabled="false"><i class="pe-7s-plus"></i></a>
-                                    <a class="btn btn-white list-btns" ng-disabled="true"><i class="pe-7s-pen"></i></a>
-                                    <a class="btn btn-white list-btns" ng-disabled="true"><i class="pe-7s-trash"></i></a>
-                                    <a class="btn btn-white list-btns" ng-disabled="true"><i class="pe-7s-look"></i></a>
+                                        ><i class="pe-7s-plus"></i></a>
+                                    <a class="btn btn-white list-btns"  data-toggle="modal" data-target="#myModal1"
+                                       ng-disabled="projBtns"><i class="pe-7s-pen"></i></a>
+                                    <a class="btn btn-white list-btns" ng-disabled="projBtns"><i class="pe-7s-trash"></i></a>
+                                    <a class="btn btn-white list-btns" ng-disabled="projBtns"><i class="pe-7s-look"></i></a>
                                 </div>
                             </div>
                             <div class="card-body table-full-width table-responsive">
@@ -48,24 +49,17 @@
                                             <th>ID</th>
                                             <th>Project name</th>
                                             <th>Date created</th>
-                                            <th>Date modified</th>
+                                            <th>Date completed</th>
                                             <th>Privacy</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>JobSeek</td>
-                                            <td>July 02, 2019</td>
-                                            <td>July 02, 2019</td>
-                                            <td>Public</td>
-                                        </tr>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>JobSeek</td>
-                                            <td>July 02, 2019</td>
-                                            <td>July 02, 2019</td>
-                                            <td>Public</td>
+                                        <tr ng-click="clickProject($event, proj)" ng-repeat="proj in personalProjs">
+                                            <td>{{proj.perprojectId}}</td>
+                                            <td>{{proj.title}}</td>
+                                            <td>{{getDate(proj.created)}}</td>
+                                            <td>{{getDate(proj.completed)}}</td>
+                                            <td>{{proj.privacy}}</td>
                                         </tr>
                                     </tbody>
                                 </table>

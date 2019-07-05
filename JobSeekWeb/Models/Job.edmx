@@ -287,6 +287,19 @@
         <Function Name="spCompany_getCompanyId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="asp_userId" Type="int" Mode="In" />
         </Function>
+        <Function Name="spProject_deleteSkill" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="pprojectskillId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="spProject_getAllPersonalProj" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ownerId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="spProject_getScreenShots" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="projId" Type="int" Mode="In" />
+          <Parameter Name="isPersonal" Type="int" Mode="In" />
+        </Function>
+        <Function Name="spProject_getSkills" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="projId" Type="int" Mode="In" />
+        </Function>
         <Function Name="spSkill_addSkill" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="title" Type="varchar" Mode="In" />
           <Parameter Name="categoryId" Type="int" Mode="In" />
@@ -520,6 +533,19 @@
           </AssociationSet>
           <EntitySet Name="tbl_personal_project" EntityType="JobModel.tbl_personal_project" />
           <EntitySet Name="tbl_skill" EntityType="JobModel.tbl_skill" />
+          <FunctionImport Name="spProject_getAllPersonalProj" ReturnType="Collection(JobModel.spProject_getAllPersonalProj_Result)">
+          <Parameter Name="ownerId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="spProject_getScreenShots" ReturnType="Collection(JobModel.spProject_getScreenShots_Result)">
+            <Parameter Name="projId" Mode="In" Type="Int32" />
+            <Parameter Name="isPersonal" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="spProject_getSkills" ReturnType="Collection(JobModel.spProject_getSkills_Result)">
+          <Parameter Name="projId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="spProject_deleteSkill">
+          <Parameter Name="pprojectskillId" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="spWorker_getDetails_Result">
           <Property Type="Int32" Name="workerId" Nullable="false" />
@@ -831,6 +857,27 @@
           <Property Name="title" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="categoryId" Type="Int32" Nullable="false" />
         </EntityType>
+        <ComplexType Name="spProject_getAllPersonalProj_Result">
+          <Property Type="Int32" Name="perprojectId" Nullable="false" />
+          <Property Type="String" Name="title" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="projectDesc" Nullable="false" MaxLength="200" />
+          <Property Type="DateTime" Name="created" Nullable="false" />
+          <Property Type="DateTime" Name="completed" Nullable="false" />
+          <Property Type="Int32" Name="ownerId" Nullable="false" />
+          <Property Type="Int32" Name="isWorkerProj" Nullable="false" />
+          <Property Type="String" Name="privacy" Nullable="false" MaxLength="15" />
+        </ComplexType>
+        <ComplexType Name="spProject_getScreenShots_Result">
+          <Property Type="Int32" Name="ssId" Nullable="false" />
+          <Property Type="String" Name="path" Nullable="false" MaxLength="150" />
+          <Property Type="Int32" Name="projectId" Nullable="false" />
+          <Property Type="Byte" Name="isPersonalProj" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="spProject_getSkills_Result">
+          <Property Type="Int32" Name="pprojectSkillId" Nullable="false" />
+          <Property Type="Int32" Name="skillId" Nullable="false" />
+          <Property Type="Int32" Name="perprojectId" Nullable="false" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1167,6 +1214,40 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="spProject_getAllPersonalProj" FunctionName="JobModel.Store.spProject_getAllPersonalProj">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="JobModel.spProject_getAllPersonalProj_Result">
+                <ScalarProperty Name="perprojectId" ColumnName="perprojectId" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="projectDesc" ColumnName="projectDesc" />
+                <ScalarProperty Name="created" ColumnName="created" />
+                <ScalarProperty Name="completed" ColumnName="completed" />
+                <ScalarProperty Name="ownerId" ColumnName="ownerId" />
+                <ScalarProperty Name="isWorkerProj" ColumnName="isWorkerProj" />
+                <ScalarProperty Name="privacy" ColumnName="privacy" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="spProject_getScreenShots" FunctionName="JobModel.Store.spProject_getScreenShots">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="JobModel.spProject_getScreenShots_Result">
+                <ScalarProperty Name="ssId" ColumnName="ssId" />
+                <ScalarProperty Name="path" ColumnName="path" />
+                <ScalarProperty Name="projectId" ColumnName="projectId" />
+                <ScalarProperty Name="isPersonalProj" ColumnName="isPersonalProj" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="spProject_getSkills" FunctionName="JobModel.Store.spProject_getSkills">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="JobModel.spProject_getSkills_Result">
+                <ScalarProperty Name="pprojectSkillId" ColumnName="pprojectSkillId" />
+                <ScalarProperty Name="skillId" ColumnName="skillId" />
+                <ScalarProperty Name="perprojectId" ColumnName="perprojectId" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="spProject_deleteSkill" FunctionName="JobModel.Store.spProject_deleteSkill" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

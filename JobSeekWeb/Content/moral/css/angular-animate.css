@@ -119,6 +119,26 @@ label span {
 
 }
 
+.close_screenshot {
+    background-color: #8553C6;
+    color: white;
+    position: absolute;
+    right: 25px;
+    top: 15px;
+    cursor: pointer;
+    border-radius: 50%;
+    font-size: 20px;
+    height: 35px;
+    width: 35px;
+    padding: 5px;
+}
+.close_screenshot i {
+    padding-left: 2px;
+}
+.close_screenshot:hover i {
+    color: red;
+}
+
 /* Right triangle placed top left flush. */
 .tri-right.border.left-top:before {
 	content: ' ';

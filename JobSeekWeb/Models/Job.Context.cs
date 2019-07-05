@@ -323,5 +323,45 @@ namespace JobSeekWeb.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spWorker_getAllUserInfo_Result>("spWorker_getAllUserInfo", asp_userIdParameter);
         }
+    
+        public virtual ObjectResult<spProject_getAllPersonalProj_Result> spProject_getAllPersonalProj(Nullable<int> ownerId)
+        {
+            var ownerIdParameter = ownerId.HasValue ?
+                new ObjectParameter("ownerId", ownerId) :
+                new ObjectParameter("ownerId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spProject_getAllPersonalProj_Result>("spProject_getAllPersonalProj", ownerIdParameter);
+        }
+    
+        public virtual ObjectResult<spProject_getScreenShots_Result> spProject_getScreenShots(Nullable<int> projId, Nullable<int> isPersonal)
+        {
+            var projIdParameter = projId.HasValue ?
+                new ObjectParameter("projId", projId) :
+                new ObjectParameter("projId", typeof(int));
+    
+            var isPersonalParameter = isPersonal.HasValue ?
+                new ObjectParameter("isPersonal", isPersonal) :
+                new ObjectParameter("isPersonal", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spProject_getScreenShots_Result>("spProject_getScreenShots", projIdParameter, isPersonalParameter);
+        }
+    
+        public virtual ObjectResult<spProject_getSkills_Result> spProject_getSkills(Nullable<int> projId)
+        {
+            var projIdParameter = projId.HasValue ?
+                new ObjectParameter("projId", projId) :
+                new ObjectParameter("projId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spProject_getSkills_Result>("spProject_getSkills", projIdParameter);
+        }
+    
+        public virtual int spProject_deleteSkill(Nullable<int> pprojectskillId)
+        {
+            var pprojectskillIdParameter = pprojectskillId.HasValue ?
+                new ObjectParameter("pprojectskillId", pprojectskillId) :
+                new ObjectParameter("pprojectskillId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("spProject_deleteSkill", pprojectskillIdParameter);
+        }
     }
 }
