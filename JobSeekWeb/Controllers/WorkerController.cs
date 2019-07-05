@@ -69,6 +69,24 @@ namespace JobSeekWeb.Controllers
             var skills = db.spWorker_getWorkerSkills(userinfo.workerId).ToList();
             return Json(new { userInfo = userinfo, skills = skills }, JsonRequestBehavior.AllowGet);
         }
+        [HttpGet]
+        public JsonResult GetWorkerPersonalProj()
+        {
+            var personalProjs = db.spProject_getAllPersonalProj(User.Identity.GetUserId<int>()).ToList();
+            List<int> projIds = new List<int>();
+            foreach (spProject_getAllPersonalProj_Result item in personalProjs)
+            {
+                projIds.Add(item.perprojectId);
+            }
+            var screenshots = db.tbl_proj_screenshots.Where(w => projIds.Contains(w.projectId)).ToList();
+            var projSkills = db.tbl_pproject_skill.Where(w => projIds.Contains(w.perprojectId)).ToList();
+            return Json(new
+            {
+                personalProj = personalProjs,
+                screenshots = screenshots,
+                projSkills = projSkills
+            }, JsonRequestBehavior.AllowGet);
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public JsonResult AddNewPersonalProj(Project project)
@@ -141,19 +159,19 @@ namespace JobSeekWeb.Controllers
             }
 
         }
-        [HttpGet]
-        public JsonResult GetWorkerPersonalProj()
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult RemoveProject(Project project)
         {
-            var personalProjs = db.spProject_getAllPersonalProj(User.Identity.GetUserId<int>()).ToList();
-            List<int> projIds = new List<int>();
-            foreach(spProject_getAllPersonalProj_Result item in personalProjs)
+            List<string> paths = project.RemoveProject();
+            if(paths?.Count > 0)
             {
-                projIds.Add(item.perprojectId);
+                foreach (string path in paths)
+                {
+                    System.IO.File.Delete(Server.MapPath("~" + path));
+                }
             }
-            var screenshots = db.tbl_proj_screenshots.Where(w => projIds.Contains(w.projectId)).ToList();
-            var projSkills = db.tbl_pproject_skill.Where(w => projIds.Contains(w.perprojectId)).ToList();
-            return Json(new { personalProj = personalProjs, screenshots = screenshots,
-            projSkills = projSkills}, JsonRequestBehavior.AllowGet);
+            return Json("Success", JsonRequestBehavior.AllowGet);
         }
     }
 }

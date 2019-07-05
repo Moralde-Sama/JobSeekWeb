@@ -56,6 +56,27 @@ namespace JobSeekWeb.Models.MyClass
                 }
             }
         }
+        public List<string> RemoveProject()
+        {
+            tbl_personal_project project = db.tbl_personal_project.Find(perprojectId);
+            db.Entry(project).State = System.Data.Entity.EntityState.Deleted;
+            IEnumerable<tbl_pproject_skill> projSkills = db.tbl_pproject_skill.Where(w => w.perprojectId == perprojectId).ToList();
+            db.tbl_pproject_skill.RemoveRange(projSkills);
+
+            List<string> path = new List<string>();
+            IEnumerable<tbl_proj_screenshots> screenShots = db.tbl_proj_screenshots
+                .Where(w => w.projectId == perprojectId).ToList();
+            if(screenShots?.Count() > 0)
+            {
+                foreach (tbl_proj_screenshots projSkill in screenShots)
+                {
+                    path.Add(projSkill.path);
+                }
+                db.tbl_proj_screenshots.RemoveRange(screenShots);
+            }
+            db.SaveChanges();
+            return path;
+        }
         public List<string> RemoveScreenShots()
         {
             List<string> path = new List<string>();

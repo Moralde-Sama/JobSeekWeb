@@ -213,6 +213,19 @@ module.service("projectService", function ($http) {
             headers: { 'Content-Type': undefined }
         })
     }
+    this.removeProject = (id) => {
+        var formdata = new FormData();
+        formdata.append("__RequestVerificationToken",
+            $('input:hidden[name=__RequestVerificationToken]').val());
+        formdata.append('perprojectId', id);
+        return $http({
+            method: 'POST',
+            data: formdata,
+            url: '/Worker/RemoveProject',
+            transformRequest: angular.identity,
+            headers: { 'Content-Type': undefined }
+        })
+    }
     this.getPersonalProjects = () => {
         return $http.get("../Worker/GetWorkerPersonalProj");
     }
@@ -269,7 +282,7 @@ module.controller("NavigationCtrl", ["$scope", "$location", "$http", "profileSer
 
     s.logout = () => {
         Swal.fire({
-            title: 'Are you sure you want to Logout?',
+            title: 'Are you sure that you want to Logout?',
             text: '',
             type: 'warning',
             showCancelButton: true,
@@ -332,7 +345,6 @@ module.controller("ModalCtrl", ["$scope", "$q", "profileService", "projectServic
             if (isNaN(value.id)) {
                 newSkills.push(value.id);
             } else {
-                console.log(modalFactory.isEdit);
                 if (modalFactory.isEdit) {
                     if (removeSkill.length > 0) {
                         if (removeSkill.filter((f) => f.skillId == value.id).length == 0) {
@@ -364,7 +376,7 @@ module.controller("ModalCtrl", ["$scope", "$q", "profileService", "projectServic
                 data.removeSkill.push(value.pprojectSkillId);
             })
             console.log(data.removeScreenShots);
-            swalConfirmation("Are you sure you want to update this project?", '', 'warning', () => {
+            swalConfirmation("Are you sure that you want to update this project?", '', 'warning', () => {
                 return pService.updatePersonalProj(data);
             }, (result) => {
                 if (result) {
@@ -372,6 +384,7 @@ module.controller("ModalCtrl", ["$scope", "$q", "profileService", "projectServic
                         swalSuccess("Update", '', () => {
                             r.clearModal();
                             $('#myModal1').modal('toggle');
+                            r.projBtns = true;
                             pService.getPersonalProjects().then((result) => {
                                 modalFactory.projectHolder = result.data;
                                 r.personalProjs = result.data.personalProj;
@@ -385,7 +398,7 @@ module.controller("ModalCtrl", ["$scope", "$q", "profileService", "projectServic
             });
         } else {
             
-            swalConfirmation("Are you sure want to save this project?", '', 'warning', () => {
+            swalConfirmation("Are you sure that want to save this project?", '', 'warning', () => {
                 return pService.addNewPersonalProj(data);
             }, (result) => {
                     if (result) {
@@ -602,7 +615,7 @@ module.controller("ProfileCtrl", ["$scope", "$http", "$q", "profileService", fun
         var img;
         Swal.fire({
             title: 'Crop image.',
-            text: 'Are you sure you want to update your profile picture?',
+            text: 'Are you sure that you want to update your profile picture?',
             imageUrl: '',
             imageAlt: 'Profile Picture',
             showCancelButton: true,
@@ -667,7 +680,7 @@ module.controller("ProfileCtrl", ["$scope", "$http", "$q", "profileService", fun
                 !s.userInfo.newpassword;
             var Valid = isPassEmpty ? true : s.userInfo.newpassword == s.userInfo.repassword;
             if (Valid) {
-                swalConfirmWithPassword('Are you sure you want to update your account settings?',
+                swalConfirmWithPassword('Are you sure that you want to update your account settings?',
                     'warning',
                     (password) => {
                         s.userInfo.oldpassword = password != "" ? password : "asdfjkjl";
@@ -692,7 +705,7 @@ module.controller("ProfileCtrl", ["$scope", "$http", "$q", "profileService", fun
                 swalError(`New password doesnt match with confirmation password.`);
             }
         } else if (section === "personal") {
-            swalUpdate('Are you sure you want to update your personal information?', '', 'warning',
+            swalUpdate('Are you sure that you want to update your personal information?', '', 'warning',
                 (result) => {
                     if (result) {
                         service.updatePersonalInfo(s.userInfo).then((result) => {
@@ -709,7 +722,7 @@ module.controller("ProfileCtrl", ["$scope", "$http", "$q", "profileService", fun
                     }
                 });
         } else if (section === "address") {
-            swalUpdate('Are you sure you want to update your address?', '', 'warning',
+            swalUpdate('Are you sure that you want to update your address?', '', 'warning',
                 (result) => {
                     if (result) {
                         var addressArray = [];
@@ -735,7 +748,7 @@ module.controller("ProfileCtrl", ["$scope", "$http", "$q", "profileService", fun
                     }
                 });
         } else if (section === "skills") {
-            swalUpdate('Are you sure you want to update your skills?', '', 'warning',
+            swalUpdate('Are you sure that you want to update your skills?', '', 'warning',
                 (result) => {
                     if (result) {
                         var addSkills = [];
@@ -1100,7 +1113,7 @@ module.controller("CompanyCtrl", ["$scope", "$http", function (s, h) {
 module.controller("ProjectCtrl", ["$scope", "$http", "projectService", "$rootScope", "modalFactory", function (s, h, pservice, r, modalFactory) {
     s.lists = [0, 1, 2, 3, 4]
     s.myprojects = false;
-    s.projBtns = true;
+    r.projBtns = true;
     var projectHolder;
     //$("#myprojectscard").css("min-height", `${window.innerHeight - 200}px`);
     s.selectMyProjects = (isProject) => {
@@ -1133,7 +1146,7 @@ module.controller("ProjectCtrl", ["$scope", "$http", "projectService", "$rootSco
             selectedElem = angular.element(event.currentTarget);
             selectedElem.css('background-color', '#F5F5F5')
         }
-        s.projBtns = false;
+        r.projBtns = false;
         data.projTitle = data.title;
         data.pcreated = new Date(moment(data.created));
         data.pcompleted = new Date(moment(data.completed));
@@ -1167,6 +1180,25 @@ module.controller("ProjectCtrl", ["$scope", "$http", "projectService", "$rootSco
         r.clearModal();
         selectedElem.css('background-color', '#FFFFFF');
         selectedElem = null;
+    }
+    s.removeProject = () => {
+        swalConfirmation('Are you sure that you want to delete this project?', 'This project will be permanently removed.', 'warning', () => {
+            return pservice.removeProject(r.d.perprojectId);
+        }, (result) => {
+                if (result) {
+                    if (result.data == 'Success') {
+                        swalSuccess('Deleted', '', () => {
+                            r.projBtns = true;
+                            pservice.getPersonalProjects().then((result) => {
+                                modalFactory.projectHolder = result.data;
+                                r.personalProjs = result.data.personalProj;
+                            })
+                        })
+                    } else {
+                        swalError(result.data);
+                    }
+                }
+            })
     }
 
     pservice.getPersonalProjects(holders.personalProjHolder).then((result) => {
