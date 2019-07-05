@@ -101,8 +101,8 @@ namespace JobSeekWeb.Controllers
         [ValidateAntiForgeryToken]
         public JsonResult UpdatePersonalProj(Project project)
         {
-            //try
-            //{
+            try
+            {
                 int[] newSkillIds = project.AddMultipleNewSkillProj();
                 project.AddMultipleSkillsProj(project.perprojectId);
                 project.addSkills = newSkillIds;
@@ -134,12 +134,12 @@ namespace JobSeekWeb.Controllers
                     }
             }
                 return Json("Success", JsonRequestBehavior.AllowGet);
-            //}
-            //catch(Exception e)
-            //{
-            //    return Json(e.Message, JsonRequestBehavior.AllowGet);
-            //}
-            
+            }
+            catch (Exception e)
+            {
+                return Json(e.Message, JsonRequestBehavior.AllowGet);
+            }
+
         }
         [HttpGet]
         public JsonResult GetWorkerPersonalProj()

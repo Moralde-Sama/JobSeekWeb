@@ -318,12 +318,10 @@ module.controller("ModalCtrl", ["$scope", "$q", "profileService", "projectServic
     var addSkills = [];
     var removeSkill = [];
     var filelist = [];
-    var ssPosition = 0;
     var screenshots = null;
     var removeScreenShots = [];
-    var ssRemoved = 0;
     r.d = null;
-    
+
     s.saveUpdate = (data) => {
         data.privacy = privacy.select2("data")[0].id;
         data.created = moment(data.pcreated).format("MM-DD-YYYY");
@@ -372,7 +370,7 @@ module.controller("ModalCtrl", ["$scope", "$q", "profileService", "projectServic
                 if (result) {
                     if (result.data == "Success") {
                         swalSuccess("Update", '', () => {
-                            clearModal();
+                            r.clearModal();
                             $('#myModal1').modal('toggle');
                             pService.getPersonalProjects().then((result) => {
                                 modalFactory.projectHolder = result.data;
@@ -387,14 +385,13 @@ module.controller("ModalCtrl", ["$scope", "$q", "profileService", "projectServic
             });
         } else {
             
-            console.log(data);
             swalConfirmation("Are you sure want to save this project?", '', 'warning', () => {
                 return pService.addNewPersonalProj(data);
             }, (result) => {
                     if (result) {
                         if (result.data == "Success") {
                             swalSuccess("Saved", '', () => {
-                                clearModal();
+                                r.clearModal();
                                 $('#myModal1').modal('toggle');
                                 pService.getPersonalProjects().then((result) => {
                                     r.personalProjs = result.data.personalProj;
@@ -421,11 +418,10 @@ module.controller("ModalCtrl", ["$scope", "$q", "profileService", "projectServic
             reader.onload = function (e) {
                 angular.element('#sscontainer').append(`<div class="row">
                     <div class="col-md-12 center_content">
-                        <a class="close_screenshot" onClick="angular.element(this).scope().removeSS(${ssPosition}, '${filelist[ssPosition].name}')"><i class="pe-7s-close"></i></a>
+                        <a class="close_screenshot" onClick="angular.element(this).scope().removeSS(this, '${filelist[count].name}')"><i class="pe-7s-close"></i></a>
                         <img src="${e.target.result}" style="max-width: 100%; margin: 5px 0; border: 2px solid #dbccee; border-radius: 5px;" />` +
                     "</div></div>");
                 count++;
-                ssPosition++;
                 if (file[count]) {
                     reader.readAsDataURL(file[count]);
                 }
@@ -447,11 +443,11 @@ module.controller("ModalCtrl", ["$scope", "$q", "profileService", "projectServic
         swalConfirmation('Are you sure?', 'closing this will clear all your data you input.', 'warning', () => { }, (result) => {
             if (result) {
                 $('#myModal1').modal('toggle');
-                clearModal();
+                r.clearModal();
             }
         })
      }
-    s.removeSS = (position, id) => {
+    s.removeSS = (element, id) => {
         if (modalFactory.isEdit) {
             if (screenshots == null) {
                 screenshots = modalFactory.screenshots;
@@ -460,19 +456,17 @@ module.controller("ModalCtrl", ["$scope", "$q", "profileService", "projectServic
             removeScreenShots.push(remove);
             console.log(removeScreenShots);
         } else {
-            console.log(id);
             var filFile = filelist.filter((f) => f.name === id);
             filelist.splice(filelist.indexOf(filFile));
+            console.log(filelist);
         }
-        angular.element(angular.element('#sscontainer')[0].children[(position - ssRemoved) + 1]).remove();
-        ssRemoved++;
-        ssPosition--;
-        }
+         $($($(element)[0].parentElement)[0].parentElement).remove();
+    }
     s.submitLabel = () => {
         return modalFactory.isEdit ? 'Update' : "Save";
-    }
+        }
 
-    function clearModal() {
+    r.clearModal = () => {
         r.d = null;
         r.d = {
             projTitle: null,
@@ -481,16 +475,11 @@ module.controller("ModalCtrl", ["$scope", "$q", "profileService", "projectServic
             pcompleted: null
         };
         filelist = [];
-        ssPosition = 0;
         screenshots = null;
         removeScreenShots = [];
-        ssRemoved = 0;
         modalFactory.isEdit = false;
         $("#projscreenshots").val('');
         $("#sscontainer").empty();
-        $("#sscontainer").append('<div class="row"><div class="col-md-12 center_content"><label style="font-weight: bold; font-size: 20px;">Screenshots</label>' +
-            '</div></div>');
-        s.$apply();
         projSkills.val(null).trigger('change');
         privacy.val('Public').trigger('change');
         var children = angular.element('#skillsContainerP')[0].children;
@@ -1137,10 +1126,12 @@ module.controller("ProjectCtrl", ["$scope", "$http", "projectService", "$rootSco
     }
     s.clickProject = (event, data) => {
         if (selectedElem == null) {
-            selectedElem = angular.element(event.currentTarget).css('background-color', '#F5F5F5');
+            selectedElem = angular.element(event.currentTarget);
+            selectedElem.css('background-color', '#F5F5F5')
         } else {
-            angular.element(selectedElem).css('background-color', '#FFFFFF');
-            selectedElem = angular.element(event.currentTarget).css('background-color', '#F5F5F5');
+            selectedElem.css('background-color', '#FFFFFF');
+            selectedElem = angular.element(event.currentTarget);
+            selectedElem.css('background-color', '#F5F5F5')
         }
         s.projBtns = false;
         data.projTitle = data.title;
@@ -1165,14 +1156,17 @@ module.controller("ProjectCtrl", ["$scope", "$http", "projectService", "$rootSco
         modalFactory.screenshots = screenshots;
         modalFactory.isEdit = true;
         $("#sscontainer").empty();
-        $("#sscontainer").append('<div class="row"><div class="col-md-12 center_content"><label style="font-weight: bold; font-size: 20px;">Screenshots</label>' +
-            '</div></div>');
-        angular.forEach(screenshots, (value, index) => {
+        angular.forEach(screenshots, (value) => {
             $("#sscontainer").append(`<div class="row"><div class="col-md-12 center_content">
-                <a class="close_screenshot" onClick="angular.element(this).scope().removeSS(${index},${value.ssId})"><i class="pe-7s-close"></i></a>
+                <a class="close_screenshot" onClick="angular.element(this).scope().removeSS(this, ${value.ssId})"><i class="pe-7s-close"></i></a>
                 <img src="${value.path}" style="max-width: 100%; margin: 5px 0; border: 2px solid #dbccee; border-radius: 5px;" />` +
                 "</div></div>");
         })
+    }
+    s.clickAdd = () => {
+        r.clearModal();
+        selectedElem.css('background-color', '#FFFFFF');
+        selectedElem = null;
     }
 
     pservice.getPersonalProjects(holders.personalProjHolder).then((result) => {
