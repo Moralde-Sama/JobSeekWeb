@@ -113,94 +113,154 @@
          role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" ng-controller="ModalCtrl">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header justify-content-center">
-                    <h3 class="title" style="margin-top: 10px; font-weight: 100;">My New Project {{test}}</h3>
-                </div>
-                <form name="myproject">
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label ng-class="validateLabel(myproject.projTitle.$valid)">
-                                        PROJECT NAME
-                                        <span ng-hide="myproject.projTitle.$valid"> - REQUIRED</span>
-                                    </label>
-                                    <input type="text" name="projTitle" ng-class="validateInput(myproject.projTitle.$valid)"
-                                           ng-model="d.projTitle" required>
+                <div ng-hide="viewProj">
+                    <div class="modal-header justify-content-center">
+                        <h3 class="title" style="margin-top: 10px; font-weight: 100;">My New Project</h3>
+                    </div>
+                    <form name="myproject">
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label ng-class="validateLabel(myproject.projTitle.$valid)">
+                                            PROJECT NAME
+                                            <span ng-hide="myproject.projTitle.$valid"> - REQUIRED</span>
+                                        </label>
+                                        <input type="text" name="projTitle" ng-class="validateInput(myproject.projTitle.$valid)"
+                                               ng-model="d.projTitle" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="select-valid">Privacy</label>
+                                    <select id="privacyP" class="form-control" style="width: 100%;">
+                                        <option value="Public">Public</option>
+                                        <option value="Private">Private</option>
+                                    </select>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <label class="select-valid">Privacy</label>
-                                <select id="privacyP" class="form-control" style="width: 100%;">
-                                    <option value="Public">Public</option>
-                                    <option value="Private">Private</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label ng-class="validateLabel(myproject.projectDesc.$valid)">
-                                        PROJECT DESCRIPTION
-                                        <span ng-hide="myproject.projectDesc.$valid"> - REQUIRED</span>
-                                    </label>
-                                    <textarea rows="3" cols="80" name="projectDesc" ng-class="validateInput(myproject.projectDesc.$valid)"
-                                              ng-model="d.projectDesc" required></textarea>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label ng-class="validateLabel(myproject.projectDesc.$valid)">
+                                            PROJECT DESCRIPTION
+                                            <span ng-hide="myproject.projectDesc.$valid"> - REQUIRED</span>
+                                        </label>
+                                        <textarea rows="3" cols="80" name="projectDesc" ng-class="validateInput(myproject.projectDesc.$valid)"
+                                                  ng-model="d.projectDesc" required></textarea>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label ng-class="validateLabel(myproject.pcreated.$valid)">
-                                        DATE CREATED
-                                        <span ng-hide="myproject.pcreated.$valid"> - REQUIRED</span>
-                                    </label>
-                                    <input type="date" name="pcreated" ng-class="validateInput(myproject.pcreated.$valid)"
-                                           ng-model="d.pcreated" required>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label ng-class="validateLabel(myproject.pcreated.$valid)">
+                                            DATE CREATED
+                                            <span ng-hide="myproject.pcreated.$valid"> - REQUIRED</span>
+                                        </label>
+                                        <input type="date" name="pcreated" ng-class="validateInput(myproject.pcreated.$valid)"
+                                               ng-model="d.pcreated" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label ng-class="validateLabel(myproject.pcompleted.$valid)">
+                                            DATE COMPLETED
+                                            <span ng-hide="myproject.pcompleted.$valid"> - REQUIRED</span>
+                                        </label>
+                                        <input type="date" name="pcompleted" ng-class="validateInput(myproject.pcompleted.$valid)"
+                                               ng-model="d.pcompleted" required>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label ng-class="validateLabel(myproject.pcompleted.$valid)">
-                                        DATE COMPLETED
-                                        <span ng-hide="myproject.pcompleted.$valid"> - REQUIRED</span>
-                                    </label>
-                                    <input type="date" name="pcompleted" ng-class="validateInput(myproject.pcompleted.$valid)"
-                                           ng-model="d.pcompleted" required>
+                            <div class="row">
+                                <div id="skillsContainerP" class="col-md-12">
+                                    <label class="select-valid">Technologies Used/Skills<span> - Required</span></label>
+                                    <select id="skillsproj" class="form-control" multiple style="width: 100%;"></select>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div id="skillsContainerP" class="col-md-12">
-                                <label class="select-valid">Technologies Used/Skills<span> - Required</span></label>
-                                <select id="skillsproj" class="form-control" multiple style="width: 100%;"></select>
+                            <hr />
+                            <div class="row">
+                                <div class="col-md-12 center_content">
+                                    <label style="font-weight: bold; font-size: 20px;">Screenshots</label>
+                                </div>
                             </div>
-                        </div>
-                        <hr />
-                        <div class="row">
-                            <div class="col-md-12 center_content">
-                                <label style="font-weight: bold; font-size: 20px;">Screenshots</label>
-                            </div>
-                        </div>
-                        <div id="sscontainer">
+                            <div id="sscontainer">
 
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12 center_content">
-                                <input id="projscreenshots" onchange="angular.element(this).scope().getImageFile(this.files)" type="file" multiple style="display: none;" />
-                                <button type="button" onclick="document.getElementById('projscreenshots').click()" class="btn btn-violet">Upload Screenshots</button>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 center_content">
+                                    <input id="projscreenshots" onchange="angular.element(this).scope().getImageFile(this.files)" type="file" multiple style="display: none;" />
+                                    <button type="button" onclick="document.getElementById('projscreenshots').click()" class="btn btn-violet">Upload Screenshots</button>
+                                </div>
                             </div>
                         </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-violet" ng-click="saveUpdate(d)"
+                                    ng-disabled="!myproject.$valid">
+                                {{submitLabel()}}
+                            </button>
+                            <button type="button" class="btn btn-mywarning" ng-click="closeModal()">Close</button>
+                        </div>
+                    </form>
+                </div>
+                <div ng-hide="!viewProj" style="padding: 15px;">
+                    <div class="row">
+                        <div class="col-md-12 center_content">
+                            <a class="MyPrev">
+                                <i ng-click="prevSS()" class="pe-7s-angle-left MyPrevIcon"></i>
+                            </a>
+                            <div class="screenshots">
+                                <img ng-class="imgClass($index)" imageonload ng-repeat="ss in d.viewSS track by $index" ng-src="{{ss.path}}" />
+                            </div>
+                            <a class="MyNext">
+                                <i ng-click="nextSS()" class="pe-7s-angle-right MyNextIcon"></i>
+                            </a>
+                        </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-violet" ng-click="saveUpdate(d)"
-                                ng-disabled="!myproject.$valid">
-                            {{submitLabel()}}
-                        </button>
-                        <button type="button" class="btn btn-mywarning" ng-click="closeModal()">Close</button>
+                    <div class="row" style="margin: 15px 10px 0 10px;">
+                        <div class="col-md-12 center_content">
+                            <label style="font-weight: bold; font-size: 25px;">{{d.projTitle}}</label>
+                        </div>
                     </div>
-                </form>
+                    <div class="row" style="margin: 5px;">
+                        <div class="col-md-12 center_content">
+                            <p style="font-weight: normal; font-size: 15px;">
+                                {{d.projectDesc}}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row" style="margin: 5px;">
+                        <div class="col-md-6" style="text-align:center">
+                            <label style="font-weight: bold; font-size: 20px;">Date Started</label><br />
+                            <p style="font-weight: normal; font-size: 15px;">
+                                {{getCreatedDate()}}
+                            </p>
+                        </div>
+                        <div class="col-md-6" style="text-align:center">
+                            <label style="font-weight: bold; font-size: 20px;">Date Completed</label><br />
+                            <p style="font-weight: normal; font-size: 15px;">
+                                {{getCompletedDate()}}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row" style="margin: 5px; text-align:center;">
+                        <div class="col-md-12">
+                            <label style="font-weight: bold; font-size: 20px;">Technologies Used/Skills</label><br />
+                        </div>
+                    </div>
+                    <div class="row" style="margin: 10px; text-align:center;">
+                        <div class="col-md-12 center_content">
+                            <ul id="horizontal-list">
+                                <li ng-repeat="skill in d.viewSkills">{{getSkillName(skill)}}</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row" style="margin: 15px 0;">
+                        <div class="col-md-12 center_content">
+                            <button type="button" class="btn btn-mywarning" data-dismiss="modal" ng-click="closeModalV()">Close</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -556,6 +556,7 @@
     <Content Include="Content\moral\css\worker-css.css" />
     <Content Include="Content\moral\Images\eriri.png" />
     <Content Include="Content\moral\Images\kodaikanal-2836301.jpg" />
+    <Content Include="Content\moral\Images\Screenshot_9.png" />
     <Content Include="Content\moral\requireJs\require.js" />
     <Content Include="Content\moral\select2\css\select2.css" />
     <Content Include="Content\moral\select2\css\select2.min.css" />

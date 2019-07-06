@@ -236,9 +236,28 @@ module.factory("modalFactory", function () {
         screenshots: null,
         skills: null,
         isEdit: false,
-        projectHolder: null
+        projectHolder: null,
+        skillList: null
     }
 })
+
+module.directive('imageonload', function () {
+    return {
+        restrict: 'A',
+        link: function (scope, element, attrs) {
+            element.bind('load', function () {
+                var height = element[0].height;
+                var width = element[0].width;
+                if (height > width) {
+                    element.css('width', 'unset');
+                }
+            });
+            element.bind('error', function () {
+                alert('image could not be loaded');
+            });
+        }
+    };
+});
 
 //Controllers
 module.controller("NavigationCtrl", ["$scope", "$location", "$http", "profileService", function (s, l, h, service) {
@@ -333,6 +352,7 @@ module.controller("ModalCtrl", ["$scope", "$q", "profileService", "projectServic
     var filelist = [];
     var screenshots = null;
     var removeScreenShots = [];
+    var viewSSCount = 0;
     r.d = null;
 
     s.saveUpdate = (data) => {
@@ -382,12 +402,13 @@ module.controller("ModalCtrl", ["$scope", "$q", "profileService", "projectServic
                 if (result) {
                     if (result.data == "Success") {
                         swalSuccess("Update", '', () => {
-                            r.clearModal();
                             $('#myModal1').modal('toggle');
-                            r.projBtns = true;
                             pService.getPersonalProjects().then((result) => {
                                 modalFactory.projectHolder = result.data;
-                                r.personalProjs = result.data.personalProj;
+                                r.clearModal();
+                                setTimeout(() => {
+                                    r.personalProjs = result.data.personalProj;
+                                }, 1000);
                             })
                         })
                     }
@@ -457,6 +478,8 @@ module.controller("ModalCtrl", ["$scope", "$q", "profileService", "projectServic
             if (result) {
                 $('#myModal1').modal('toggle');
                 r.clearModal();
+                r.projBtns = true;
+                r.$apply();
             }
         })
      }
@@ -478,7 +501,59 @@ module.controller("ModalCtrl", ["$scope", "$q", "profileService", "projectServic
     s.submitLabel = () => {
         return modalFactory.isEdit ? 'Update' : "Save";
         }
-
+    s.closeModalV = () => {
+        selectedElem.removeClass('tr_active');
+        selectedElem = null;
+        r.projBtns = true;
+        viewSSCount = 0;
+        r.d.viewSS = [];
+        setTimeout(() => {
+            r.viewProj = false;
+        }, 500);
+    }
+    s.nextSS = () => {
+        var element = angular.element('.screenshots')[0].children;
+        $($($(element[viewSSCount])[0])[0]).css('display', 'none');
+        console.log((element.length - 1) == viewSSCount);
+        viewSSCount = (element.length - 1) == viewSSCount ? -1 : viewSSCount;
+        viewSSCount++;
+        $($($(element[viewSSCount])[0])[0]).css('display', 'block');
+    }
+    s.prevSS = () => {
+        console.log("clicked");
+        var element = angular.element('.screenshots')[0].children;
+        $($($(element[viewSSCount])[0])[0]).css('display', 'none');
+        viewSSCount = 0 == viewSSCount ? (element.length) : viewSSCount;
+        viewSSCount--;
+        $($($(element[viewSSCount])[0])[0]).css('display', 'block');
+        }
+    s.getCreatedDate = () => {
+        try {
+            return moment(r.d.pcreated).format('MMMM DD, YYYY');
+        } catch (e) {
+            return '';
+        }
+    }
+    s.getCompletedDate = () => {
+        try {
+            return moment(r.d.pcompleted).format('MMMM DD, YYYY');
+        } catch (e) {
+            return '';
+        }
+        }
+    s.getSkillName = (id) => {
+        try {
+            return holders.categoryAndSkillsHolder.skills.filter((f) => f.id == id)[0].text;
+        } catch (e) {
+            return '';
+        }
+        }
+    s.imgClass = (index) => {
+        if (index != null) {
+            var result = index == 0 ? true : false;
+            return { 'img-single': result, 'img-multiple': !result }
+        }
+    }
     r.clearModal = () => {
         r.d = null;
         r.d = {
@@ -500,6 +575,11 @@ module.controller("ModalCtrl", ["$scope", "$q", "profileService", "projectServic
             angular.element(children[2].children[0].children[0]).addClass("invalid");
             angular.element(children[0]).addClass("red");
         }
+        r.projBtns = true;
+        if (selectedElem !== null) {
+            selectedElem.removeClass('tr_active');
+            selectedElem = null;
+        }
     }
 
     $(document).ready(() => {
@@ -509,7 +589,7 @@ module.controller("ModalCtrl", ["$scope", "$q", "profileService", "projectServic
         q.all([
             service.getCategoriesandSkills()
         ]).then((result) => {
-            holders.categoryAndSkillsHolder = result.data;
+            holders.categoryAndSkillsHolder = result[0].data;
             projSkills.select2({
                 data: result[0].data.skills,
                 minimumInputLength: 3,
@@ -1114,6 +1194,7 @@ module.controller("ProjectCtrl", ["$scope", "$http", "projectService", "$rootSco
     s.lists = [0, 1, 2, 3, 4]
     s.myprojects = false;
     r.projBtns = true;
+    r.viewProj = false;
     var projectHolder;
     //$("#myprojectscard").css("min-height", `${window.innerHeight - 200}px`);
     s.selectMyProjects = (isProject) => {
@@ -1140,13 +1221,14 @@ module.controller("ProjectCtrl", ["$scope", "$http", "projectService", "$rootSco
     s.clickProject = (event, data) => {
         if (selectedElem == null) {
             selectedElem = angular.element(event.currentTarget);
-            selectedElem.css('background-color', '#F5F5F5')
+            selectedElem.addClass('tr_active');
         } else {
-            selectedElem.css('background-color', '#FFFFFF');
+            selectedElem.removeClass('tr_active');
             selectedElem = angular.element(event.currentTarget);
-            selectedElem.css('background-color', '#F5F5F5')
+            selectedElem.addClass('tr_active');
         }
-        r.projBtns = false;
+        r.projBtns = false
+        r.viewProj = false;
         data.projTitle = data.title;
         data.pcreated = new Date(moment(data.created));
         data.pcompleted = new Date(moment(data.completed));
@@ -1160,12 +1242,14 @@ module.controller("ProjectCtrl", ["$scope", "$http", "projectService", "$rootSco
         $("#privacyP").val(data.privacy).trigger('change');
         $("#skillsproj").val(projSkills).trigger('change');
         modalFactory.skills = filterskills;
+        r.d.viewSkills = projSkills;
         var children = angular.element('#skillsContainerP')[0].children;
         if (angular.element(children[0]).hasClass("red")) {
             angular.element(children[2].children[0].children[0]).removeClass("invalid");
             angular.element(children[0]).removeClass("red");
         }
         var screenshots = modalFactory.projectHolder.screenshots.filter((f) => f.projectId == data.perprojectId);
+        r.d.viewSS = screenshots;
         modalFactory.screenshots = screenshots;
         modalFactory.isEdit = true;
         $("#sscontainer").empty();
@@ -1178,8 +1262,11 @@ module.controller("ProjectCtrl", ["$scope", "$http", "projectService", "$rootSco
     }
     s.clickAdd = () => {
         r.clearModal();
-        selectedElem.css('background-color', '#FFFFFF');
-        selectedElem = null;
+        if (selectedElem !== null) {
+            selectedElem.css('background-color', '#FFFFFF');
+            selectedElem = null;
+        }
+        r.viewProj = false;
     }
     s.removeProject = () => {
         swalConfirmation('Are you sure that you want to delete this project?', 'This project will be permanently removed.', 'warning', () => {
@@ -1199,6 +1286,9 @@ module.controller("ProjectCtrl", ["$scope", "$http", "projectService", "$rootSco
                     }
                 }
             })
+    }
+    s.viewProject = () => {
+        r.viewProj = true;
     }
 
     pservice.getPersonalProjects(holders.personalProjHolder).then((result) => {
@@ -1224,7 +1314,8 @@ function swalConfirmation(title, text, type, precallback, callback) {
         showLoaderOnConfirm: true,
         preConfirm: function () {
             return precallback();
-        }
+        },
+        allowOutsideClick: () => !Swal.isLoading()
     }).then((result) => {
         callback(result.value)
     }, () => {
