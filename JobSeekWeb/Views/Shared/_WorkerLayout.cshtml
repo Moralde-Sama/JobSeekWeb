@@ -210,7 +210,7 @@
                                 <i ng-click="prevSS()" class="pe-7s-angle-left MyPrevIcon"></i>
                             </a>
                             <div class="screenshots">
-                                <img ng-class="imgClass($index)" imageonload ng-repeat="ss in d.viewSS track by $index" ng-src="{{ss.path}}" />
+                                <img ng-class="imgClass(index)" imageonload ng-repeat="(index, ss) in d.viewSS" ng-src="{{ss.path}}" />
                             </div>
                             <a class="MyNext">
                                 <i ng-click="nextSS()" class="pe-7s-angle-right MyNextIcon"></i>

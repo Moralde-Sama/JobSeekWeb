@@ -403,14 +403,12 @@ module.controller("ModalCtrl", ["$scope", "$q", "profileService", "projectServic
                     if (result.data == "Success") {
                         swalSuccess("Update", '', () => {
                             $('#myModal1').modal('toggle');
+                            r.clearModal();
                             pService.getPersonalProjects().then((result) => {
                                 modalFactory.projectHolder = result.data;
-                                r.clearModal();
-                                setTimeout(() => {
-                                    r.personalProjs = result.data.personalProj;
-                                }, 1000);
-                            })
-                        })
+                                r.updatepersonalProjs(result.data.personalProj);
+                            });
+                        });
                     }
                     else {
                         swalError(result.data);
@@ -428,9 +426,10 @@ module.controller("ModalCtrl", ["$scope", "$q", "profileService", "projectServic
                                 r.clearModal();
                                 $('#myModal1').modal('toggle');
                                 pService.getPersonalProjects().then((result) => {
-                                    r.personalProjs = result.data.personalProj;
-                                })
-                            })
+                                    modalFactory.projectHolder = result.data;
+                                    r.updatepersonalProjs(result.data.personalProj);
+                                });
+                            });
                         } else {
                             swalError(result.data);
                         }
@@ -1278,9 +1277,9 @@ module.controller("ProjectCtrl", ["$scope", "$http", "projectService", "$rootSco
                             r.projBtns = true;
                             pservice.getPersonalProjects().then((result) => {
                                 modalFactory.projectHolder = result.data;
-                                r.personalProjs = result.data.personalProj;
-                            })
-                        })
+                                s.personalProjs = result.data.personalProj;
+                            });
+                        });
                     } else {
                         swalError(result.data);
                     }
@@ -1291,9 +1290,13 @@ module.controller("ProjectCtrl", ["$scope", "$http", "projectService", "$rootSco
         r.viewProj = true;
     }
 
+    r.updatepersonalProjs = (data) => {
+        s.personalProjs = data;
+    }
+
     pservice.getPersonalProjects(holders.personalProjHolder).then((result) => {
         modalFactory.projectHolder = result.data;
-        r.personalProjs = result.data.personalProj
+        s.personalProjs = result.data.personalProj;
     })
 }])
 module.controller("MessageCtrl", ["$scope", "$http", function (s, h) {

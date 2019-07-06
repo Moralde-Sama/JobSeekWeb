@@ -56,7 +56,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr ng-click="clickProject($event, proj)" ng-repeat="proj in personalProjs">
+                                        <tr ng-click="clickProject($event, proj)" ng-repeat="proj in personalProjs track by $index">
                                             <td>{{proj.perprojectId}}</td>
                                             <td>{{proj.title}}</td>
                                             <td>{{getDate(proj.created)}}</td>
