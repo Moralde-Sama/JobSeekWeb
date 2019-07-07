@@ -35,12 +35,12 @@
                     </div>*@
                 </div>
             </div>
-            <div class="col-md-12" style="display: flex; justify-content: center;">
+            <div id="profileNav" class="col-md-12" style="display: flex; justify-content: center;">
                 <div class="row" style="width: 100%;">
                     <div class="col-sm-12 col-md-4">
                         <div class="card content_center active">
                             <div class="content">
-                                <a class="list-btn active">
+                                <a class="list-btn active" ng-click="navigateMainCards(0, $event)">
                                     <i class="pe-7s-user"></i>
                                     <p>Personal Details</p>
                                 </a>
@@ -50,7 +50,7 @@
                     <div class="col-sm-12 col-md-4">
                         <div class="card content_center">
                             <div class="content">
-                                <a class="list-btn">
+                                <a class="list-btn" ng-click="navigateMainCards(1, $event)">
                                     <i class="pe-7s-note2"></i>
                                     <p>Company</p>
                                 </a>
@@ -60,7 +60,7 @@
                     <div class="col-sm-12 col-md-4">
                         <div class="card content_center">
                             <div class="content">
-                                <a class="list-btn">
+                                <a class="list-btn" ng-click="navigateMainCards(2, $event)">
                                     <i class="pe-7s-box2"></i>
                                     <p>Projects</p>
                                 </a>
@@ -69,10 +69,13 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div ng-show="navCardsVisibility[0]" class="row">
             <div class="col-md-12">
                 <div class="card">
                     <div class="header">
-                        <h4 class="title">Account Settings 
+                        <h4 class="title">
+                            Account Settings
                             <i class="pe-7s-pen" ng-click="disabled('settings')" ng-hide="!settings"
                                style="float: right;"></i>
                         </h4>
@@ -92,17 +95,21 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label ng-class="validateLabel(settingsform.UserName.$valid)">Username 
-                                        <span ng-hide="settingsform.UserName.$valid"> - Required</span></label>
-                                        <input id="username" name="UserName" ng-model="userInfo.UserName" type="text" 
+                                        <label ng-class="validateLabel(settingsform.UserName.$valid)">
+                                            Username
+                                            <span ng-hide="settingsform.UserName.$valid"> - Required</span>
+                                        </label>
+                                        <input id="username" name="UserName" ng-model="userInfo.UserName" type="text"
                                                ng-class="validateInput(settingsform.UserName.$valid)"
                                                ng-disabled="settings" required>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label ng-class="validateLabel(settingsform.email.$valid)">Email 
-                                        <span ng-hide="settingsform.email.$valid"> - Required</span></label>
+                                        <label ng-class="validateLabel(settingsform.email.$valid)">
+                                            Email
+                                            <span ng-hide="settingsform.email.$valid"> - Required</span>
+                                        </label>
                                         <input type="email" name="email" ng-class="validateInput(settingsform.email.$valid)"
                                                ng-model="userInfo.Email" ng-disabled="settings" required>
                                     </div>
@@ -112,14 +119,14 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>New Password</label>
-                                        <input id="password" ng-model="userInfo.newpassword" type="password" 
+                                        <input id="password" ng-model="userInfo.newpassword" type="password"
                                                class="form-control" placeholder="Optional" ng-disabled="settings">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Repeat Password</label>
-                                        <input id="repassword" ng-model="userInfo.repassword" type="password" 
+                                        <input id="repassword" ng-model="userInfo.repassword" type="password"
                                                class="form-control" placeholder="Optional" ng-disabled="settings">
                                     </div>
                                 </div>
@@ -138,33 +145,41 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="header">
-                        <h4 class="title">Personal Information 
-                        <i class="pe-7s-pen" ng-click="disabled('personal')" ng-hide="!personal"
-                           style="float: right;"></i></h4>
+                        <h4 class="title">
+                            Personal Information
+                            <i class="pe-7s-pen" ng-click="disabled('personal')" ng-hide="!personal"
+                               style="float: right;"></i>
+                        </h4>
                     </div>
                     <div class="content">
                         <form name="pnform">
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label ng-class="validateLabel(pnform.fname.$valid)">First Name 
-                                        <span ng-hide="pnform.fname.$valid"> - Required</span></label>
-                                        <input type="text" ng-class="validateInput(pnform.fname.$valid)" name="fname" 
+                                        <label ng-class="validateLabel(pnform.fname.$valid)">
+                                            First Name
+                                            <span ng-hide="pnform.fname.$valid"> - Required</span>
+                                        </label>
+                                        <input type="text" ng-class="validateInput(pnform.fname.$valid)" name="fname"
                                                ng-model="userInfo.fname" ng-disabled="personal" required>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label ng-class="validateLabel(pnform.mname.$valid)">Middle Name 
-                                        <span ng-hide="pnform.mname.$valid"> - Required</span></label>
-                                        <input type="text" ng-class="validateInput(pnform.mname.$valid)" 
+                                        <label ng-class="validateLabel(pnform.mname.$valid)">
+                                            Middle Name
+                                            <span ng-hide="pnform.mname.$valid"> - Required</span>
+                                        </label>
+                                        <input type="text" ng-class="validateInput(pnform.mname.$valid)"
                                                name="mname" ng-model="userInfo.mname" ng-disabled="personal" required>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label ng-class="validateLabel(pnform.lname.$valid)">Last Name 
-                                        <span ng-hide="pnform.lname.$valid"> - Required</span></label>
+                                        <label ng-class="validateLabel(pnform.lname.$valid)">
+                                            Last Name
+                                            <span ng-hide="pnform.lname.$valid"> - Required</span>
+                                        </label>
                                         <input id="lastname" type="text" ng-class="validateInput(pnform.lname.$valid)"
                                                name="lname" ng-model="userInfo.lname" ng-disabled="personal" required>
                                     </div>
@@ -181,16 +196,20 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label ng-class="validateLabel(pnform.cellnum.$valid)">Cellphone Number
-                                        <span ng-hide="pnform.cellnum.$valid"> - Required</span></label>
+                                        <label ng-class="validateLabel(pnform.cellnum.$valid)">
+                                            Cellphone Number
+                                            <span ng-hide="pnform.cellnum.$valid"> - Required</span>
+                                        </label>
                                         <input type="number" ng-class="validateInput(pnform.cellnum.$valid)" name="cellnum"
                                                ng-model="userInfo.cellnum" ng-disabled="personal" required>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label ng-class="validateLabel(pnform.birthdate.$valid)">Birthdate
-                                        <span ng-hide="pnform.birthdate.$valid"> - Required</span></label>
+                                        <label ng-class="validateLabel(pnform.birthdate.$valid)">
+                                            Birthdate
+                                            <span ng-hide="pnform.birthdate.$valid"> - Required</span>
+                                        </label>
                                         <input type="date" ng-class="validateInput(pnform.birthdate.$valid)" name="birthdate"
                                                ng-model="userInfo.birthdate" ng-disabled="personal" required>
                                     </div>
@@ -199,8 +218,10 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label ng-class="validateLabel(pnform.header.$valid)">Header
-                                        <span ng-hide="pnform.header.$valid"> - Required</span></label>
+                                        <label ng-class="validateLabel(pnform.header.$valid)">
+                                            Header
+                                            <span ng-hide="pnform.header.$valid"> - Required</span>
+                                        </label>
                                         <textarea id="header" rows="2" cols="80" name="header" ng-model="userInfo.header"
                                                   ng-class="validateInput(pnform.header.$valid)"
                                                   ng-disabled="personal" required></textarea>
@@ -221,7 +242,8 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="header">
-                        <h4 class="title">Address 
+                        <h4 class="title">
+                            Address
                             <i class="pe-7s-pen" ng-click="disabled('address')" ng-hide="!address"
                                style="float: right;"></i>
                         </h4>
@@ -230,15 +252,14 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <label for="region">Region</label>
-                                <select id="region" class="form-control" ng-disabled="address">
-                                </select>
+                                <select id="region" class="form-control" ng-disabled="address"></select>
                             </div>
                             <div id="provinceContainer" class="col-md-4">
                                 <label class="select-valid">Province<span> - Required</span></label>
                                 <select id="province" class="form-control" ng-disabled="address"></select>
                             </div>
                             <div id="cityContainer" class="col-md-4">
-                                 <label class="select-valid">City<span> - Required</span></label>
+                                <label class="select-valid">City<span> - Required</span></label>
                                 <select id="city" class="form-control" ng-disabled="address"></select>
                             </div>
                         </div>
@@ -261,7 +282,8 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="header">
-                        <h4 class="title">Skills
+                        <h4 class="title">
+                            Skills
                             <i class="pe-7s-pen" ng-click="disabled('skills')" ng-hide="!skills"
                                style="float: right;"></i>
                         </h4>
@@ -278,14 +300,79 @@
                         <div class="row" style="margin-bottom: 15px; margin-top: 13px;">
                             <div id="skillsContainer" class="col-md-12">
                                 <label class="select-valid">Skills<span> - Required</span></label>
-                                <select id="skills" class="form-control" multiple ng-disabled="skills">
-                                </select>
+                                <select id="skills" class="form-control" multiple ng-disabled="skills"></select>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12 text-center animate" ng-hide="skills">
                                 <a class="btn btn-mywarning" ng-click="cancel('skills')">Cancel</a>
                                 <a class="btn btn-violet" ng-click="update('skills')">Update Skills</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div ng-show="navCardsVisibility[2]" class="row-eq-height">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="content">
+                        <div class="row" style="margin-top: 20px;">
+                            <div class="col-md-12" style="display: flex; justify-content: center;">
+                                <div class="row" style="width: 100%;">
+                                    <div class="col-sm-12 col-md-6">
+                                        <div class="card content_center active">
+                                            <div class="content">
+                                                <a class="list-btn active">
+                                                    <i class="pe-7s-note2"></i>
+                                                    <p>Personal Projects</p>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6">
+                                        <div class="card content_center">
+                                            <div class="content">
+                                                <a class="list-btn">
+                                                    <i class="pe-7s-note2"></i>
+                                                    <p>Companies Projects</p>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6" ng-repeat="proj in perProjList">
+                                <div class="card">
+                                    <div class="header">
+                                        <h4 class="title" style="text-align:center;" ng-bind="proj.title">
+                                        </h4>
+                                        <div class="row">
+                                            <div class="col-md-12" style="text-align:center">
+                                                <p ng-bind="proj.projectDesc" style="font-weight: normal; font-size: 15px; text-align:center; word-break:break-all;"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="content" style="text-align:center;">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label style="font-size: 18px;">Created</label>
+                                                <p ng-bind="getDate(proj.created)"></p>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label style="font-size: 18px;">Completed</label>
+                                                <p ng-bind="getDate(proj.created)"></p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12 center_content">
+                                                <button type="button" class="btn btn-violet" ng-click="showProjDetails(proj)">View Details</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

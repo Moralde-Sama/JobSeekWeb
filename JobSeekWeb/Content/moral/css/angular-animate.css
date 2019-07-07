@@ -1,8 +1,11 @@
-﻿.ng-hide {
+﻿html {
+    scroll-behavior: smooth;
+}
+.ng-hide {
     opacity: 0;
 }
 label {
-    font-weight: normal !important;
+    font-weight: 300 !important;
 }
 .col-md-12.text-center.animate {
     -webkit-transition: all 300ms linear;

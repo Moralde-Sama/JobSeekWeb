@@ -501,8 +501,10 @@ module.controller("ModalCtrl", ["$scope", "$q", "profileService", "projectServic
         return modalFactory.isEdit ? 'Update' : "Save";
         }
     s.closeModalV = () => {
-        selectedElem.removeClass('tr_active');
-        selectedElem = null;
+        if (selectedElem != null) {
+            selectedElem.removeClass('tr_active');
+            selectedElem = null;
+        }
         r.projBtns = true;
         viewSSCount = 0;
         r.d.viewSS = [];
@@ -637,17 +639,22 @@ module.controller("ModalCtrl", ["$scope", "$q", "profileService", "projectServic
 module.controller("DashboardCtrl", ["$scope", "$http", function (s, h) {
 
 }])
-module.controller("ProfileCtrl", ["$scope", "$http", "$q", "profileService", function (s, h, q, service) {
+module.controller("ProfileCtrl", ["$scope", "$rootScope", "$q", "profileService", "projectService", "modalFactory", function (s, r, q, service, pService, modalFactory) {
 
     s.settings = true;
     s.personal = true;
     s.address = true;
     s.skills = true;
+    s.navCardsVisibility = [true, false, false];
     s.addrssBtnDsbled = false;
     var skillsRemoved = [];
     var selectedMultipleVal = []; 
     var addressValue = {region: null, province: null, city: null, brgy: null};
     var address = ["region", "province", "city", "brgy"];
+    var navSelected = {
+        a: $('#profileNav > div > div > .card.content_center.active')[0],
+        div: $('#profileNav > div > div >  div > div > .list-btn.active')[0]
+    }
 
     s.fullname = () => {
         if (s.userInfo != undefined) {
@@ -657,7 +664,19 @@ module.controller("ProfileCtrl", ["$scope", "$http", "$q", "profileService", fun
         }
 
     }
+    s.navigateMainCards = (index, element) => {
+        console.log(navSelected);
+        s.navCardsVisibility[s.navCardsVisibility.indexOf(true)] = false;
+        s.navCardsVisibility[index] = true;
+        $(navSelected.a).removeClass('active');
+        $(navSelected.div).removeClass('active');
+        navSelected.a = $(element.currentTarget);
+        navSelected.div = $($(element.currentTarget)[0].parentElement.parentElement);
+        $(element.currentTarget).addClass('active');
+        $($(element.currentTarget)[0].parentElement.parentElement).addClass('active');
+    }
 
+    //Profile
     s.getImageFileC = (file) => {
         if (file && file[0]) {
             var reader = new FileReader();
@@ -919,6 +938,28 @@ module.controller("ProfileCtrl", ["$scope", "$http", "$q", "profileService", fun
         return { 'form-control': state, 'form-control invalid': !state };
     }
 
+    //Projects
+    s.showProjDetails = (project) => {
+        project.projTitle = project.title;
+        r.d = project;
+        console.log(modalFactory.projectHolder.screenshots.filter((f) => f.projectId == project.perprojectId));
+        r.d.viewSS = modalFactory.projectHolder.screenshots.filter((f) => f.projectId == project.perprojectId);
+        var projSkillsIds = [];
+        angular.forEach(modalFactory.projectHolder.projSkills.filter((f) => f.perprojectId == project.perprojectId), (value) => {
+            projSkillsIds.push(value.skillId);
+        });
+        r.d.viewSkills = projSkillsIds;
+        $("#myModal1").modal('toggle');
+        r.viewProj = true;
+        
+    }
+    s.getDate = (date) => {
+        if (date != null) {
+            return moment(date).format("MMMM DD, YYYY");
+        }
+    }
+
+    //Profile Functions
     function swalUpdate(title, text, type, callback) {
         Swal.fire({
             title: title,
@@ -1139,6 +1180,7 @@ module.controller("ProfileCtrl", ["$scope", "$http", "$q", "profileService", fun
             }
         })
     }
+    //Project Functions
 
     $(document).ready(function () {
         q.all([
@@ -1173,9 +1215,17 @@ module.controller("ProfileCtrl", ["$scope", "$http", "$q", "profileService", fun
                     initSelect2(value, index, data);
                 })
                 initSelect2Skills();
-                console.log(s.userInfo);
             })
         })
+        if (modalFactory.projectHolder != null) {
+            s.perProjList = modalFactory.projectHolder.personalProj;
+        } else {
+            pService.getPersonalProjects().then((result) => {
+                modalFactory.projectHolder = result.data;
+                s.perProjList = result.data.personalProj;
+                console.log(modalFactory.projectHolder);
+            })
+        }
         $('#gender').select2();
     });
 }])
@@ -1194,8 +1244,6 @@ module.controller("ProjectCtrl", ["$scope", "$http", "projectService", "$rootSco
     s.myprojects = false;
     r.projBtns = true;
     r.viewProj = false;
-    var projectHolder;
-    //$("#myprojectscard").css("min-height", `${window.innerHeight - 200}px`);
     s.selectMyProjects = (isProject) => {
         s.myprojects = !isProject;
     }
@@ -1301,6 +1349,7 @@ module.controller("ProjectCtrl", ["$scope", "$http", "projectService", "$rootSco
 }])
 module.controller("MessageCtrl", ["$scope", "$http", function (s, h) {
     s.lists = [0, 1, 2, 3, 4]
+
     $("#messageCard").height(window.innerHeight - 310);
     $("#contacts").height(window.innerHeight - 199);
 }])
