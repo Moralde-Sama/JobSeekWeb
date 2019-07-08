@@ -341,8 +341,7 @@ module.controller("NavigationCtrl", ["$scope", "$location", "$http", "profileSer
         })
     }
 }])
-module.controller("ModalCtrl", ["$scope", "$q", "profileService", "projectService", "$rootScope", "modalFactory",
-    function (s, q, service, pService, r, modalFactory) {
+module.controller("ModalCtrl", ["$scope", "$q", "profileService", "projectService", "$rootScope", "modalFactory", function (s, q, service, pService, r, modalFactory) {
 
     var projSkills = $("#skillsproj");
     var privacy = $("#privacyP");
@@ -554,6 +553,9 @@ module.controller("ModalCtrl", ["$scope", "$q", "profileService", "projectServic
             var result = index == 0 ? true : false;
             return { 'img-single': result, 'img-multiple': !result }
         }
+    }
+    s.clickProjStatus = () => {
+
     }
     r.clearModal = () => {
         r.d = null;

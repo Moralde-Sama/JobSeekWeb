@@ -61,6 +61,11 @@ namespace JobSeekWeb.Controllers
         {
             return View("~/Views/Shared/_WorkerLayout.cshtml");
         }
+        [AllowAnonymous]
+        public ActionResult DesignProfile()
+        {
+            return View();
+        }
         [HttpGet]
         public JsonResult GetUserInfo()
         {

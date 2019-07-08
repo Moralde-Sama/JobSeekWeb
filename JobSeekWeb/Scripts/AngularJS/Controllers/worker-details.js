@@ -1,4 +1,4 @@
-﻿
+﻿var module = angular.module("Job", []);
 module.service('workerService', function ($http) {
     this.getRegion = () => {
         return $http.get("../Content/PH/json/region.json");
@@ -76,7 +76,12 @@ module.controller("WorkerProfileCtrl", ["$scope", "$http", "$q", "workerService"
             s.skills = s.skillsHolder.filter((f) => f.categoryId == data);
         }
     }
-
+    s.validateLabel = (state) => {
+        return { 'red': !state };
+    }
+    s.validateInput = (state) => {
+        return { 'form-control': state, 'form-control invalid': !state };
+    }
     s.saveDetails = (data) => {
         Swal.fire({
             title: 'Are you sure you want save this information?',
@@ -165,34 +170,67 @@ module.controller("WorkerProfileCtrl", ["$scope", "$http", "$q", "workerService"
     }
 
     function initServices() {
-        service.getRegion().then((r) => {
-            s.regions = r.data;
-            service.getProvince().then((r) => {
-                s.provincesHolder = r.data;
-                service.getCity().then((r) => {
-                    s.citiesHolder = r.data;
-                    service.getBrgy().then((r) => {
-                        s.brgysHolder = r.data;
-                    });
-                })
-            })
-        });
-        service.getCategoriesandSkills().then((r) => {
-            s.categories = r.data.categories;
-            s.skillsHolder = r.data.skills;
+        q.all([
+            service.getRegion(),
+            service.getProvince(),
+            service.getCity(),
+            service.getBrgy(),
+            service.getCategoriesandSkills()
+        ]).then((result) => {
+            s.regions = result[0].data;
+            s.provincesHolder = result[1].data;
+            s.citiesHolder = result[2].data;
+            s.brgysHolder = result[3].data;
+            s.categories = result[4].data.categories;
+            s.skillsHolder = result[4].data.skills;
+            var SRegionData = [];
+            angular.forEach(result[0].data, (value) => {
+                SRegionData.push({ id: value.regCode, text: value.regDesc });
+            });
+            $('#region').select2({ data: SRegionData });
         });
     }
     function init() {
 
         $(document).ready(function () {
             $('#gender').select2();
+            $('#region').select2();
+            $('#region').on('select2:selecting', (e) => {
+                var data = e.params.args.data;
+                $("#province").empty();
+                var filteredProvince = s.provincesHolder.filter((f) => f.regCode == data.id);
+                $('#province').append('<option value="0" disabled selected>Select a province</option>').trigger('change');
+                angular.forEach(filteredProvince, (value) => {
+                    $('#province').append(new Option(value.provDesc, value.provCode, false, false)).trigger('change');
+                });
+            });
             $('#province').select2();
+            $('#province').on('select2:selecting', (e) => {
+                var data = e.params.args.data;
+                $("#city").empty();
+                var filteredCity = s.citiesHolder.filter((f) => f.provCode == data.id);
+                $('#city').append('<option value="0" disabled selected>Select a city/municipality</option>').trigger('change');
+                angular.forEach(filteredCity, (value) => {
+                    $('#city').append(new Option(value.citymunDesc, value.citymunCode, false, false)).trigger('change');
+                });
+            });
             $('#city').select2();
+            $('#city').on('select2:selecting', (e) => {
+                var data = e.params.args.data;
+                $("#brgy").empty();
+                var filteredBrgy = s.brgysHolder.filter((f) => f.citymunCode == data.id);
+                $('#brgy').append('<option value="0" disabled selected>Select a brgy</option>').trigger('change');
+                angular.forEach(filteredBrgy, (value) => {
+                    $('#brgy').append(new Option(value.brgyDesc, value.brgyCode, false, false)).trigger('change');
+                });
+            });
             $('#brgy').select2();
             $("#skills").select2({
                 tags: true,
                 maximumSelectionLength: 5,
-                placeholder: "Select or add your skills"
+                placeholder: "Select or add your skills",
+                minimumInputLength: 3,
+                minimumResultsForSearch: 20
             })
         })
     }
