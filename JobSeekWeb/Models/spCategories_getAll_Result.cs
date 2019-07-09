@@ -13,7 +13,7 @@ namespace JobSeekWeb.Models
     
     public partial class spCategories_getAll_Result
     {
-        public int categoryId { get; set; }
-        public string title { get; set; }
+        public int id { get; set; }
+        public string text { get; set; }
     }
 }

@@ -59,33 +59,20 @@ namespace JobSeekWeb.Controllers
         #region Worker
         [HttpPost]
         [Authorize (Roles = "Worker")]
-        public JsonResult svProfDetails(Worker worker, int[] skillIds, string[] newskills)
+        [ValidateAntiForgeryToken]
+        public JsonResult svProfDetails(Worker worker)
         {
             try
             {
                 worker.workerId = Convert.ToInt32(User.Identity.GetWorkerOrCompanyId());
                 worker.asp_user_Id = Convert.ToInt32(User.Identity.GetUserId<int>());
-                worker.prof_path = "/Content/Moralde/Images/eriri.png";
-                worker.header = "Test";
+                worker.prof_path = "/Uploads/Worker/Img/eriri.png";
+                worker.cover_path = "/Uploads/Worker/Img/kodaikana.jpg";
+                worker.header = " ";
                 worker.UpdateProfileDetails();
-                if (skillIds != null)
-                {
-                    foreach (int skillId in skillIds)
-                    {
-                        worker.skillId = skillId;
-                        worker.AddSkill(worker.workerId);
-                    }
-                }
-                if (newskills != null)
-                {
-                    foreach (string title in newskills)
-                    {
-                        worker.title = title;
-                        worker.AddNewSkill();
-                        worker.skillId = Skills.getSkillDetailsByTitle(title).skillId;
-                        worker.AddSkill(worker.workerId);
-                    }
-                }
+                worker.AddMultipleSkills(worker.workerId);
+                worker.addSkills = worker.AddMultipleNewSkill();
+                worker.AddMultipleSkills(worker.workerId);
                 AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
                 return Json("Success", JsonRequestBehavior.AllowGet);
             }

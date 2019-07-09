@@ -61,11 +61,6 @@ namespace JobSeekWeb.Controllers
         {
             return View("~/Views/Shared/_WorkerLayout.cshtml");
         }
-        [AllowAnonymous]
-        public ActionResult DesignProfile()
-        {
-            return View();
-        }
         [HttpGet]
         public JsonResult GetUserInfo()
         {
@@ -98,7 +93,7 @@ namespace JobSeekWeb.Controllers
         {
             project.ownerId = User.Identity.GetUserId<int>();
             var projDetails = project.AddPersonalProject();
-            int[] newSkillIds = project.AddMultipleNewSkillProj();
+            int[] newSkillIds = project.AddMultipleNewSkill();
             project.AddMultipleSkillsProj(projDetails.perprojectId);
             project.addSkills = newSkillIds;
             project.AddMultipleSkillsProj(projDetails.perprojectId);
@@ -126,7 +121,7 @@ namespace JobSeekWeb.Controllers
         {
             try
             {
-                int[] newSkillIds = project.AddMultipleNewSkillProj();
+                int[] newSkillIds = project.AddMultipleNewSkill();
                 project.AddMultipleSkillsProj(project.perprojectId);
                 project.addSkills = newSkillIds;
                 project.AddMultipleSkillsProj(project.perprojectId);

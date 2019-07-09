@@ -23,13 +23,14 @@ namespace JobSeekWeb.Models.MyClass
         public int city { get; set; }
         public int brgy { get; set; }
         public string prof_path { get; set; }
+        public string cover_path { get; set; }
 
         public void UpdateProfileDetails()
         {
             db.spWorker_updateDetails(
                 workerId, fname, mname, lname, birthdate,
                 gender, header, cellnum, region, province,
-                city, brgy
+                city, brgy, prof_path, cover_path
                 );
         }
 

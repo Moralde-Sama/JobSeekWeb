@@ -186,11 +186,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\C__MigrationHistory.cs">
-      <DependentUpon>Job.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\MyClass\IdentityExtension.cs" />
-    <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Job.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -206,6 +201,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Job.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\MyClass\IdentityExtension.cs" />
+    <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MyClass\Project.cs" />
     <Compile Include="Models\MyClass\Settings.cs" />
@@ -213,12 +210,6 @@
     <Compile Include="Models\MyClass\Users.cs" />
     <Compile Include="Models\MyClass\Worker.cs" />
     <Compile Include="Models\spCategories_getAll_Result.cs">
-      <DependentUpon>Job.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\spCategories_getAll_Result1.cs">
-      <DependentUpon>Job.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\spCategories_getAll_Result2.cs">
       <DependentUpon>Job.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\spProject_getAllPersonalProj_Result.cs">
@@ -653,13 +644,6 @@
     <Content Include="Scripts\AngularJS\Router\worker.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <EntityDeploy Include="Models\Job.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Job.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\Job.edmx.diagram">
-      <DependentUpon>Job.edmx</DependentUpon>
-    </Content>
     <Content Include="Content\amade\fon\appton.eot" />
     <Content Include="Content\amade\fon\appton.ttf" />
     <Content Include="Content\amade\fon\appton.woff" />
@@ -930,6 +914,13 @@
     <Content Include="Content\assets\sass\lbd\_typography.scss" />
     <Content Include="Content\assets\sass\lbd\_variables.scss" />
     <Content Include="Content\assets\sass\light-bootstrap-dashboard.scss" />
+    <EntityDeploy Include="Models\Job.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Job.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\Job.edmx.diagram">
+      <DependentUpon>Job.edmx</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />

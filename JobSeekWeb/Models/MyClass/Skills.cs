@@ -20,7 +20,7 @@ namespace JobSeekWeb.Models.MyClass
             db.spSkill_addSkill(title, categoryId);
         }
 
-        public int[] AddMultipleNewSkillProj()
+        public int[] AddMultipleNewSkill()
         {
             if (newSkills?.Length > 0)
             {
