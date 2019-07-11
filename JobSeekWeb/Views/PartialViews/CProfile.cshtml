@@ -146,85 +146,64 @@
             <div class="card">
                 <div class="header">
                     <h4 class="title">
-                        Personal Information
+                        Company Information
                         <i class="pe-7s-pen" ng-click="disabled('personal')" ng-hide="!personal"
                            style="float: right;"></i>
                     </h4>
                 </div>
                 <div class="content">
-                    <form name="pnform">
+                    <form name="companyform">
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <div class="form-group">
-                                    <label ng-class="validateLabel(pnform.fname.$valid)">
-                                        First Name
-                                        <span ng-hide="pnform.fname.$valid"> - Required</span>
+                                    <label ng-class="validateLabel(companyform.name.$valid)">
+                                        Company Name
+                                        <span ng-hide="companyform.name.$valid"> - Required</span>
                                     </label>
-                                    <input type="text" ng-class="validateInput(pnform.fname.$valid)" name="fname"
-                                           ng-model="userInfo.fname" ng-disabled="personal" required>
+                                    <input type="text" ng-class="validateInput(companyform.name.$valid)" name="name"
+                                           ng-model="company.name" ng-disabled="personal" required style="text-transform:capitalize;">
                                 </div>
                             </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label ng-class="validateLabel(pnform.mname.$valid)">
-                                        Middle Name
-                                        <span ng-hide="pnform.mname.$valid"> - Required</span>
-                                    </label>
-                                    <input type="text" ng-class="validateInput(pnform.mname.$valid)"
-                                           name="mname" ng-model="userInfo.mname" ng-disabled="personal" required>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label ng-class="validateLabel(pnform.lname.$valid)">
-                                        Last Name
-                                        <span ng-hide="pnform.lname.$valid"> - Required</span>
-                                    </label>
-                                    <input id="lastname" type="text" ng-class="validateInput(pnform.lname.$valid)"
-                                           name="lname" ng-model="userInfo.lname" ng-disabled="personal" required>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <label for="gender">Gender</label>
-                                <select id="gender" ng-model="userInfo.gender" class="form-control"
-                                        ng-disabled="personal">
-                                    <option value="Male">Male</option>
-                                    <option value="Female">Female</option>
-                                </select>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label ng-class="validateLabel(pnform.cellnum.$valid)">
-                                        Cellphone Number
-                                        <span ng-hide="pnform.cellnum.$valid"> - Required</span>
-                                    </label>
-                                    <input type="number" ng-class="validateInput(pnform.cellnum.$valid)" name="cellnum"
-                                           ng-model="userInfo.cellnum" ng-disabled="personal" required>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label ng-class="validateLabel(pnform.birthdate.$valid)">
-                                        Birthdate
-                                        <span ng-hide="pnform.birthdate.$valid"> - Required</span>
-                                    </label>
-                                    <input type="date" ng-class="validateInput(pnform.birthdate.$valid)" name="birthdate"
-                                           ng-model="userInfo.birthdate" ng-disabled="personal" required>
+                            <div class="col-md-6">
+                                <div id="TypeContainer" class="form-group">
+                                    <label class="select-valid">Type of Company
+                                    <span> - Required</span></label>
+                                    <select class="form-control" ng-disabled="personal"></select>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label ng-class="validateLabel(pnform.header.$valid)">
-                                        Header
-                                        <span ng-hide="pnform.header.$valid"> - Required</span>
+                                    <label ng-class="validateLabel(companyform.description.$valid)">
+                                        Company Description
+                                        <span ng-hide="companyform.description.$valid"> - Required</span>
                                     </label>
-                                    <textarea id="header" rows="2" cols="80" name="header" ng-model="userInfo.header"
-                                              ng-class="validateInput(pnform.header.$valid)"
+                                    <textarea rows="2" cols="80" name="description" ng-model="company.description"
+                                              ng-class="validateInput(companyform.description.$valid)"
                                               ng-disabled="personal" required></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label ng-class="validateLabel(companyform.cellnumber.$valid)">
+                                        Contact Number
+                                        <span ng-hide="companyform.cellnumber.$valid"> - Required</span>
+                                    </label>
+                                    <input type="number" ng-class="validateInput(companyform.cellnumber.$valid)"
+                                           name="cellnumber" ng-model="company.cellnumber" ng-disabled="personal" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label ng-class="validateLabel(companyform.business_email.$valid)">
+                                        Business Email
+                                        <span ng-hide="companyform.business_email.$valid"> - Required</span>
+                                    </label>
+                                    <input id="lastname" type="text" ng-class="validateInput(companyform.business_email.$valid)"
+                                           name="business_email" ng-model="company.business_email" ng-disabled="personal" required>
                                 </div>
                             </div>
                         </div>
@@ -232,8 +211,8 @@
                     <div class="row">
                         <div class="col-md-12 text-center animate" ng-hide="personal">
                             <a class="btn btn-mywarning" ng-click="cancel('personal')">Cancel</a>
-                            <a class="btn btn-violet" ng-click="pnform.$valid && update('personal')"
-                               ng-disabled="!pnform.$valid">Update Personal Info</a>
+                            <a class="btn btn-violet" ng-click="companyform.$valid && update('personal')"
+                               ng-disabled="!companyform.$valid">Update Personal Info</a>
                         </div>
                     </div>
                 </div>

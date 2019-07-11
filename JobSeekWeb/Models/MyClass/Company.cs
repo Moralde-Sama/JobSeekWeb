@@ -23,20 +23,37 @@ namespace JobSeekWeb.Models.MyClass
 
         public void UpdateDetails()
         {
-            tbl_company company = db.tbl_company.Find(companyId);
-            company.name = name;
-            company.description = description;
-            company.cellnumber = cellnumber;
-            company.categoryId = categoryId;
-            company.business_email = business_email;
-            company.region = region;
-            company.province = province;
-            company.city = city;
-            company.brgy = brgy;
-            company.prof_path = "/Uploads/Company/Profile/eriri.png";
-            company.cover_path = "/Uploads/Company/Cover/kodaikana.jpg";
-            db.Entry(company).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
+            using(JobEntities db = new JobEntities())
+            {
+                tbl_company company = db.tbl_company.Find(companyId);
+                company.name = name;
+                company.description = description;
+                company.cellnumber = cellnumber;
+                company.categoryId = categoryId;
+                company.business_email = business_email;
+                company.region = region;
+                company.province = province;
+                company.city = city;
+                company.brgy = brgy;
+                company.prof_path = "/Uploads/Company/Profile/eriri.png";
+                company.cover_path = "/Uploads/Company/Cover/kodaikana.jpg";
+                db.Entry(company).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+        }
+        public void UpdateCompanyInformation()
+        {
+            using(JobEntities db = new JobEntities())
+            {
+                tbl_company company = db.tbl_company.Find(companyId);
+                company.name = name;
+                company.categoryId = categoryId;
+                company.description = description;
+                company.cellnumber = cellnumber;
+                company.business_email = business_email;
+                db.Entry(company).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
         }
         public static spCompany_getDetails_Result GetCompanyDetails(int asp_userId)
         {

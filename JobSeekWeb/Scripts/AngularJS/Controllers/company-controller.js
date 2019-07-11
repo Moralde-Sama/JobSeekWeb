@@ -32,6 +32,9 @@ module.service('NavigationService', function ($http, $q) {
     }
 });
 module.service('ProfileService', function ($http, $q) {
+    this.getCategories = () => {
+        return $http.get('../Company/GetCategories');
+    }
     this.updateProfilePic = (base64_string) => {
         var formdata = new FormData();
         formdata.append("__RequestVerificationToken",
@@ -73,11 +76,27 @@ module.service('ProfileService', function ($http, $q) {
             headers: { 'Content-Type': undefined }
         });
     }
+    this.updateCompanyInfo = (company_details) => {
+        var formdata = new FormData();
+        formdata.append("__RequestVerificationToken",
+            $('input:hidden[name=__RequestVerificationToken]').val());
+        angular.forEach(company_details, (value, key) => {
+            formdata.append(key, value);
+        });
+        return $http({
+            method: 'POST',
+            url: '/Account/UpdateCompanyInformation',
+            data: formdata,
+            transformRequest: angular.identity,
+            headers: { 'Content-Type': undefined }
+        });
+    }
 });
 
 module.factory('HoldersFactory', function () {
     return {
-        companyInfo: null
+        companyInfo: null,
+        categories: null
     }
 });
 module.directive('imageonload', function () {
@@ -157,6 +176,9 @@ module.controller('ProfileCtrl', ['$scope', '$q', 'NavigationService', 'ProfileS
         //company details, jobs and projects
         scope.navCardsVisibility = [true, false, false];
         scope.settings = true;
+        scope.personal = true;
+
+        const type_manager = new Select2Manager("#TypeContainer");
 
         initServices();
 
@@ -311,18 +333,62 @@ module.controller('ProfileCtrl', ['$scope', '$q', 'NavigationService', 'ProfileS
                 } else {
                     swalError('New password and confirm password doesnt match.');
                 }
+            } else if (section === 'personal') {
+                const type_value = type_manager.getSelectedItems()[0];
+                if (isNaN(type_value.id)) {
+                    scope.company.title = type_value.id;
+                } else {
+                    scope.company.categoryId = type_value.id;
+                }
+                swalConfirmation({
+                    title: 'Are you sure you want to update company information?',
+                    text: '',
+                    type: 'warning',
+                    precallback: () => {
+                        return profile_service.updateCompanyInfo(scope.company);
+                    },
+                    callback: (result) => {
+                        if (result) {
+                            if (result.data === 'Success') {
+                                swalSuccess({
+                                    title: 'Updated',
+                                    text: '',
+                                    callback: () => {
+                                        scope.disabled('personal');
+                                        scope.$apply();
+                                    }
+                                });
+                            } else {
+                                swalError(result.data);
+                            }
+                        }
+                    }
+                });
             }
         }
 
         function initServices() {
             q.all([
-                navigation_service.getCompanyInfo(holders_factory.companyInfo)
+                navigation_service.getCompanyInfo(holders_factory.companyInfo),
+                profile_service.getCategories()
             ]).then((results) => {
-                console.log(results);
                 holders_factory.companyInfo = results[0].data;
                 scope.company = results[0].data;
-                console.log(scope.company);
+                holders_factory.categories = results[1].data;
+                scope.company.cellnumber = parseInt(scope.company.cellnumber);
+
+                initSelect2();
             });
+        }
+
+        function initSelect2() {
+            type_manager.initSelect2({
+                tags: true,
+                data: holders_factory.categories,
+                minimumInputLength: 2,
+                minimumResultsForSearch: -1
+            });
+            type_manager.setSelectedItems([scope.company.categoryId]);
         }
 }]);
 function swalConfirmWithPassword(options) {
@@ -396,3 +462,74 @@ function swalSuccess(option) {
         option.callback();
     })
 }   
+
+function Select2Manager(container_id) {
+    this.container_id = container_id;
+    this.container_children = $(container_id);
+    this.select = $(this.container_children[0].children[1]);
+    this.label = $(this.container_children[0].children[0]);
+    this.items = null;
+}
+Select2Manager.prototype.initSelect2 = function (options) {
+    this.select.select2(options);
+    this.select2_border = $($($($(this.container_id)[0].children[2])[0].children[0])[0].children[0]);
+}
+Select2Manager.prototype.Selecting = function (callback) {
+    this.select.on('select2:selecting', (selected) => {
+        callback(selected);
+    });
+}
+Select2Manager.prototype.invalid = function () {
+    if (!this.label.hasClass('red')) {
+        this.label.addClass('red');
+        this.select2_border.addClass('invalid');
+    }
+}
+Select2Manager.prototype.valid = function () {
+    if (this.label.hasClass('red')) {
+        this.label.removeClass('red');
+        this.select2_border.removeClass('invalid');
+    }
+}
+Select2Manager.prototype.getSelectedItems = function () {
+    return this.select.select2('data');
+}
+Select2Manager.prototype.clearItems = function () {
+    this.select.empty();
+}
+Select2Manager.prototype.addItem = function (id, text, isSelected) {
+    this.select.append(new Option(text, id, isSelected, isSelected)).trigger('change');
+}
+Select2Manager.prototype.addCustomOptionItem = function (option_element) {
+    this.select.append(option_element).trigger('change');
+}
+Select2Manager.prototype.addItems = function (array_selected_id) {
+    this.items.forEach((item) => {
+        const isSelected = array_selected_id === undefined ? false : array_selected_id.includes(item.id);
+        this.addItem(item.id, item.text, isSelected);
+    });
+}
+Select2Manager.prototype.setSelectedItems = function (array_selected_id) {
+    this.select.val(array_selected_id).trigger('change');
+}
+function ConvertDataToSelect2Data(data, address_index) {
+    this.keys = ['reg', 'prov', 'citymun', 'brgy'];
+    this.values = [];
+    this.data = data;
+    this.address_index = address_index;
+}
+ConvertDataToSelect2Data.prototype.filter = function (key, key_value) {
+    this.data = this.data.filter((f) => f[key] == key_value);
+    this.noFilter();
+    return this.values;
+}
+ConvertDataToSelect2Data.prototype.noFilter = function () {
+    this.data.forEach((value) => {
+        this.values.push({
+            id: value[`${this.keys[this.address_index]}Code`],
+            text: value[`${this.keys[this.address_index]}Desc`],
+            filter_key: this.address_index > 0 ? `${this.keys[this.address_index - 1]}Code` : ''
+        });
+    });
+    return this.values;
+}

@@ -7,7 +7,6 @@ namespace JobSeekWeb.Models.MyClass
 {
     public class Category
     {
-        public JobEntities db = new JobEntities();
         public int categoryId { get; set; }
         public string title { get; set; }
 
@@ -15,6 +14,7 @@ namespace JobSeekWeb.Models.MyClass
         {
             if(!String.IsNullOrEmpty(title))
             {
+                using (JobEntities db = new JobEntities())
                 if(db.tbl_category.Where(w => w.title == title).Count() == 0)
                 {
                     tbl_category category = new tbl_category
@@ -29,7 +29,10 @@ namespace JobSeekWeb.Models.MyClass
         }
         public static IEnumerable<spCategories_getAll_Result> GetCategories()
         {
-            return new JobEntities().spCategories_getAll().ToList();
+            using(JobEntities db = new JobEntities())
+            {
+                return db.spCategories_getAll().ToList();
+            }
         }
     }
 }

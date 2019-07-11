@@ -261,10 +261,18 @@ namespace JobSeekWeb.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Company")]
-        public JsonResult UpdateCompanySettings()
+        public JsonResult UpdateCompanyInformation(Company company)
         {
-
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                company.SaveCategoryIfNotNull();
+                company.UpdateCompanyInformation();
+                return Json("Success", JsonRequestBehavior.AllowGet);
+            }
+            catch(Exception e)
+            {
+                return Json(e.Message, JsonRequestBehavior.AllowGet);
+            }
         }
         #endregion
 
