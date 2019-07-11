@@ -222,11 +222,11 @@ namespace JobSeekWeb.Controllers
             return View();
         }
 
-        #region Worker
+        #region Worker/Company
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Worker")]
+        [Authorize(Roles = "Worker, Company")]
         public async Task<ActionResult> UpdateSettings(Settings settings)
         {
             var user = await UserManager.FindByIdAsync(User.Identity.GetUserId<int>());

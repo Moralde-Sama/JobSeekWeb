@@ -99,7 +99,7 @@
                                         Username
                                         <span ng-hide="settingsform.UserName.$valid"> - Required</span>
                                     </label>
-                                    <input id="username" name="UserName" ng-model="userInfo.UserName" type="text"
+                                    <input id="username" name="UserName" ng-model="company.UserName" type="text"
                                            ng-class="validateInput(settingsform.UserName.$valid)"
                                            ng-disabled="settings" required>
                                 </div>
@@ -111,7 +111,7 @@
                                         <span ng-hide="settingsform.email.$valid"> - Required</span>
                                     </label>
                                     <input type="email" name="email" ng-class="validateInput(settingsform.email.$valid)"
-                                           ng-model="userInfo.Email" ng-disabled="settings" required>
+                                           ng-model="company.Email" ng-disabled="settings" required>
                                 </div>
                             </div>
                         </div>
@@ -119,14 +119,14 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>New Password</label>
-                                    <input id="password" ng-model="userInfo.newpassword" type="password"
+                                    <input id="password" ng-model="company.newpassword" type="password"
                                            class="form-control" placeholder="Optional" ng-disabled="settings">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Repeat Password</label>
-                                    <input id="repassword" ng-model="userInfo.repassword" type="password"
+                                    <input id="repassword" ng-model="company.repassword" type="password"
                                            class="form-control" placeholder="Optional" ng-disabled="settings">
                                 </div>
                             </div>
@@ -274,39 +274,6 @@
                             <a class="btn btn-mywarning" ng-click="cancel('address')">Cancel</a>
                             <a class="btn btn-violet" ng-click="!addrssBtnDsbled && update('address')"
                                ng-disabled="addrssBtnDsbled">Update Address</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-12">
-            <div class="card">
-                <div class="header">
-                    <h4 class="title">
-                        Skills
-                        <i class="pe-7s-pen" ng-click="disabled('skills')" ng-hide="!skills"
-                           style="float: right;"></i>
-                    </h4>
-                </div>
-                <div class="content">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <label>Category</label>
-                            <select id="category" class="form-control" ng-disabled="skills">
-                                <option value="0" disabled selected>Select a category</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row" style="margin-bottom: 15px; margin-top: 13px;">
-                        <div id="skillsContainer" class="col-md-12">
-                            <label class="select-valid">Skills<span> - Required</span></label>
-                            <select id="skills" class="form-control" multiple ng-disabled="skills"></select>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 text-center animate" ng-hide="skills">
-                            <a class="btn btn-mywarning" ng-click="cancel('skills')">Cancel</a>
-                            <a class="btn btn-violet" ng-click="update('skills')">Update Skills</a>
                         </div>
                     </div>
                 </div>

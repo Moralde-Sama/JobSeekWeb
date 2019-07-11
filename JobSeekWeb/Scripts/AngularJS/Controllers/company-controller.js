@@ -58,6 +58,21 @@ module.service('ProfileService', function ($http, $q) {
             headers: { 'Content-Type': undefined }
         });
     }
+    this.updateSettings = (settings_value) => {
+        var formdata = new FormData();
+        formdata.append("__RequestVerificationToken",
+            $('input:hidden[name=__RequestVerificationToken]').val());
+        angular.forEach(settings_value, (value, key) => {
+            formdata.append(key, value);
+        });
+        return $http({
+            method: 'POST',
+            url: '/Manage/UpdateSettings',
+            data: formdata,
+            transformRequest: angular.identity,
+            headers: { 'Content-Type': undefined }
+        });
+    }
 });
 
 module.factory('HoldersFactory', function () {
@@ -139,8 +154,11 @@ module.controller('NavigationCtrl', ['$scope', '$location', 'NavigationService',
 module.controller('ProfileCtrl', ['$scope', '$q', 'NavigationService', 'ProfileService', 'HoldersFactory',
     function (scope, q, navigation_service, profile_service, holders_factory) {
 
-        initServices();
+        //company details, jobs and projects
+        scope.navCardsVisibility = [true, false, false];
+        scope.settings = true;
 
+        initServices();
 
         scope.profilePic = () => {
             document.getElementById("getFileProf").click();
@@ -243,6 +261,58 @@ module.controller('ProfileCtrl', ['$scope', '$q', 'NavigationService', 'ProfileS
         scope.coverPhotoClick = () => {
             document.getElementById("getFileCover").click();
         }
+        scope.validateLabel = (state) => {
+            return { 'red': !state };
+        }
+        scope.validateInput = (state) => {
+            return { 'form-control': state, 'form-control invalid': !state };
+        }
+        scope.disabled = (section) => {
+            if (section === "settings") { scope.settings = !scope.settings }
+            else if (section === "personal") { scope.personal = !scope.personal }
+            else if (section === "address") { scope.address = !scope.address }
+        }
+        scope.cancel = (section) => {
+            if (section === "settings") { scope.disabled(section); }
+            if (section === "personal") { scope.disabled(section); }
+            if (section === "address") { scope.disabled(section); }
+               
+        }
+        scope.update = (section) => {
+            if (section === 'settings') {
+                if (scope.company.newpassword === scope.company.repassword) {
+                    swalConfirmWithPassword({
+                        title: 'Are you sure you want to update your account settings?',
+                        passwordCallback: (password) => {
+                            scope.company.oldpassword = password != "" ? password : "asdfjkjl";
+                            return profile_service.updateSettings(scope.company);
+                        },
+                        callback: (result) => {
+                            console.log(result);
+                            if (result.value) {
+                                if (result.value.data === 'Success') {
+                                    swalSuccess({
+                                        title: 'Updated',
+                                        text: '',
+                                        callback: () => {
+                                            scope.disabled('settings');
+                                            delete scope.company.oldpassword;
+                                            delete scope.company.newpassword;
+                                            delete scope.company.repassword;
+                                            scope.$apply();
+                                        }
+                                    });
+                                } else {
+                                    swalError(result.value.data);
+                                }
+                            }
+                        }
+                    });
+                } else {
+                    swalError('New password and confirm password doesnt match.');
+                }
+            }
+        }
 
         function initServices() {
             q.all([
@@ -255,6 +325,30 @@ module.controller('ProfileCtrl', ['$scope', '$q', 'NavigationService', 'ProfileS
             });
         }
 }]);
+function swalConfirmWithPassword(options) {
+    Swal.fire({
+        title: options.title,
+        text: 'Input your password for verification',
+        input: 'password',
+        inputAttributes: {
+            autocapitalize: 'off'
+        },
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#8553C6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes',
+        showLoaderOnConfirm: true,
+        preConfirm: (password) => {
+            return options.passwordCallback(password);
+        },
+        allowOutsideClick: () => !Swal.isLoading()
+    }).then((result) => {
+        options.callback(result);
+    }, () => {
+        swalError();
+    });
+}
 function swalConfirmation(option) {
     Swal.fire({
         title: option.title,

@@ -258,6 +258,14 @@ namespace JobSeekWeb.Controllers
                 return Json(e.Message, JsonRequestBehavior.AllowGet);
             }
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Company")]
+        public JsonResult UpdateCompanySettings()
+        {
+
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
         #endregion
 
         //
