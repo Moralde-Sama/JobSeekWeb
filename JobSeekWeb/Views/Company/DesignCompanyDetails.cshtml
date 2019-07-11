@@ -1,0 +1,178 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>Light Bootstrap Dashboard - Free Bootstrap 4 Admin Dashboard by Creative Tim</title>
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
+    <link href="~/Content/assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/moral/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/moral/css/angular-animate.css" rel="stylesheet" />
+    <link href="~/Content/moral/Swal/sweetalert2.css" rel="stylesheet" />
+    <link href="~/Content/assets/css/light-bootstrap-dashboard.css?v=2.0.0" rel="stylesheet" />
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='styles' />
+    <link href="~/Content/moral/css/company-style.css" rel="stylesheet" />
+</head>
+<body ng-app="Job">
+    <div class="wrapper">
+        <div class="main-panel">
+            <nav class="navbar navbar-default navbar-fixed">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+
+                    </div>
+                    <div class="collapse navbar-collapse">
+                        <ul class="nav navbar-nav navbar-left"></ul>
+                        <ul class="nav navbar-nav navbar-right">
+                            <li ng-controller="LogoutCtrl">
+                                <button type="button" class="btn btn-violet" ng-click="logout()">Logout</button>
+                            </li>
+                            <li class="separator hidden-lg"></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <div class="content" ng-controller="CompanyCtrl">
+                <div class="container">
+                    <form name="company_info">
+                        @Html.AntiForgeryToken()
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="header">
+                                        <h4 class="title">Company Basic Information</h4>
+                                    </div>
+                                    <div class="content">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label ng-class="validateLabel(company_info.name.$valid)">
+                                                        Company name
+                                                        <span ng-hide="company_info.name.$valid"> - Required</span>
+                                                    </label>
+                                                    <input id="companyname" name="name" ng-class="validateInput(company_info.name.$valid)"
+                                                           ng-model="company.name" type="text" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div id="CategoryContainer" class="form-group">
+                                                    <label class="select-valid">Type of Company<span> - Required</span></label>
+                                                    <select id="category" class="form-control">
+                                                        <option value="0" disabled selected>Select or write the type of your company</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label ng-class="validateLabel(company_info.description.$valid)">
+                                                        Company Description
+                                                        <span ng-hide="company_info.description.$valid"> - Required</span>
+                                                    </label>
+                                                    <textarea name="description" ng-class="validateInput(company_info.description.$valid)"
+                                                              rows="2" ng-model="company.description" type="text" required></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label ng-class="validateLabel(company_info.cellnumber.$valid)">
+                                                        Contact Number
+                                                        <span ng-hide="company_info.cellnumber.$valid"> - Required</span>
+                                                    </label>
+                                                    <input name="cellnumber" ng-class="validateInput(company_info.cellnumber.$valid)"
+                                                           ng-model="company.cellnumber" type="number" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label ng-class="validateLabel(company_info.business_email.$valid)">
+                                                        Business Email
+                                                        <span ng-hide="company_info.business_email.$valid"> - Required</span>
+                                                    </label>
+                                                    <input name="business_email" ng-class="validateInput(company_info.business_email.$valid)"
+                                                           ng-model="company.business_email" type="email" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="header">
+                                        <h4 class="title">Address</h4>
+                                    </div>
+                                    <div class="content">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div id="RegionContainer" class="form-group">
+                                                    <label class="select-valid">Region<span> - Required</span></label>
+                                                    <select id="region" class="form-control">
+                                                        <option value="0" disabled selected>Select a region</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div id="ProvinceContainer" class="form-group">
+                                                    <label class="select-valid">Province<span> - Required</span></label>
+                                                    <select id="province" class="form-control">
+                                                        <option value="0" disabled selected>Select a region first</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div id="CityContainer" class="form-group">
+                                                    <label class="select-valid">City/Municipality<span> - Required</span></label>
+                                                    <select id="city" class="form-control">
+                                                        <option value="0" disabled selected>Select a province first</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div id="BrgyContainer" class="form-group">
+                                                    <label class="select-valid">Baranggay<span> - Required</span></label>
+                                                    <select id="brgy" class="form-control">
+                                                        <option value="0" disabled selected>Select a city/municipality first</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="row">
+                        <div class="col-md-12 center_content">
+                            <button type="button" class="btn btn-violet" ng-disabled="!company_info.$valid || !isValid" ng-click="saveDetails()">Save Information</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/Content/assets/js/jquery.3.2.1.min.js"></script>
+    <script src="~/Content/assets/js/bootstrap.min.js"></script>
+    <script src="~/Content/assets/js/bootstrap-switch.js"></script>
+    <script src="~/Content/assets/js/light-bootstrap-dashboard.js?v=2.0.0"></script>
+    <script src="~/Content/moral/select2/js/select2.js"></script>
+    <script src="~/Content/moral/Swal/sweetalert2.js"></script>
+    <script src="~/Scripts/AngularJS/angular.min.js"></script>
+    <script src="~/Scripts/AngularJS/Controllers/company-details.js"></script>
+</body>
+</html>

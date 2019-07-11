@@ -10,9 +10,8 @@
 namespace JobSeekWeb.Models
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class tbl_company
+    public partial class spCompany_getDetails_Result
     {
         public int companyId { get; set; }
         public string name { get; set; }

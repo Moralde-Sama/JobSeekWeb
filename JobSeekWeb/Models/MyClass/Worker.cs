@@ -49,14 +49,7 @@ namespace JobSeekWeb.Models.MyClass
                 List<bool> completed = new List<bool>();
                 foreach (PropertyInfo property in properties)
                 {
-                    if (property.GetValue(worker) != null)
-                    {
-                        completed.Add(true);
-                    }
-                    else
-                    {
-                        completed.Add(false);
-                    }
+                    completed.Add(property.GetValue(worker) != null ? true : false);
                 }
                 return (completed.Contains(false)) ? false : true;
             }

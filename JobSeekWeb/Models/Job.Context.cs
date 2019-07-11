@@ -30,7 +30,6 @@ namespace JobSeekWeb.Models
         public virtual DbSet<tbl_category> tbl_category { get; set; }
         public virtual DbSet<tbl_chat> tbl_chat { get; set; }
         public virtual DbSet<tbl_chat_attachment> tbl_chat_attachment { get; set; }
-        public virtual DbSet<tbl_company> tbl_company { get; set; }
         public virtual DbSet<tbl_company_job> tbl_company_job { get; set; }
         public virtual DbSet<tbl_notification> tbl_notification { get; set; }
         public virtual DbSet<tbl_personal_project> tbl_personal_project { get; set; }
@@ -46,6 +45,7 @@ namespace JobSeekWeb.Models
         public virtual DbSet<tbl_asp_user_claim> tbl_asp_user_claim { get; set; }
         public virtual DbSet<tbl_asp_user_login> tbl_asp_user_login { get; set; }
         public virtual DbSet<tbl_asp_users> tbl_asp_users { get; set; }
+        public virtual DbSet<tbl_company> tbl_company { get; set; }
     
         public virtual ObjectResult<spCategories_getAll_Result> spCategories_getAll()
         {
@@ -378,6 +378,15 @@ namespace JobSeekWeb.Models
                 new ObjectParameter("header", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("spWorker_updatePersonalInfo", workerIdParameter, fnameParameter, mnameParameter, lnameParameter, genderParameter, cellnumParameter, birthdateParameter, headerParameter);
+        }
+    
+        public virtual ObjectResult<spCompany_getDetails_Result> spCompany_getDetails(Nullable<int> asp_userId)
+        {
+            var asp_userIdParameter = asp_userId.HasValue ?
+                new ObjectParameter("asp_userId", asp_userId) :
+                new ObjectParameter("asp_userId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spCompany_getDetails_Result>("spCompany_getDetails", asp_userIdParameter);
         }
     }
 }

@@ -87,8 +87,15 @@
           <Property Name="companyId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="name" Type="varchar" MaxLength="200" />
           <Property Name="description" Type="varchar" MaxLength="100" />
-          <Property Name="address" Type="varchar" MaxLength="200" />
           <Property Name="categoryId" Type="int" />
+          <Property Name="cellnumber" Type="varchar" MaxLength="15" />
+          <Property Name="business_email" Type="varchar" MaxLength="50" />
+          <Property Name="region" Type="int" />
+          <Property Name="province" Type="int" />
+          <Property Name="city" Type="int" />
+          <Property Name="brgy" Type="int" />
+          <Property Name="prof_path" Type="varchar" MaxLength="150" />
+          <Property Name="cover_path" Type="varchar" MaxLength="150" />
           <Property Name="asp_user_Id" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="tbl_company_job">
@@ -277,6 +284,9 @@
         <Function Name="spCompany_getCompanyId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="asp_userId" Type="int" Mode="In" />
         </Function>
+        <Function Name="spCompany_getDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="asp_userId" Type="int" Mode="In" />
+        </Function>
         <Function Name="spProject_deleteSkill" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="pprojectskillId" Type="int" Mode="In" />
         </Function>
@@ -436,17 +446,6 @@
           <Property Name="attachmentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="path" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
         </EntityType>
-        <EntityType Name="tbl_company">
-          <Key>
-            <PropertyRef Name="companyId" />
-          </Key>
-          <Property Name="companyId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="address" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="categoryId" Type="Int32" />
-          <Property Name="asp_user_Id" Type="Int32" Nullable="false" />
-        </EntityType>
         <EntityType Name="tbl_company_job">
           <Key>
             <PropertyRef Name="jobId" />
@@ -574,7 +573,6 @@
           <EntitySet Name="tbl_category" EntityType="Self.tbl_category" />
           <EntitySet Name="tbl_chat" EntityType="Self.tbl_chat" />
           <EntitySet Name="tbl_chat_attachment" EntityType="Self.tbl_chat_attachment" />
-          <EntitySet Name="tbl_company" EntityType="Self.tbl_company" />
           <EntitySet Name="tbl_company_job" EntityType="Self.tbl_company_job" />
           <EntitySet Name="tbl_notification" EntityType="Self.tbl_notification" />
           <EntitySet Name="tbl_personal_project" EntityType="Self.tbl_personal_project" />
@@ -701,6 +699,10 @@
             <Parameter Name="cellnum" Mode="In" Type="String" />
             <Parameter Name="birthdate" Mode="In" Type="DateTime" />
             <Parameter Name="header" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="tbl_company" EntityType="JobModel.tbl_company" />
+          <FunctionImport Name="spCompany_getDetails" ReturnType="Collection(JobModel.spCompany_getDetails_Result)">
+            <Parameter Name="asp_userId" Mode="In" Type="Int32" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="spCategories_getAll_Result">
@@ -865,6 +867,39 @@
           <End Type="JobModel.tbl_asp_role" Role="tbl_asp_role" Multiplicity="*" />
           <End Type="JobModel.tbl_asp_users" Role="tbl_asp_users" Multiplicity="*" />
         </Association>
+        <EntityType Name="tbl_company">
+          <Key>
+            <PropertyRef Name="companyId" />
+          </Key>
+          <Property Name="companyId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="categoryId" Type="Int32" />
+          <Property Name="cellnumber" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="business_email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="region" Type="Int32" />
+          <Property Name="province" Type="Int32" />
+          <Property Name="city" Type="Int32" />
+          <Property Name="brgy" Type="Int32" />
+          <Property Name="prof_path" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="cover_path" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="asp_user_Id" Type="Int32" Nullable="false" />
+        </EntityType>
+        <ComplexType Name="spCompany_getDetails_Result">
+          <Property Type="Int32" Name="companyId" Nullable="false" />
+          <Property Type="String" Name="name" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="description" Nullable="true" MaxLength="100" />
+          <Property Type="Int32" Name="categoryId" Nullable="true" />
+          <Property Type="String" Name="cellnumber" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="business_email" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="region" Nullable="true" />
+          <Property Type="Int32" Name="province" Nullable="true" />
+          <Property Type="Int32" Name="city" Nullable="true" />
+          <Property Type="Int32" Name="brgy" Nullable="true" />
+          <Property Type="String" Name="prof_path" Nullable="true" MaxLength="150" />
+          <Property Type="String" Name="cover_path" Nullable="true" MaxLength="150" />
+          <Property Type="Int32" Name="asp_user_Id" Nullable="false" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -895,18 +930,6 @@
               <MappingFragment StoreEntitySet="tbl_chat_attachment">
                 <ScalarProperty Name="attachmentId" ColumnName="attachmentId" />
                 <ScalarProperty Name="path" ColumnName="path" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tbl_company">
-            <EntityTypeMapping TypeName="JobModel.tbl_company">
-              <MappingFragment StoreEntitySet="tbl_company">
-                <ScalarProperty Name="companyId" ColumnName="companyId" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="address" ColumnName="address" />
-                <ScalarProperty Name="categoryId" ColumnName="categoryId" />
-                <ScalarProperty Name="asp_user_Id" ColumnName="asp_user_Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1233,6 +1256,44 @@
           </AssociationSetMapping>
           <FunctionImportMapping FunctionImportName="spWorker_updateDetails" FunctionName="JobModel.Store.spWorker_updateDetails" />
           <FunctionImportMapping FunctionImportName="spWorker_updatePersonalInfo" FunctionName="JobModel.Store.spWorker_updatePersonalInfo" />
+          <EntitySetMapping Name="tbl_company">
+            <EntityTypeMapping TypeName="JobModel.tbl_company">
+              <MappingFragment StoreEntitySet="tbl_company">
+                <ScalarProperty Name="asp_user_Id" ColumnName="asp_user_Id" />
+                <ScalarProperty Name="cover_path" ColumnName="cover_path" />
+                <ScalarProperty Name="prof_path" ColumnName="prof_path" />
+                <ScalarProperty Name="brgy" ColumnName="brgy" />
+                <ScalarProperty Name="city" ColumnName="city" />
+                <ScalarProperty Name="province" ColumnName="province" />
+                <ScalarProperty Name="region" ColumnName="region" />
+                <ScalarProperty Name="business_email" ColumnName="business_email" />
+                <ScalarProperty Name="cellnumber" ColumnName="cellnumber" />
+                <ScalarProperty Name="categoryId" ColumnName="categoryId" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="companyId" ColumnName="companyId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="spCompany_getDetails" FunctionName="JobModel.Store.spCompany_getDetails">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="JobModel.spCompany_getDetails_Result">
+                <ScalarProperty Name="companyId" ColumnName="companyId" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="categoryId" ColumnName="categoryId" />
+                <ScalarProperty Name="cellnumber" ColumnName="cellnumber" />
+                <ScalarProperty Name="business_email" ColumnName="business_email" />
+                <ScalarProperty Name="region" ColumnName="region" />
+                <ScalarProperty Name="province" ColumnName="province" />
+                <ScalarProperty Name="city" ColumnName="city" />
+                <ScalarProperty Name="brgy" ColumnName="brgy" />
+                <ScalarProperty Name="prof_path" ColumnName="prof_path" />
+                <ScalarProperty Name="cover_path" ColumnName="cover_path" />
+                <ScalarProperty Name="asp_user_Id" ColumnName="asp_user_Id" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -201,6 +201,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Job.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\MyClass\Category.cs" />
+    <Compile Include="Models\MyClass\Company.cs" />
     <Compile Include="Models\MyClass\IdentityExtension.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -210,6 +212,9 @@
     <Compile Include="Models\MyClass\Users.cs" />
     <Compile Include="Models\MyClass\Worker.cs" />
     <Compile Include="Models\spCategories_getAll_Result.cs">
+      <DependentUpon>Job.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\spCompany_getDetails_Result.cs">
       <DependentUpon>Job.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\spProject_getAllPersonalProj_Result.cs">
@@ -543,6 +548,7 @@
     <Content Include="Content\moral\cropper\cropper.min.css" />
     <Content Include="Content\moral\cropper\cropper.min.js" />
     <Content Include="Content\moral\css\angular-animate.css" />
+    <Content Include="Content\moral\css\company-style.css" />
     <Content Include="Content\moral\css\custom-materialize.css" />
     <Content Include="Content\moral\css\worker-css.css" />
     <Content Include="Content\moral\Images\eriri.png" />
@@ -638,6 +644,7 @@
     <Content Include="Scripts\AngularJS\angular-route.min.js" />
     <Content Include="Scripts\AngularJS\angular.min.js" />
     <Content Include="Scripts\AngularJS\Controllers\companies-controller.js" />
+    <Content Include="Scripts\AngularJS\Controllers\company-details.js" />
     <Content Include="Scripts\AngularJS\Controllers\worker-controller.js" />
     <Content Include="Scripts\AngularJS\Controllers\worker-details.js" />
     <Content Include="Scripts\AngularJS\module.js" />
@@ -937,6 +944,8 @@
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\MyJs\autocomplete.js" />
+    <Content Include="Uploads\Company\Profile\eriri.png" />
+    <Content Include="Uploads\Company\Cover\kodaikana.jpg" />
     <Content Include="Uploads\Worker\Img\eriri.png" />
     <Content Include="Uploads\Worker\Img\kodaikana.jpg" />
     <Content Include="Views\Amad\vendor\bootstrap\css\bootstrap-grid.css" />
@@ -1041,6 +1050,7 @@
     <Content Include="Views\Worker\Details.cshtml" />
     <Content Include="Views\PartialViews\WMessages.cshtml" />
     <Content Include="Views\PartialViews\WProjects.cshtml" />
+    <Content Include="Views\Company\DesignCompanyDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

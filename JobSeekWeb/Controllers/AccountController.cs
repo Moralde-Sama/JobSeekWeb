@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Globalization;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -198,6 +196,24 @@ namespace JobSeekWeb.Controllers
             {
                 return Json(e.Message, JsonRequestBehavior.AllowGet);
             }
+        }
+        #endregion
+        #region Company
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult UpdateCompanyDetails(Company company)
+        {
+            //try
+            //{
+                company.companyId = Convert.ToInt32(User.Identity.GetWorkerOrCompanyId());
+                company.SaveCategoryIfNotNull();
+                company.UpdateDetails();
+                return Json("Success", JsonRequestBehavior.AllowGet);
+            //}
+            //catch(Exception e)
+            //{
+            //    return Json(e.Message, JsonRequestBehavior.AllowGet);
+            //}
         }
         #endregion
 
