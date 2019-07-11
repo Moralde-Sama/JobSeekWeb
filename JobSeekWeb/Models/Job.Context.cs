@@ -388,5 +388,31 @@ namespace JobSeekWeb.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spCompany_getDetails_Result>("spCompany_getDetails", asp_userIdParameter);
         }
+    
+        public virtual int spCompany_updateProfilePic(Nullable<int> asp_userId, string prof_path)
+        {
+            var asp_userIdParameter = asp_userId.HasValue ?
+                new ObjectParameter("asp_userId", asp_userId) :
+                new ObjectParameter("asp_userId", typeof(int));
+    
+            var prof_pathParameter = prof_path != null ?
+                new ObjectParameter("prof_path", prof_path) :
+                new ObjectParameter("prof_path", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("spCompany_updateProfilePic", asp_userIdParameter, prof_pathParameter);
+        }
+    
+        public virtual int spCompany_updateCoverPhoto(Nullable<int> asp_userId, string cover_path)
+        {
+            var asp_userIdParameter = asp_userId.HasValue ?
+                new ObjectParameter("asp_userId", asp_userId) :
+                new ObjectParameter("asp_userId", typeof(int));
+    
+            var cover_pathParameter = cover_path != null ?
+                new ObjectParameter("cover_path", cover_path) :
+                new ObjectParameter("cover_path", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("spCompany_updateCoverPhoto", asp_userIdParameter, cover_pathParameter);
+        }
     }
 }

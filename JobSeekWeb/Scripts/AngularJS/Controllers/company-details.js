@@ -54,7 +54,6 @@ module.service('LogoutService', function ($http) {
         });
     }
 });
-
 module.controller('LogoutCtrl', ['$scope', 'LogoutService', function (scope, logout_service) {
     scope.logout = () => {
         swalConfirmation({
@@ -84,7 +83,6 @@ module.controller('LogoutCtrl', ['$scope', 'LogoutService', function (scope, log
         });
     }
 }]);
-
 module.controller('CompanyCtrl', ['$scope', '$q', 'CompanyService', function (scope, q, company_service) {
     
     scope.company = {};

@@ -37,5 +37,13 @@ namespace JobSeekWeb.Controllers
             return View();
         }
         #endregion
+
+        #region Company Partial Views
+        [Authorize(Roles = "Company")]
+        public ActionResult CProfile()
+        {
+            return View();
+        }
+        #endregion
     }
 }

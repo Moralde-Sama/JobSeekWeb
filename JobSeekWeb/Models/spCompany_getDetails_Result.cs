@@ -13,6 +13,8 @@ namespace JobSeekWeb.Models
     
     public partial class spCompany_getDetails_Result
     {
+        public string Email { get; set; }
+        public string UserName { get; set; }
         public int companyId { get; set; }
         public string name { get; set; }
         public string description { get; set; }

@@ -644,10 +644,12 @@
     <Content Include="Scripts\AngularJS\angular-route.min.js" />
     <Content Include="Scripts\AngularJS\angular.min.js" />
     <Content Include="Scripts\AngularJS\Controllers\companies-controller.js" />
+    <Content Include="Scripts\AngularJS\Controllers\company-controller.js" />
     <Content Include="Scripts\AngularJS\Controllers\company-details.js" />
     <Content Include="Scripts\AngularJS\Controllers\worker-controller.js" />
     <Content Include="Scripts\AngularJS\Controllers\worker-details.js" />
     <Content Include="Scripts\AngularJS\module.js" />
+    <Content Include="Scripts\AngularJS\Router\company.js" />
     <Content Include="Scripts\AngularJS\Router\worker.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -1051,6 +1053,8 @@
     <Content Include="Views\PartialViews\WMessages.cshtml" />
     <Content Include="Views\PartialViews\WProjects.cshtml" />
     <Content Include="Views\Company\DesignCompanyDetails.cshtml" />
+    <Content Include="Views\Shared\_CompanyLayout.cshtml" />
+    <Content Include="Views\PartialViews\CProfile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

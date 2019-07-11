@@ -287,6 +287,14 @@
         <Function Name="spCompany_getDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="asp_userId" Type="int" Mode="In" />
         </Function>
+        <Function Name="spCompany_updateCoverPhoto" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="asp_userId" Type="int" Mode="In" />
+          <Parameter Name="cover_path" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="spCompany_updateProfilePic" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="asp_userId" Type="int" Mode="In" />
+          <Parameter Name="prof_path" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="spProject_deleteSkill" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="pprojectskillId" Type="int" Mode="In" />
         </Function>
@@ -702,7 +710,15 @@
           </FunctionImport>
           <EntitySet Name="tbl_company" EntityType="JobModel.tbl_company" />
           <FunctionImport Name="spCompany_getDetails" ReturnType="Collection(JobModel.spCompany_getDetails_Result)">
+          <Parameter Name="asp_userId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="spCompany_updateProfilePic">
             <Parameter Name="asp_userId" Mode="In" Type="Int32" />
+            <Parameter Name="prof_path" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="spCompany_updateCoverPhoto">
+            <Parameter Name="asp_userId" Mode="In" Type="Int32" />
+            <Parameter Name="cover_path" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="spCategories_getAll_Result">
@@ -886,6 +902,8 @@
           <Property Name="asp_user_Id" Type="Int32" Nullable="false" />
         </EntityType>
         <ComplexType Name="spCompany_getDetails_Result">
+          <Property Type="String" Name="Email" Nullable="true" MaxLength="256" />
+          <Property Type="String" Name="UserName" Nullable="false" MaxLength="256" />
           <Property Type="Int32" Name="companyId" Nullable="false" />
           <Property Type="String" Name="name" Nullable="true" MaxLength="200" />
           <Property Type="String" Name="description" Nullable="true" MaxLength="100" />
@@ -1278,6 +1296,8 @@
           <FunctionImportMapping FunctionImportName="spCompany_getDetails" FunctionName="JobModel.Store.spCompany_getDetails">
             <ResultMapping>
               <ComplexTypeMapping TypeName="JobModel.spCompany_getDetails_Result">
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
                 <ScalarProperty Name="companyId" ColumnName="companyId" />
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="description" ColumnName="description" />
@@ -1294,6 +1314,8 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="spCompany_updateProfilePic" FunctionName="JobModel.Store.spCompany_updateProfilePic" />
+          <FunctionImportMapping FunctionImportName="spCompany_updateCoverPhoto" FunctionName="JobModel.Store.spCompany_updateCoverPhoto" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

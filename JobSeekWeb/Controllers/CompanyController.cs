@@ -1,5 +1,6 @@
 ﻿using JobSeekWeb.Models;
 using JobSeekWeb.Models.MyClass;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,6 +10,7 @@ using System.Web.Mvc;
 
 namespace JobSeekWeb.Controllers
 {
+    [Authorize(Roles = "Company")]
     public class CompanyController : Controller
     {
         // GET: Company
@@ -19,6 +21,14 @@ namespace JobSeekWeb.Controllers
         public ActionResult Dashboard()
         {
             return View();
+        }
+        public ActionResult Job()
+        {
+            return View("~/Views/Shared/_CompanyLayout.cshtml");
+        }
+        public new ActionResult Profile()
+        {
+            return View("~/Views/Shared/_CompanyLayout.cshtml");
         }
         public ActionResult DesignCompanyDetails()
         {
@@ -37,7 +47,15 @@ namespace JobSeekWeb.Controllers
                 return Json(e.Message, JsonRequestBehavior.AllowGet);
             }
         }
-        
+        [HttpGet]
+        public JsonResult GetCompanyInfo()
+        {
+            spCompany_getDetails_Result company_details = 
+                Company.GetCompanyDetails(User.Identity.GetUserId<int>());
+            return Json(company_details, JsonRequestBehavior.AllowGet);
+        }
+
+
 
     }
 }

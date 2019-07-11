@@ -34,11 +34,17 @@ namespace JobSeekWeb.Models.MyClass
             company.city = city;
             company.brgy = brgy;
             company.prof_path = "/Uploads/Company/Profile/eriri.png";
-            company.cover_path = "/Uploads/Company/Profile/kodaikana.jpg";
+            company.cover_path = "/Uploads/Company/Cover/kodaikana.jpg";
             db.Entry(company).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
         }
-
+        public static spCompany_getDetails_Result GetCompanyDetails(int asp_userId)
+        {
+            using (JobEntities db = new JobEntities())
+            {
+                return db.spCompany_getDetails(asp_userId).FirstOrDefault();
+            }
+        }
         public static bool IsDetailsCompleted(int asp_userId)
         {
             var company_details = new JobEntities().spCompany_getDetails(asp_userId).FirstOrDefault();
