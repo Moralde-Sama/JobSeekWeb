@@ -414,5 +414,10 @@ namespace JobSeekWeb.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("spCompany_updateCoverPhoto", asp_userIdParameter, cover_pathParameter);
         }
+    
+        public virtual ObjectResult<spCompany_getCompanies_Result> spCompany_getCompanies()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spCompany_getCompanies_Result>("spCompany_getCompanies");
+        }
     }
 }

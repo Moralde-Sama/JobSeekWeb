@@ -54,8 +54,5 @@ namespace JobSeekWeb.Controllers
                 Company.GetCompanyDetails(User.Identity.GetUserId<int>());
             return Json(company_details, JsonRequestBehavior.AllowGet);
         }
-
-
-
     }
 }

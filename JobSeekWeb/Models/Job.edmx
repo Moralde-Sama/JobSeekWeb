@@ -281,6 +281,7 @@
         <Function Name="spCompany_Exist" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="asp_userId" Type="int" Mode="In" />
         </Function>
+        <Function Name="spCompany_getCompanies" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="spCompany_getCompanyId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="asp_userId" Type="int" Mode="In" />
         </Function>
@@ -720,6 +721,7 @@
             <Parameter Name="asp_userId" Mode="In" Type="Int32" />
             <Parameter Name="cover_path" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="spCompany_getCompanies" ReturnType="Collection(JobModel.spCompany_getCompanies_Result)" />
         </EntityContainer>
         <ComplexType Name="spCategories_getAll_Result">
           <Property Type="Int32" Name="id" Nullable="false" />
@@ -904,6 +906,21 @@
         <ComplexType Name="spCompany_getDetails_Result">
           <Property Type="String" Name="Email" Nullable="true" MaxLength="256" />
           <Property Type="String" Name="UserName" Nullable="false" MaxLength="256" />
+          <Property Type="Int32" Name="companyId" Nullable="false" />
+          <Property Type="String" Name="name" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="description" Nullable="true" MaxLength="100" />
+          <Property Type="Int32" Name="categoryId" Nullable="true" />
+          <Property Type="String" Name="cellnumber" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="business_email" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="region" Nullable="true" />
+          <Property Type="Int32" Name="province" Nullable="true" />
+          <Property Type="Int32" Name="city" Nullable="true" />
+          <Property Type="Int32" Name="brgy" Nullable="true" />
+          <Property Type="String" Name="prof_path" Nullable="true" MaxLength="150" />
+          <Property Type="String" Name="cover_path" Nullable="true" MaxLength="150" />
+          <Property Type="Int32" Name="asp_user_Id" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="spCompany_getCompanies_Result">
           <Property Type="Int32" Name="companyId" Nullable="false" />
           <Property Type="String" Name="name" Nullable="true" MaxLength="200" />
           <Property Type="String" Name="description" Nullable="true" MaxLength="100" />
@@ -1316,6 +1333,25 @@
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="spCompany_updateProfilePic" FunctionName="JobModel.Store.spCompany_updateProfilePic" />
           <FunctionImportMapping FunctionImportName="spCompany_updateCoverPhoto" FunctionName="JobModel.Store.spCompany_updateCoverPhoto" />
+          <FunctionImportMapping FunctionImportName="spCompany_getCompanies" FunctionName="JobModel.Store.spCompany_getCompanies">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="JobModel.spCompany_getCompanies_Result">
+                <ScalarProperty Name="companyId" ColumnName="companyId" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="categoryId" ColumnName="categoryId" />
+                <ScalarProperty Name="cellnumber" ColumnName="cellnumber" />
+                <ScalarProperty Name="business_email" ColumnName="business_email" />
+                <ScalarProperty Name="region" ColumnName="region" />
+                <ScalarProperty Name="province" ColumnName="province" />
+                <ScalarProperty Name="city" ColumnName="city" />
+                <ScalarProperty Name="brgy" ColumnName="brgy" />
+                <ScalarProperty Name="prof_path" ColumnName="prof_path" />
+                <ScalarProperty Name="cover_path" ColumnName="cover_path" />
+                <ScalarProperty Name="asp_user_Id" ColumnName="asp_user_Id" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -86,5 +86,12 @@ namespace JobSeekWeb.Models.MyClass
             }
             return completed.Contains(false) ? false : true;
         }
+        public static IEnumerable<spCompany_getCompanies_Result> GetCompanies()
+        {
+            using(JobEntities db = new JobEntities())
+            {
+                return db.spCompany_getCompanies().ToList();
+            }
+        }
     }
 }

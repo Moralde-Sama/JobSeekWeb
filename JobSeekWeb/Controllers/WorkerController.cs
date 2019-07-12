@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using JobSeekWeb.Extensions;
 using JobSeekWeb.Models.MyClass;
+using company = JobSeekWeb.Models.MyClass.Company;
 using Microsoft.AspNet.Identity;
 using System.Web.Mvc;
 using JobSeekWeb.Models;
-using System.Net;
-using Newtonsoft.Json;
 using System.IO;
 
 namespace JobSeekWeb.Controllers
@@ -53,7 +51,7 @@ namespace JobSeekWeb.Controllers
         {
             return View("~/Views/Shared/_WorkerLayout.cshtml");
         }
-        public ActionResult Company()
+        public new ActionResult Company()
         {
             return View("~/Views/Shared/_WorkerLayout.cshtml");
         }
@@ -172,6 +170,23 @@ namespace JobSeekWeb.Controllers
                 }
             }
             return Json("Success", JsonRequestBehavior.AllowGet);
+        }
+        [HttpGet]
+        public JsonResult GetCategories()
+        {
+            try
+            {
+                return Json(Category.GetCategories(), JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                return Json(e.Message, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpGet]
+        public JsonResult GetCompanies()
+        {
+            return Json(company.GetCompanies(), JsonRequestBehavior.AllowGet);
         }
     }
 }

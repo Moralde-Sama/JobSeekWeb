@@ -9,9 +9,9 @@
 var holderObjects = Object.keys(holders);
 var selectedElem = null;
 
-var module = angular.module("Job", ["ngRoute", "ngAnimate"]);
+var module = angular.module('Job', ['ngRoute', 'ngAnimate']);
 
-module.service("profileService", function ($http, $q) {
+module.service('profileService', function ($http, $q) {
     this.getUserInfo = (holder) => {
         if (holder == null) {
             return $http.get("../Worker/GetUserInfo");
@@ -155,8 +155,8 @@ module.service("profileService", function ($http, $q) {
             }
         });
     }
-})
-module.service("projectService", function ($http) {
+});
+module.service('projectService', function ($http) {
     this.addNewPersonalProj = (data) => {
         var formdata = new FormData();
         formdata.append("__RequestVerificationToken",
@@ -176,7 +176,7 @@ module.service("projectService", function ($http) {
                 }
             }
         })
-        
+
         console.log(formdata.values());
         return $http({
             method: 'POST',
@@ -229,9 +229,17 @@ module.service("projectService", function ($http) {
     this.getPersonalProjects = () => {
         return $http.get("../Worker/GetWorkerPersonalProj");
     }
-})
+});
+module.service('companyService', function ($http) {
+    this.getCompanies = () => {
+        return $http.get('../Worker/GetCompanies');
+    }
+    this.getCategories = () => {
+        return $http.get('../Worker/GetCategories');
+    }
+});
 
-module.factory("modalFactory", function () {
+module.factory('modalFactory', function () {
     return {
         screenshots: null,
         skills: null,
@@ -260,7 +268,7 @@ module.directive('imageonload', function () {
 });
 
 //Controllers
-module.controller("NavigationCtrl", ["$scope", "$location", "$http", "profileService", function (s, l, h, service) {
+module.controller('NavigationCtrl', ['$scope', '$location', '$http', 'profileService', function (s, l, h, service) {
 
     s.fullname = () => {
         if (s.user != undefined) {
@@ -1231,11 +1239,34 @@ module.controller("ProfileCtrl", ["$scope", "$rootScope", "$q", "profileService"
         $('#gender').select2();
     });
 }])
-module.controller("CompanyCtrl", ["$scope", "$http", function (s, h) {
-    s.lists = [0, 1, 2, 3, 4]
+module.controller('CompanyCtrl', ['$scope', '$q', 'companyService', function (scope, q, company_service) {
+    scope.lists = [0, 1, 2, 3, 4]
+
+    let category_manager = new Select2Manager('#CategoryContainer');
+
+    initServices();
+
+    function initServices() {
+        q.all([
+            company_service.getCompanies(),
+            company_service.getCategories()
+        ]).then((result) => {
+            scope.companies = result[0].data;
+            scope.categories = result[1].data;
+            console.log(scope.categories);
+            initSelect2();
+        });
+    }
+
+    function initSelect2() {
+        category_manager.initSelect2({
+            data: scope.categories,
+            minimumInputLength: 2,
+            minimumResultsForSearch: -1
+        });
+    }
 
     $(document).ready(function () {
-        $("#category").select2();
         $("#skills").select2({
             placeholder: "Select skills"
         });
@@ -1356,6 +1387,7 @@ module.controller("MessageCtrl", ["$scope", "$http", function (s, h) {
     $("#contacts").height(window.innerHeight - 199);
 }])
 
+
 function swalConfirmation(title, text, type, precallback, callback) {
     Swal.fire({
         title: title,
@@ -1403,3 +1435,74 @@ function swalSuccess(title, text, callback) {
         callback()
     })
 }   
+
+function Select2Manager(container_id) {
+    this.container_id = container_id;
+    this.container_children = $(container_id);
+    this.select = $(this.container_children[0].children[1]);
+    this.label = $(this.container_children[0].children[0]);
+    this.items = null;
+}
+Select2Manager.prototype.initSelect2 = function (options) {
+    this.select.select2(options);
+    this.select2_border = $($($($(this.container_id)[0].children[2])[0].children[0])[0].children[0]);
+}
+Select2Manager.prototype.Selecting = function (callback) {
+    this.select.on('select2:selecting', (selected) => {
+        callback(selected);
+    });
+}
+Select2Manager.prototype.invalid = function () {
+    if (!this.label.hasClass('red')) {
+        this.label.addClass('red');
+        this.select2_border.addClass('invalid');
+    }
+}
+Select2Manager.prototype.valid = function () {
+    if (this.label.hasClass('red')) {
+        this.label.removeClass('red');
+        this.select2_border.removeClass('invalid');
+    }
+}
+Select2Manager.prototype.getSelectedItems = function () {
+    return this.select.select2('data');
+}
+Select2Manager.prototype.clearItems = function () {
+    this.select.empty();
+}
+Select2Manager.prototype.addItem = function (id, text, isSelected) {
+    this.select.append(new Option(text, id, isSelected, isSelected)).trigger('change');
+}
+Select2Manager.prototype.addCustomOptionItem = function (option_element) {
+    this.select.append(option_element).trigger('change');
+}
+Select2Manager.prototype.addItems = function (array_selected_id) {
+    this.items.forEach((item) => {
+        const isSelected = array_selected_id === undefined ? false : array_selected_id.includes(item.id);
+        this.addItem(item.id, item.text, isSelected);
+    });
+}
+Select2Manager.prototype.setSelectedItems = function (array_selected_id) {
+    this.select.select2('val', array_selected_id);
+}
+function ConvertDataToSelect2Data(data, address_index) {
+    this.keys = ['reg', 'prov', 'citymun', 'brgy'];
+    this.values = [];
+    this.data = data;
+    this.address_index = address_index;
+}
+ConvertDataToSelect2Data.prototype.filter = function (key, key_value) {
+    this.data = this.data.filter((f) => f[key] == key_value);
+    this.noFilter();
+    return this.values;
+}
+ConvertDataToSelect2Data.prototype.noFilter = function () {
+    $.each(this.data, (index, value) => {
+        this.values.push({
+            id: value[`${this.keys[this.address_index]}Code`],
+            text: value[`${this.keys[this.address_index]}Desc`],
+            filter_key: this.address_index > 0 ? `${this.keys[this.address_index - 1]}Code` : ''
+        });
+    });
+    return this.values;
+}

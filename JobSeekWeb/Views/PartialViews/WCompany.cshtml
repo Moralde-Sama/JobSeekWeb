@@ -10,32 +10,29 @@
                     </div>
                     <div class="content">
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Search</label>
                                     <input type="text" class="form-control" placeholder="Company name">
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <label for="category">Category</label>
-                                <select id="category" class="form-control" name="state">
-                                    <option value="Male">Male</option>
-                                    <option value="Female">Female</option>
-                                </select>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div id="CategoryContainer" class="form-group">
+                                    <label class="select-valid">Type of Company</label>
+                                    <select class="form-control" name="state">
+                                        <option selected disabled></option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                <label for="skills">Skills</label>
-                                <select id="skills" class="form-control" multiple name="state">
-                                    <option value="Male">Male</option>
-                                    <option value="Female">Female</option>
-                                    <option value="Female">Female</option>
-                                    <option value="Female">Female</option>
-                                    <option value="Female">Female</option>
-                                    <option value="Female">Female</option>
-                                    <option value="Female">Female</option>
-                                </select>
+                                <div class="form-group">
+                                    <label class="select-valid">Skills</label>
+                                    <select id="skills" class="form-control" multiple name="state"></select>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -44,21 +41,24 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="header">
-                        <h4 class="title">Results - 5 Companies</h4>
+                        <h4 class="title">Results - {{companies.length}} Company/s</h4>
                     </div>
                     <div class="content">
                         <div class="row">
-                            <div class="col-md-4" ng-repeat="test in lists">
+                            <div class="col-md-4" ng-repeat="company in companies">
                                 <div class="card card-user">
-                                    <div class="image" style="height: 100px;">
-                                        <img src="~/Content/moral/Images/kodaikanal-2836301.jpg" alt="..." />
+                                    <div class="image" style="height: 150px;">
+                                        <img ng-src="{{company.cover_path}}" alt="..." style="width: 100%; height: 100%;" />
                                     </div>
                                     <div class="content">
                                         <div style="display: flex; justify-content: center;">
-                                            <img class="avatar border-violet company" src="~/Content/moral/Images/eriri.png" alt="..." />
+                                            <img class="avatar border-violet company" ng-src="{{company.prof_path}}" alt="..." />
                                         </div>
-                                        <p class="description text-center" style="margin-top: 10px;">
-                                            Web Developer Company
+                                        <p class="description text-center" style="margin-top: 10px; font-weight:bold; text-transform: capitalize;">
+                                            {{company.name}}
+                                        </p>
+                                        <p class="description text-center" style="font-size: 15px; margin-top: 10px; text-transform: capitalize;">
+                                            "{{company.description}}"
                                         </p>
                                     </div>
                                     <hr>

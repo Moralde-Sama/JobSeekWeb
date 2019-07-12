@@ -214,6 +214,9 @@
     <Compile Include="Models\spCategories_getAll_Result.cs">
       <DependentUpon>Job.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\spCompany_getCompanies_Result.cs">
+      <DependentUpon>Job.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\spCompany_getDetails_Result.cs">
       <DependentUpon>Job.tt</DependentUpon>
     </Compile>
