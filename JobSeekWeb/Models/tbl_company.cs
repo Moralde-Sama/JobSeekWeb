@@ -17,8 +17,15 @@ namespace JobSeekWeb.Models
         public int companyId { get; set; }
         public string name { get; set; }
         public string description { get; set; }
-        public string address { get; set; }
         public Nullable<int> categoryId { get; set; }
+        public string cellnumber { get; set; }
+        public string business_email { get; set; }
+        public Nullable<int> region { get; set; }
+        public Nullable<int> province { get; set; }
+        public Nullable<int> city { get; set; }
+        public Nullable<int> brgy { get; set; }
+        public string prof_path { get; set; }
+        public string cover_path { get; set; }
         public int asp_user_Id { get; set; }
     }
 }

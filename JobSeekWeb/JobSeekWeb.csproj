@@ -186,11 +186,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\C__MigrationHistory.cs">
-      <DependentUpon>Job.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\MyClass\IdentityExtension.cs" />
-    <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Job.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -206,7 +201,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Job.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\MyClass\Category.cs" />
+    <Compile Include="Models\MyClass\Company.cs" />
+    <Compile Include="Models\MyClass\IdentityExtension.cs" />
+    <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\MyClass\Project.cs" />
     <Compile Include="Models\MyClass\Settings.cs" />
     <Compile Include="Models\MyClass\Skills.cs" />
     <Compile Include="Models\MyClass\Users.cs" />
@@ -214,10 +214,19 @@
     <Compile Include="Models\spCategories_getAll_Result.cs">
       <DependentUpon>Job.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\spCategories_getAll_Result1.cs">
+    <Compile Include="Models\spCompany_getCompanies_Result.cs">
       <DependentUpon>Job.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\spCategories_getAll_Result2.cs">
+    <Compile Include="Models\spCompany_getDetails_Result.cs">
+      <DependentUpon>Job.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\spProject_getAllPersonalProj_Result.cs">
+      <DependentUpon>Job.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\spProject_getScreenShots_Result.cs">
+      <DependentUpon>Job.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\spProject_getSkills_Result.cs">
       <DependentUpon>Job.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\spSkills_getAll_Result.cs">
@@ -236,9 +245,6 @@
       <DependentUpon>Job.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\spWorker_getWorkerSkills_Result.cs">
-      <DependentUpon>Job.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\sysdiagram.cs">
       <DependentUpon>Job.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_asp_role.cs">
@@ -271,10 +277,19 @@
     <Compile Include="Models\tbl_notification.cs">
       <DependentUpon>Job.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\tbl_personal_project.cs">
+      <DependentUpon>Job.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tbl_pproject_skill.cs">
+      <DependentUpon>Job.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\tbl_project.cs">
       <DependentUpon>Job.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_project_participants.cs">
+      <DependentUpon>Job.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tbl_proj_screenshots.cs">
       <DependentUpon>Job.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_requirements.cs">
@@ -536,10 +551,12 @@
     <Content Include="Content\moral\cropper\cropper.min.css" />
     <Content Include="Content\moral\cropper\cropper.min.js" />
     <Content Include="Content\moral\css\angular-animate.css" />
+    <Content Include="Content\moral\css\company-style.css" />
     <Content Include="Content\moral\css\custom-materialize.css" />
     <Content Include="Content\moral\css\worker-css.css" />
     <Content Include="Content\moral\Images\eriri.png" />
     <Content Include="Content\moral\Images\kodaikanal-2836301.jpg" />
+    <Content Include="Content\moral\Images\Screenshot_9.png" />
     <Content Include="Content\moral\requireJs\require.js" />
     <Content Include="Content\moral\select2\css\select2.css" />
     <Content Include="Content\moral\select2\css\select2.min.css" />
@@ -630,19 +647,15 @@
     <Content Include="Scripts\AngularJS\angular-route.min.js" />
     <Content Include="Scripts\AngularJS\angular.min.js" />
     <Content Include="Scripts\AngularJS\Controllers\companies-controller.js" />
+    <Content Include="Scripts\AngularJS\Controllers\company-controller.js" />
+    <Content Include="Scripts\AngularJS\Controllers\company-details.js" />
     <Content Include="Scripts\AngularJS\Controllers\worker-controller.js" />
     <Content Include="Scripts\AngularJS\Controllers\worker-details.js" />
     <Content Include="Scripts\AngularJS\module.js" />
+    <Content Include="Scripts\AngularJS\Router\company.js" />
     <Content Include="Scripts\AngularJS\Router\worker.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <EntityDeploy Include="Models\Job.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Job.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\Job.edmx.diagram">
-      <DependentUpon>Job.edmx</DependentUpon>
-    </Content>
     <Content Include="Content\amade\fon\appton.eot" />
     <Content Include="Content\amade\fon\appton.ttf" />
     <Content Include="Content\amade\fon\appton.woff" />
@@ -913,6 +926,13 @@
     <Content Include="Content\assets\sass\lbd\_typography.scss" />
     <Content Include="Content\assets\sass\lbd\_variables.scss" />
     <Content Include="Content\assets\sass\light-bootstrap-dashboard.scss" />
+    <EntityDeploy Include="Models\Job.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Job.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\Job.edmx.diagram">
+      <DependentUpon>Job.edmx</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -928,6 +948,9 @@
     <Content Include="Scripts\moment-with-locales.min.js" />
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
+    <Content Include="Scripts\MyJs\autocomplete.js" />
+    <Content Include="Uploads\Company\Profile\eriri.png" />
+    <Content Include="Uploads\Company\Cover\kodaikana.jpg" />
     <Content Include="Uploads\Worker\Img\eriri.png" />
     <Content Include="Uploads\Worker\Img\kodaikana.jpg" />
     <Content Include="Views\Amad\vendor\bootstrap\css\bootstrap-grid.css" />
@@ -1030,11 +1053,17 @@
     <Content Include="Views\PartialViews\WDashboard.cshtml" />
     <Content Include="Views\Amad\Dashboard.cshtml" />
     <Content Include="Views\Worker\Details.cshtml" />
+    <Content Include="Views\PartialViews\WMessages.cshtml" />
+    <Content Include="Views\PartialViews\WProjects.cshtml" />
+    <Content Include="Views\Company\DesignCompanyDetails.cshtml" />
+    <Content Include="Views\Shared\_CompanyLayout.cshtml" />
+    <Content Include="Views\PartialViews\CProfile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\amade\ven\font-awesome\less\" />
     <Folder Include="Content\amade\ven\font-awesome\scss\" />
+    <Folder Include="Uploads\Screenshots\" />
     <Folder Include="Views\Amad\vendor\font-awesome\less\" />
     <Folder Include="Views\Amad\vendor\font-awesome\scss\" />
   </ItemGroup>

@@ -11,9 +11,15 @@ namespace JobSeekWeb.Models
 {
     using System;
     
-    public partial class spCategories_getAll_Result2
+    public partial class spProject_getAllPersonalProj_Result
     {
-        public int id { get; set; }
-        public string text { get; set; }
+        public int perprojectId { get; set; }
+        public string title { get; set; }
+        public string projectDesc { get; set; }
+        public System.DateTime created { get; set; }
+        public System.DateTime completed { get; set; }
+        public int ownerId { get; set; }
+        public int isWorkerProj { get; set; }
+        public string privacy { get; set; }
     }
 }

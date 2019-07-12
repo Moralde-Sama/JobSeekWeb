@@ -12,11 +12,11 @@ namespace JobSeekWeb.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class C__MigrationHistory
+    public partial class tbl_proj_screenshots
     {
-        public string MigrationId { get; set; }
-        public string ContextKey { get; set; }
-        public byte[] Model { get; set; }
-        public string ProductVersion { get; set; }
+        public int ssId { get; set; }
+        public string path { get; set; }
+        public int projectId { get; set; }
+        public byte isPersonalProj { get; set; }
     }
 }

@@ -10,10 +10,17 @@
 namespace JobSeekWeb.Models
 {
     using System;
+    using System.Collections.Generic;
     
-    public partial class spCategories_getAll_Result
+    public partial class tbl_personal_project
     {
-        public int id { get; set; }
-        public string text { get; set; }
+        public int perprojectId { get; set; }
+        public string title { get; set; }
+        public string projectDesc { get; set; }
+        public System.DateTime created { get; set; }
+        public System.DateTime completed { get; set; }
+        public int ownerId { get; set; }
+        public int isWorkerProj { get; set; }
+        public string privacy { get; set; }
     }
 }

@@ -1,0 +1,9 @@
+﻿#category {
+    width: 100%;
+}
+.main-panel {
+    width: 100%;
+}
+#companyname {
+    text-transform:capitalize;
+}

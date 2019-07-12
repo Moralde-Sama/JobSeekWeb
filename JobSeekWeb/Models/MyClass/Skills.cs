@@ -11,31 +11,68 @@ namespace JobSeekWeb.Models.MyClass
         public int skillId { get; set; }
         public string title { get; set; }
         public int categoryId { get; set; }
-        public string[] newSkill { get; set; }
+        public string[] newSkills { get; set; }
         public int[] addSkills { get; set; }
         public int[] removeSkill { get; set; }
 
-        public void AddNewSkill(string title)
+        public void AddNewSkill()
         {
             db.spSkill_addSkill(title, categoryId);
         }
-        public void AddSkill(int workerId)
+
+        public int[] AddMultipleNewSkill()
         {
-            if(addSkills?.Length > 0)
+            if (newSkills?.Length > 0)
             {
-                foreach(int skillId in addSkills)
+                int[] newSkillId = new int[newSkills.Length];
+                for(int i = 0; i < newSkills.Length; i++)
                 {
-                    db.spWorker_addSkill(workerId, skillId);
+                    db.spSkill_addSkill(newSkills[i], 0);
+                    var skillDetails = db.spSkill_getSkillDetailsByTitle(newSkills[i]).FirstOrDefault();
+                    newSkillId[i] = skillDetails.skillId;
                 }
+                return newSkillId;
             }
             else
             {
-                if(skillId != 0)
+                return null;
+            }
+            
+        }
+
+        public void AddSkill(int workerId)
+        {
+            db.spWorker_addSkill(workerId, skillId);
+        }
+
+        public void AddMultipleSkills(int workerId)
+        {
+            if (addSkills?.Length > 0)
+            {
+                foreach (int skillId in addSkills)
                 {
                     db.spWorker_addSkill(workerId, skillId);
                 }
             }
         }
+
+        public void AddMultipleSkillsProj(int projId)
+        {
+            if (addSkills?.Length > 0)
+            {
+                foreach (int skillId in addSkills)
+                {
+                    tbl_pproject_skill pskill = new tbl_pproject_skill
+                    {
+                        perprojectId = projId,
+                        skillId = skillId
+                    };
+                    db.tbl_pproject_skill.Add(pskill);
+                    db.SaveChanges();
+                }
+            }
+        }
+
         public void RemoveSkills()
         {
             if(removeSkill?.Length > 0)

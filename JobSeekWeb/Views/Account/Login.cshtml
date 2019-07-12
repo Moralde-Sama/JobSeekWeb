@@ -36,16 +36,6 @@
                         </a>
                     </div>
                     <div class="modal-body p-4 p-lg-5">
-                        <div class="tabbable-line" style="margin-top: 20px;">
-                            <ul class="nav nav-pills nav-fill">
-                                <li class="nav-item active">
-                                    <a id="btnWorker" data-toggle="tab" style="cursor: pointer;">Worker</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a id="btnCompany" data-toggle="tab" style="cursor: pointer;">Company </a>
-                                </li>
-                            </ul>
-                        </div>
                         <br>
                         @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
                         {

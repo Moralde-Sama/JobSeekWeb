@@ -31,15 +31,16 @@ namespace JobSeekWeb.Controllers
         public ActionResult PageByRole()
         {
             int asp_userId = User.Identity.GetUserId<int>();
-            bool datails_completed = Worker.IsDetailsCompleted(asp_userId);
             if (Users.IsWorker(asp_userId))
             {
-                return datails_completed ? RedirectToAction("Dashboard", "Worker") :
+                return Worker.IsDetailsCompleted(asp_userId) ? RedirectToAction("Dashboard", "Worker") :
                     RedirectToAction("Details", "Worker");
                         
             }
             else if(Users.IsCompany(asp_userId)) {
-                return RedirectToAction("CompanyDetails", "Company");
+                return Company.IsDetailsCompleted(User.Identity.GetUserId<int>()) ?
+                    RedirectToAction("Dashboard", "Company") : 
+                    RedirectToAction("DesignCompanyDetails", "Company");
             }
             else
             {

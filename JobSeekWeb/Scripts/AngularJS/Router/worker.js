@@ -12,5 +12,13 @@
             templateUrl: "../PartialViews/WCompany",
             controller: "CompanyCtrl"
         })
+        .when("/Worker/Projects", {
+            templateUrl: "../PartialViews/WProjects",
+            controller: "ProjectCtrl"
+        })
+        .when("/Worker/Messages", {
+            templateUrl: "../PartialViews/WMessages",
+            controller: "MessageCtrl"
+        })
     $locationProvider.html5Mode(true);
 })

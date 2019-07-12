@@ -7,10 +7,11 @@
     userInfoHolder: null
 }
 var holderObjects = Object.keys(holders);
+var selectedElem = null;
 
-var module = angular.module("Job", ["ngRoute", "ngAnimate"]);
+var module = angular.module('Job', ['ngRoute', 'ngAnimate']);
 
-module.service("profileService", function ($http, $q) {
+module.service('profileService', function ($http, $q) {
     this.getUserInfo = (holder) => {
         if (holder == null) {
             return $http.get("../Worker/GetUserInfo");
@@ -46,14 +47,9 @@ module.service("profileService", function ($http, $q) {
             return returnValueIfNotNull(holders.brgyHolder);
         }
     }
-    this.getCategoriesandSkills = (holder) => {
-        if (holder == null) {
-            return $http.get("../Home/GetCategoriesAndSkills");
-        } else {
-            return returnValueIfNotNull(holders.categoryAndSkillsHolder);
-        }
+    this.getCategoriesandSkills = () => {
+        return $http.get("../Home/GetCategoriesAndSkills");
     }
-
     this.updateSettings = (data) => {
         var formdata = new FormData();
         formdata.append("__RequestVerificationToken",
@@ -148,6 +144,7 @@ module.service("profileService", function ($http, $q) {
             headers: { 'Content-Type': undefined }
         })
     }
+
     function returnValueIfNotNull(holder) {
         return $q(function (resolve, reject) {
             if (holder != null) {
@@ -158,10 +155,120 @@ module.service("profileService", function ($http, $q) {
             }
         });
     }
+});
+module.service('projectService', function ($http) {
+    this.addNewPersonalProj = (data) => {
+        var formdata = new FormData();
+        formdata.append("__RequestVerificationToken",
+            $('input:hidden[name=__RequestVerificationToken]').val());
+        angular.forEach(data, (value, key) => {
+            if (key !== 'files') {
+                if (angular.isArray(value)) {
+                    angular.forEach(value, (arVal) => {
+                        formdata.append(key, arVal);
+                    })
+                } else {
+                    formdata.append(key, value);
+                }
+            } else {
+                for (var i = 0; i < value.length; i++) {
+                    formdata.append(key, value[i]);
+                }
+            }
+        })
+
+        console.log(formdata.values());
+        return $http({
+            method: 'POST',
+            data: formdata,
+            url: '/Worker/AddNewPersonalProj',
+            transformRequest: angular.identity,
+            headers: { 'Content-Type': undefined }
+        })
+    }
+    this.updatePersonalProj = (data) => {
+        var formdata = new FormData();
+        formdata.append("__RequestVerificationToken",
+            $('input:hidden[name=__RequestVerificationToken]').val());
+        angular.forEach(data, (value, key) => {
+            if (key !== 'files') {
+                if (angular.isArray(value)) {
+                    angular.forEach(value, (arVal) => {
+                        formdata.append(key, arVal);
+                    })
+                } else {
+                    formdata.append(key, value);
+                }
+            } else {
+                for (var i = 0; i < value.length; i++) {
+                    formdata.append(key, value[i]);
+                }
+            }
+        })
+        return $http({
+            method: 'POST',
+            data: formdata,
+            url: '/Worker/UpdatePersonalProj',
+            transformRequest: angular.identity,
+            headers: { 'Content-Type': undefined }
+        })
+    }
+    this.removeProject = (id) => {
+        var formdata = new FormData();
+        formdata.append("__RequestVerificationToken",
+            $('input:hidden[name=__RequestVerificationToken]').val());
+        formdata.append('perprojectId', id);
+        return $http({
+            method: 'POST',
+            data: formdata,
+            url: '/Worker/RemoveProject',
+            transformRequest: angular.identity,
+            headers: { 'Content-Type': undefined }
+        })
+    }
+    this.getPersonalProjects = () => {
+        return $http.get("../Worker/GetWorkerPersonalProj");
+    }
+});
+module.service('companyService', function ($http) {
+    this.getCompanies = () => {
+        return $http.get('../Worker/GetCompanies');
+    }
+    this.getCategories = () => {
+        return $http.get('../Worker/GetCategories');
+    }
+});
+
+module.factory('modalFactory', function () {
+    return {
+        screenshots: null,
+        skills: null,
+        isEdit: false,
+        projectHolder: null,
+        skillList: null
+    }
 })
 
+module.directive('imageonload', function () {
+    return {
+        restrict: 'A',
+        link: function (scope, element, attrs) {
+            element.bind('load', function () {
+                var height = element[0].height;
+                var width = element[0].width;
+                if (height > width) {
+                    element.css('width', 'unset');
+                }
+            });
+            element.bind('error', function () {
+                alert('image could not be loaded');
+            });
+        }
+    };
+});
+
 //Controllers
-module.controller("NavigationCtrl", ["$scope", "$location", "$http", "profileService", function (s, l, h, service) {
+module.controller('NavigationCtrl', ['$scope', '$location', '$http', 'profileService', function (s, l, h, service) {
 
     s.fullname = () => {
         if (s.user != undefined) {
@@ -173,6 +280,7 @@ module.controller("NavigationCtrl", ["$scope", "$location", "$http", "profileSer
     }
 
     service.getUserInfo(holders.userInfoHolder).then((result) => {
+        holders.userInfoHolder = result.data;
         s.user = result.data.userInfo;
         $.notify({
             icon: "fa fa-heart",
@@ -188,7 +296,8 @@ module.controller("NavigationCtrl", ["$scope", "$location", "$http", "profileSer
             });
     })
 
-    var routepaths = ["/Worker/Dashboard", "/Worker/Profile", "/Worker/Company"];
+    var routepaths = ["/Worker/Dashboard", "/Worker/Profile", "/Worker/Company", "/Worker/Projects",
+        "/Worker/Messages"];
     var currentIndex = 0;
     s.changeView = (liIndex) => {
         var children = angular.element("#navItem")[0].children;
@@ -200,7 +309,7 @@ module.controller("NavigationCtrl", ["$scope", "$location", "$http", "profileSer
 
     s.logout = () => {
         Swal.fire({
-            title: 'Are you sure you want to Logout?',
+            title: 'Are you sure that you want to Logout?',
             text: '',
             type: 'warning',
             showCancelButton: true,
@@ -240,20 +349,322 @@ module.controller("NavigationCtrl", ["$scope", "$location", "$http", "profileSer
         })
     }
 }])
+module.controller("ModalCtrl", ["$scope", "$q", "profileService", "projectService", "$rootScope", "modalFactory", function (s, q, service, pService, r, modalFactory) {
+
+    var projSkills = $("#skillsproj");
+    var privacy = $("#privacyP");
+    var newSkills = [];
+    var addSkills = [];
+    var removeSkill = [];
+    var filelist = [];
+    var screenshots = null;
+    var removeScreenShots = [];
+    var viewSSCount = 0;
+    r.d = null;
+
+    s.saveUpdate = (data) => {
+        data.privacy = privacy.select2("data")[0].id;
+        data.created = moment(data.pcreated).format("MM-DD-YYYY");
+        data.completed = moment(data.pcompleted).format("MM-DD-YYYY");
+        data.files = filelist;
+        data.isWorkerProj = true;
+        angular.forEach(projSkills.select2("data"), (value) => {
+            if (isNaN(value.id)) {
+                newSkills.push(value.id);
+            } else {
+                if (modalFactory.isEdit) {
+                    if (removeSkill.length > 0) {
+                        if (removeSkill.filter((f) => f.skillId == value.id).length == 0) {
+                            if (modalFactory.skills.filter((f) => f.skillId != value.id)) {
+                                addSkills.push(parseInt(value.id));
+                            }
+                        }
+                    } else {
+                        if (modalFactory.skills.filter((f) => f.skillId == value.id).length == 0) {
+                            addSkills.push(parseInt(value.id));
+                        }
+                    }
+                } else {
+                    addSkills.push(parseInt(value.id));
+                }
+                
+            }
+        })
+        data.newSkills = newSkills;
+        data.addSkills = addSkills;
+
+        if (modalFactory.isEdit) {
+            data.removeScreenShots = [];
+            data.removeSkill = [];
+            angular.forEach(removeScreenShots, (value) => {
+                data.removeScreenShots.push(value.ssId);
+            })
+            angular.forEach(removeSkill, (value) => {
+                data.removeSkill.push(value.pprojectSkillId);
+            })
+            console.log(data.removeScreenShots);
+            swalConfirmation("Are you sure that you want to update this project?", '', 'warning', () => {
+                return pService.updatePersonalProj(data);
+            }, (result) => {
+                if (result) {
+                    if (result.data == "Success") {
+                        swalSuccess("Update", '', () => {
+                            $('#myModal1').modal('toggle');
+                            r.clearModal();
+                            pService.getPersonalProjects().then((result) => {
+                                modalFactory.projectHolder = result.data;
+                                r.updatepersonalProjs(result.data.personalProj);
+                            });
+                        });
+                    }
+                    else {
+                        swalError(result.data);
+                    }
+                }
+            });
+        } else {
+            
+            swalConfirmation("Are you sure that want to save this project?", '', 'warning', () => {
+                return pService.addNewPersonalProj(data);
+            }, (result) => {
+                    if (result) {
+                        if (result.data == "Success") {
+                            swalSuccess("Saved", '', () => {
+                                r.clearModal();
+                                $('#myModal1').modal('toggle');
+                                pService.getPersonalProjects().then((result) => {
+                                    modalFactory.projectHolder = result.data;
+                                    r.updatepersonalProjs(result.data.personalProj);
+                                });
+                            });
+                        } else {
+                            swalError(result.data);
+                        }
+                    }
+                });
+        }
+    }
+    s.validateLabel = (state) => {
+        return { 'red': !state };
+    }
+    s.validateInput = (state) => {
+        return { 'form-control': state, 'form-control invalid': !state };
+    }
+    s.getImageFile = (file) => {
+        var count = 0;
+        if (file && file[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                angular.element('#sscontainer').append(`<div class="row">
+                    <div class="col-md-12 center_content">
+                        <a class="close_screenshot" onClick="angular.element(this).scope().removeSS(this, '${filelist[count].name}')"><i class="pe-7s-close"></i></a>
+                        <img src="${e.target.result}" style="max-width: 100%; margin: 5px 0; border: 2px solid #dbccee; border-radius: 5px;" />` +
+                    "</div></div>");
+                count++;
+                if (file[count]) {
+                    reader.readAsDataURL(file[count]);
+                }
+            };
+
+            angular.forEach(file, (value) => {
+                filelist.push(value);
+                if (file.length == 1) {
+                    reader.readAsDataURL(value);
+                }
+            });
+
+            if (file.length > 1) {
+                reader.readAsDataURL(filelist[count]);
+            }
+        }
+        }
+    s.closeModal = () => {
+        swalConfirmation('Are you sure?', 'closing this will clear all your data you input.', 'warning', () => { }, (result) => {
+            if (result) {
+                $('#myModal1').modal('toggle');
+                r.clearModal();
+                r.projBtns = true;
+                r.$apply();
+            }
+        })
+     }
+    s.removeSS = (element, id) => {
+        if (modalFactory.isEdit) {
+            if (screenshots == null) {
+                screenshots = modalFactory.screenshots;
+            }
+            var remove = screenshots[screenshots.indexOf(screenshots.filter((f) => f.ssId == id)[0])];
+            removeScreenShots.push(remove);
+            console.log(removeScreenShots);
+        } else {
+            var filFile = filelist.filter((f) => f.name === id);
+            filelist.splice(filelist.indexOf(filFile));
+            console.log(filelist);
+        }
+         $($($(element)[0].parentElement)[0].parentElement).remove();
+    }
+    s.submitLabel = () => {
+        return modalFactory.isEdit ? 'Update' : "Save";
+        }
+    s.closeModalV = () => {
+        if (selectedElem != null) {
+            selectedElem.removeClass('tr_active');
+            selectedElem = null;
+        }
+        r.projBtns = true;
+        viewSSCount = 0;
+        r.d.viewSS = [];
+        setTimeout(() => {
+            r.viewProj = false;
+        }, 500);
+    }
+    s.nextSS = () => {
+        var element = angular.element('.screenshots')[0].children;
+        $($($(element[viewSSCount])[0])[0]).css('display', 'none');
+        console.log((element.length - 1) == viewSSCount);
+        viewSSCount = (element.length - 1) == viewSSCount ? -1 : viewSSCount;
+        viewSSCount++;
+        $($($(element[viewSSCount])[0])[0]).css('display', 'block');
+    }
+    s.prevSS = () => {
+        console.log("clicked");
+        var element = angular.element('.screenshots')[0].children;
+        $($($(element[viewSSCount])[0])[0]).css('display', 'none');
+        viewSSCount = 0 == viewSSCount ? (element.length) : viewSSCount;
+        viewSSCount--;
+        $($($(element[viewSSCount])[0])[0]).css('display', 'block');
+        }
+    s.getCreatedDate = () => {
+        try {
+            return moment(r.d.pcreated).format('MMMM DD, YYYY');
+        } catch (e) {
+            return '';
+        }
+    }
+    s.getCompletedDate = () => {
+        try {
+            return moment(r.d.pcompleted).format('MMMM DD, YYYY');
+        } catch (e) {
+            return '';
+        }
+        }
+    s.getSkillName = (id) => {
+        try {
+            return holders.categoryAndSkillsHolder.skills.filter((f) => f.id == id)[0].text;
+        } catch (e) {
+            return '';
+        }
+        }
+    s.imgClass = (index) => {
+        if (index != null) {
+            var result = index == 0 ? true : false;
+            return { 'img-single': result, 'img-multiple': !result }
+        }
+    }
+    s.clickProjStatus = () => {
+
+    }
+    r.clearModal = () => {
+        r.d = null;
+        r.d = {
+            projTitle: null,
+            projDesc: null,
+            pcreated: null,
+            pcompleted: null
+        };
+        filelist = [];
+        screenshots = null;
+        removeScreenShots = [];
+        modalFactory.isEdit = false;
+        $("#projscreenshots").val('');
+        $("#sscontainer").empty();
+        projSkills.val(null).trigger('change');
+        privacy.val('Public').trigger('change');
+        var children = angular.element('#skillsContainerP')[0].children;
+        if (!angular.element(children[0]).hasClass("red")) {
+            angular.element(children[2].children[0].children[0]).addClass("invalid");
+            angular.element(children[0]).addClass("red");
+        }
+        r.projBtns = true;
+        if (selectedElem !== null) {
+            selectedElem.removeClass('tr_active');
+            selectedElem = null;
+        }
+    }
+
+    $(document).ready(() => {
+
+        privacy.select2();
+
+        q.all([
+            service.getCategoriesandSkills()
+        ]).then((result) => {
+            holders.categoryAndSkillsHolder = result[0].data;
+            projSkills.select2({
+                data: result[0].data.skills,
+                minimumInputLength: 3,
+                minimumResultsForSearch: 20,
+                tags: true
+            });
+
+            var children = angular.element('#skillsContainerP')[0].children;
+            if (!angular.element(children[0]).hasClass("red")) {
+                angular.element(children[2].children[0].children[0]).addClass("invalid");
+                angular.element(children[0]).addClass("red");
+            }
+
+            projSkills.on("select2:select", (e) => {
+                var val = e.params.data;
+                if (projSkills.select2("data").length > 0) {
+                    if (angular.element(children[0]).hasClass("red")) {
+                        angular.element(children[2].children[0].children[0]).removeClass("invalid");
+                        angular.element(children[0]).removeClass("red");
+                    }
+                }
+                if (modalFactory.isEdit) {
+                    var remove = removeSkill.filter((f) => f.skillId == val.id)[0];
+                    if (!angular.isUndefined(remove)) {
+                        removeSkill.splice(remove);
+                    }
+                }
+            })
+            projSkills.on("select2:unselect", (e) => {
+                var val = e.params.data;
+                if (projSkills.select2("data").length == 0) {
+                    if (!angular.element(children[0]).hasClass("red")) {
+                        angular.element(children[2].children[0].children[0]).addClass("invalid");
+                        angular.element(children[0]).addClass("red");
+                    }
+                }
+                if (modalFactory.isEdit) {
+                    var remove = modalFactory.skills.filter((f) => f.skillId == val.id)[0];
+                    removeSkill.push(remove);
+                }
+            })
+        })
+    })
+
+}])
 module.controller("DashboardCtrl", ["$scope", "$http", function (s, h) {
 
 }])
-module.controller("ProfileCtrl", ["$scope", "$http", "$q", "profileService", function (s, h, q, service) {
+module.controller("ProfileCtrl", ["$scope", "$rootScope", "$q", "profileService", "projectService", "modalFactory", function (s, r, q, service, pService, modalFactory) {
 
     s.settings = true;
     s.personal = true;
     s.address = true;
     s.skills = true;
+    s.navCardsVisibility = [true, false, false];
     s.addrssBtnDsbled = false;
     var skillsRemoved = [];
     var selectedMultipleVal = []; 
     var addressValue = {region: null, province: null, city: null, brgy: null};
     var address = ["region", "province", "city", "brgy"];
+    var navSelected = {
+        a: $('#profileNav > div > div > .card.content_center.active')[0],
+        div: $('#profileNav > div > div >  div > div > .list-btn.active')[0]
+    }
 
     s.fullname = () => {
         if (s.userInfo != undefined) {
@@ -263,7 +674,19 @@ module.controller("ProfileCtrl", ["$scope", "$http", "$q", "profileService", fun
         }
 
     }
+    s.navigateMainCards = (index, element) => {
+        console.log(navSelected);
+        s.navCardsVisibility[s.navCardsVisibility.indexOf(true)] = false;
+        s.navCardsVisibility[index] = true;
+        $(navSelected.a).removeClass('active');
+        $(navSelected.div).removeClass('active');
+        navSelected.a = $(element.currentTarget);
+        navSelected.div = $($(element.currentTarget)[0].parentElement.parentElement);
+        $(element.currentTarget).addClass('active');
+        $($(element.currentTarget)[0].parentElement.parentElement).addClass('active');
+    }
 
+    //Profile
     s.getImageFileC = (file) => {
         if (file && file[0]) {
             var reader = new FileReader();
@@ -293,7 +716,6 @@ module.controller("ProfileCtrl", ["$scope", "$http", "$q", "profileService", fun
             }, 1500);
         }
     }
-
     s.getImageFile = (file) => {
         s.imagefile = file[0];
         
@@ -301,7 +723,7 @@ module.controller("ProfileCtrl", ["$scope", "$http", "$q", "profileService", fun
         var img;
         Swal.fire({
             title: 'Crop image.',
-            text: 'Are you sure you want to update your profile picture?',
+            text: 'Are you sure that you want to update your profile picture?',
             imageUrl: '',
             imageAlt: 'Profile Picture',
             showCancelButton: true,
@@ -354,23 +776,19 @@ module.controller("ProfileCtrl", ["$scope", "$http", "$q", "profileService", fun
         }
         //readURL2(file, "file", 350, 250);
     }
-
     s.profilePic = () => {
         document.getElementById("getFileProf").click();
     }
-
     s.coverPhotoClick = () => {
         document.getElementById("getFileCover").click();
     }
-
-
     s.update = (section) => {
         if (section === "settings") {
             var isPassEmpty = angular.isUndefined(s.userInfo.newpassword == undefined) ||
                 !s.userInfo.newpassword;
             var Valid = isPassEmpty ? true : s.userInfo.newpassword == s.userInfo.repassword;
             if (Valid) {
-                swalConfirmWithPassword('Are you sure you want to update your account settings?',
+                swalConfirmWithPassword('Are you sure that you want to update your account settings?',
                     'warning',
                     (password) => {
                         s.userInfo.oldpassword = password != "" ? password : "asdfjkjl";
@@ -395,7 +813,7 @@ module.controller("ProfileCtrl", ["$scope", "$http", "$q", "profileService", fun
                 swalError(`New password doesnt match with confirmation password.`);
             }
         } else if (section === "personal") {
-            swalUpdate('Are you sure you want to update your personal information?', '', 'warning',
+            swalUpdate('Are you sure that you want to update your personal information?', '', 'warning',
                 (result) => {
                     if (result) {
                         service.updatePersonalInfo(s.userInfo).then((result) => {
@@ -412,7 +830,7 @@ module.controller("ProfileCtrl", ["$scope", "$http", "$q", "profileService", fun
                     }
                 });
         } else if (section === "address") {
-            swalUpdate('Are you sure you want to update your address?', '', 'warning',
+            swalUpdate('Are you sure that you want to update your address?', '', 'warning',
                 (result) => {
                     if (result) {
                         var addressArray = [];
@@ -438,7 +856,7 @@ module.controller("ProfileCtrl", ["$scope", "$http", "$q", "profileService", fun
                     }
                 });
         } else if (section === "skills") {
-            swalUpdate('Are you sure you want to update your skills?', '', 'warning',
+            swalUpdate('Are you sure that you want to update your skills?', '', 'warning',
                 (result) => {
                     if (result) {
                         var addSkills = [];
@@ -478,7 +896,6 @@ module.controller("ProfileCtrl", ["$scope", "$http", "$q", "profileService", fun
                 });
         }
     }
-
     s.disabled = (section) => {
         if (section === "settings") { s.settings = s.settings ? false : true }
         else if (section === "personal") { s.personal = s.personal ? false : true }
@@ -531,6 +948,28 @@ module.controller("ProfileCtrl", ["$scope", "$http", "$q", "profileService", fun
         return { 'form-control': state, 'form-control invalid': !state };
     }
 
+    //Projects
+    s.showProjDetails = (project) => {
+        project.projTitle = project.title;
+        r.d = project;
+        console.log(modalFactory.projectHolder.screenshots.filter((f) => f.projectId == project.perprojectId));
+        r.d.viewSS = modalFactory.projectHolder.screenshots.filter((f) => f.projectId == project.perprojectId);
+        var projSkillsIds = [];
+        angular.forEach(modalFactory.projectHolder.projSkills.filter((f) => f.perprojectId == project.perprojectId), (value) => {
+            projSkillsIds.push(value.skillId);
+        });
+        r.d.viewSkills = projSkillsIds;
+        $("#myModal1").modal('toggle');
+        r.viewProj = true;
+        
+    }
+    s.getDate = (date) => {
+        if (date != null) {
+            return moment(date).format("MMMM DD, YYYY");
+        }
+    }
+
+    //Profile Functions
     function swalUpdate(title, text, type, callback) {
         Swal.fire({
             title: title,
@@ -542,18 +981,6 @@ module.controller("ProfileCtrl", ["$scope", "$http", "$q", "profileService", fun
             confirmButtonText: 'Yes'
         }).then((result) => {
             callback(result.value)
-        })
-    }
-    function swalSuccess(title, text, callback) {
-        Swal.fire({
-            title: `${title} Successfully!`,
-            text: text,
-            type: 'success',
-            confirmButtonColor: '#8553C6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes'
-        }).then((result) => {
-            callback()
         })
     }
     function swalConfirmWithPassword(title, type, passwordCallback, callback) {
@@ -577,21 +1004,6 @@ module.controller("ProfileCtrl", ["$scope", "$http", "$q", "profileService", fun
         }).then((result) => {
             callback(result);
         })
-    }
-    function swalError(text) {
-        if (text == undefined) {
-            Swal.fire({
-                type: 'error',
-                title: 'Oops...',
-                text: "Try to resubmit or try to check your internet connection."
-            })
-        } else {
-            Swal.fire({
-                type: 'error',
-                title: 'Oops...',
-                text: text
-            })
-        }
     }
     function select2Object(addressCode, addressText, userCode, additionalCode ) {
         if (addressCode == userCode) {
@@ -778,6 +1190,7 @@ module.controller("ProfileCtrl", ["$scope", "$http", "$q", "profileService", fun
             }
         })
     }
+    //Project Functions
 
     $(document).ready(function () {
         q.all([
@@ -785,7 +1198,7 @@ module.controller("ProfileCtrl", ["$scope", "$http", "$q", "profileService", fun
             service.getProvince(holders.provinceHolder),
             service.getCity(holders.cityHolder),
             service.getBrgy(holders.brgyHolder),
-            service.getCategoriesandSkills(holders.categoryAndSkillsHolder),
+            service.getCategoriesandSkills(),
             service.getUserInfo(holders.userInfoHolder)
         ]).then((result) => {
             angular.forEach(result, (value, key) => {
@@ -812,19 +1225,284 @@ module.controller("ProfileCtrl", ["$scope", "$http", "$q", "profileService", fun
                     initSelect2(value, index, data);
                 })
                 initSelect2Skills();
-                console.log(s.userInfo);
             })
         })
+        if (modalFactory.projectHolder != null) {
+            s.perProjList = modalFactory.projectHolder.personalProj;
+        } else {
+            pService.getPersonalProjects().then((result) => {
+                modalFactory.projectHolder = result.data;
+                s.perProjList = result.data.personalProj;
+                console.log(modalFactory.projectHolder);
+            })
+        }
         $('#gender').select2();
     });
 }])
-module.controller("CompanyCtrl", ["$scope", "$http", function (s, h) {
-    s.lists = [0, 1, 2, 3, 4]
+module.controller('CompanyCtrl', ['$scope', '$q', 'companyService', function (scope, q, company_service) {
+    scope.lists = [0, 1, 2, 3, 4]
+
+    let category_manager = new Select2Manager('#CategoryContainer');
+
+    initServices();
+
+    function initServices() {
+        q.all([
+            company_service.getCompanies(),
+            company_service.getCategories()
+        ]).then((result) => {
+            scope.companies = result[0].data;
+            scope.categories = result[1].data;
+            console.log(scope.categories);
+            initSelect2();
+        });
+    }
+
+    function initSelect2() {
+        category_manager.initSelect2({
+            data: scope.categories,
+            minimumInputLength: 2,
+            minimumResultsForSearch: -1
+        });
+    }
 
     $(document).ready(function () {
-        $("#category").select2();
         $("#skills").select2({
             placeholder: "Select skills"
         });
     })
 }])
+module.controller("ProjectCtrl", ["$scope", "$http", "projectService", "$rootScope", "modalFactory", function (s, h, pservice, r, modalFactory) {
+    s.lists = [0, 1, 2, 3, 4]
+    s.myprojects = false;
+    r.projBtns = true;
+    r.viewProj = false;
+    s.selectMyProjects = (isProject) => {
+        s.myprojects = !isProject;
+    }
+
+    s.navClass = (elementName) => {
+        if (elementName == 'my') {
+            return { 'list-btn active': !s.myprojects, 'list-btn': s.myprojects }
+        } else {
+            return { 'list-btn active': s.myprojects, 'list-btn': !s.myprojects }
+        }
+    }
+    s.navCard = (elementName) => {
+        if (elementName == 'my') {
+            return { 'card content_center active': !s.myprojects, 'card content_center': s.myprojects }
+        } else {
+            return { 'card content_center active': s.myprojects, 'card content_center': !s.myprojects }
+        }
+    }
+    s.getDate = (date) => {
+        return moment(date).format("MMMM DD, YYYY");
+    }
+    s.clickProject = (event, data) => {
+        if (selectedElem == null) {
+            selectedElem = angular.element(event.currentTarget);
+            selectedElem.addClass('tr_active');
+        } else {
+            selectedElem.removeClass('tr_active');
+            selectedElem = angular.element(event.currentTarget);
+            selectedElem.addClass('tr_active');
+        }
+        r.projBtns = false
+        r.viewProj = false;
+        data.projTitle = data.title;
+        data.pcreated = new Date(moment(data.created));
+        data.pcompleted = new Date(moment(data.completed));
+        r.d = data; 
+
+        var projSkills = [];
+        var filterskills = modalFactory.projectHolder.projSkills.filter((f) => f.perprojectId == data.perprojectId);
+        angular.forEach(filterskills, (value) => {
+            projSkills.push(value.skillId);
+        });
+        $("#privacyP").val(data.privacy).trigger('change');
+        $("#skillsproj").val(projSkills).trigger('change');
+        modalFactory.skills = filterskills;
+        r.d.viewSkills = projSkills;
+        var children = angular.element('#skillsContainerP')[0].children;
+        if (angular.element(children[0]).hasClass("red")) {
+            angular.element(children[2].children[0].children[0]).removeClass("invalid");
+            angular.element(children[0]).removeClass("red");
+        }
+        var screenshots = modalFactory.projectHolder.screenshots.filter((f) => f.projectId == data.perprojectId);
+        r.d.viewSS = screenshots;
+        modalFactory.screenshots = screenshots;
+        modalFactory.isEdit = true;
+        $("#sscontainer").empty();
+        angular.forEach(screenshots, (value) => {
+            $("#sscontainer").append(`<div class="row"><div class="col-md-12 center_content">
+                <a class="close_screenshot" onClick="angular.element(this).scope().removeSS(this, ${value.ssId})"><i class="pe-7s-close"></i></a>
+                <img src="${value.path}" style="max-width: 100%; margin: 5px 0; border: 2px solid #dbccee; border-radius: 5px;" />` +
+                "</div></div>");
+        })
+    }
+    s.clickAdd = () => {
+        r.clearModal();
+        if (selectedElem !== null) {
+            selectedElem.css('background-color', '#FFFFFF');
+            selectedElem = null;
+        }
+        r.viewProj = false;
+    }
+    s.removeProject = () => {
+        swalConfirmation('Are you sure that you want to delete this project?', 'This project will be permanently removed.', 'warning', () => {
+            return pservice.removeProject(r.d.perprojectId);
+        }, (result) => {
+                if (result) {
+                    if (result.data == 'Success') {
+                        swalSuccess('Deleted', '', () => {
+                            r.projBtns = true;
+                            pservice.getPersonalProjects().then((result) => {
+                                modalFactory.projectHolder = result.data;
+                                s.personalProjs = result.data.personalProj;
+                            });
+                        });
+                    } else {
+                        swalError(result.data);
+                    }
+                }
+            })
+    }
+    s.viewProject = () => {
+        r.viewProj = true;
+    }
+
+    r.updatepersonalProjs = (data) => {
+        s.personalProjs = data;
+    }
+
+    pservice.getPersonalProjects(holders.personalProjHolder).then((result) => {
+        modalFactory.projectHolder = result.data;
+        s.personalProjs = result.data.personalProj;
+    })
+}])
+module.controller("MessageCtrl", ["$scope", "$http", function (s, h) {
+    s.lists = [0, 1, 2, 3, 4]
+
+    $("#messageCard").height(window.innerHeight - 310);
+    $("#contacts").height(window.innerHeight - 199);
+}])
+
+
+function swalConfirmation(title, text, type, precallback, callback) {
+    Swal.fire({
+        title: title,
+        text: text,
+        type: type,
+        showCancelButton: true,
+        confirmButtonColor: '#8553C6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes',
+        showLoaderOnConfirm: true,
+        preConfirm: function () {
+            return precallback();
+        },
+        allowOutsideClick: () => !Swal.isLoading()
+    }).then((result) => {
+        callback(result.value)
+    }, () => {
+            swalError();
+        });
+}
+function swalError(text) {
+    if (text == undefined) {
+        Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: "Try to resubmit or try to check your internet connection."
+        })
+    } else {
+        Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: text
+        })
+    }
+}
+function swalSuccess(title, text, callback) {
+    Swal.fire({
+        title: `${title} Successfully!`,
+        text: text,
+        type: 'success',
+        confirmButtonColor: '#8553C6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes'
+    }).then((result) => {
+        callback()
+    })
+}   
+
+function Select2Manager(container_id) {
+    this.container_id = container_id;
+    this.container_children = $(container_id);
+    this.select = $(this.container_children[0].children[1]);
+    this.label = $(this.container_children[0].children[0]);
+    this.items = null;
+}
+Select2Manager.prototype.initSelect2 = function (options) {
+    this.select.select2(options);
+    this.select2_border = $($($($(this.container_id)[0].children[2])[0].children[0])[0].children[0]);
+}
+Select2Manager.prototype.Selecting = function (callback) {
+    this.select.on('select2:selecting', (selected) => {
+        callback(selected);
+    });
+}
+Select2Manager.prototype.invalid = function () {
+    if (!this.label.hasClass('red')) {
+        this.label.addClass('red');
+        this.select2_border.addClass('invalid');
+    }
+}
+Select2Manager.prototype.valid = function () {
+    if (this.label.hasClass('red')) {
+        this.label.removeClass('red');
+        this.select2_border.removeClass('invalid');
+    }
+}
+Select2Manager.prototype.getSelectedItems = function () {
+    return this.select.select2('data');
+}
+Select2Manager.prototype.clearItems = function () {
+    this.select.empty();
+}
+Select2Manager.prototype.addItem = function (id, text, isSelected) {
+    this.select.append(new Option(text, id, isSelected, isSelected)).trigger('change');
+}
+Select2Manager.prototype.addCustomOptionItem = function (option_element) {
+    this.select.append(option_element).trigger('change');
+}
+Select2Manager.prototype.addItems = function (array_selected_id) {
+    this.items.forEach((item) => {
+        const isSelected = array_selected_id === undefined ? false : array_selected_id.includes(item.id);
+        this.addItem(item.id, item.text, isSelected);
+    });
+}
+Select2Manager.prototype.setSelectedItems = function (array_selected_id) {
+    this.select.select2('val', array_selected_id);
+}
+function ConvertDataToSelect2Data(data, address_index) {
+    this.keys = ['reg', 'prov', 'citymun', 'brgy'];
+    this.values = [];
+    this.data = data;
+    this.address_index = address_index;
+}
+ConvertDataToSelect2Data.prototype.filter = function (key, key_value) {
+    this.data = this.data.filter((f) => f[key] == key_value);
+    this.noFilter();
+    return this.values;
+}
+ConvertDataToSelect2Data.prototype.noFilter = function () {
+    $.each(this.data, (index, value) => {
+        this.values.push({
+            id: value[`${this.keys[this.address_index]}Code`],
+            text: value[`${this.keys[this.address_index]}Desc`],
+            filter_key: this.address_index > 0 ? `${this.keys[this.address_index - 1]}Code` : ''
+        });
+    });
+    return this.values;
+}

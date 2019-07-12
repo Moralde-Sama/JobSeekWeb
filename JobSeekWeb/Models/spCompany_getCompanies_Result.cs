@@ -11,22 +11,20 @@ namespace JobSeekWeb.Models
 {
     using System;
     
-    public partial class spWorker_getDetails_Result
+    public partial class spCompany_getCompanies_Result
     {
-        public int workerId { get; set; }
-        public string fname { get; set; }
-        public string mname { get; set; }
-        public string lname { get; set; }
-        public Nullable<System.DateTime> birthdate { get; set; }
-        public string gender { get; set; }
-        public string header { get; set; }
-        public string cellnum { get; set; }
+        public int companyId { get; set; }
+        public string name { get; set; }
+        public string description { get; set; }
+        public Nullable<int> categoryId { get; set; }
+        public string cellnumber { get; set; }
+        public string business_email { get; set; }
         public Nullable<int> region { get; set; }
         public Nullable<int> province { get; set; }
         public Nullable<int> city { get; set; }
         public Nullable<int> brgy { get; set; }
-        public int asp_user_Id { get; set; }
         public string prof_path { get; set; }
         public string cover_path { get; set; }
+        public int asp_user_Id { get; set; }
     }
 }

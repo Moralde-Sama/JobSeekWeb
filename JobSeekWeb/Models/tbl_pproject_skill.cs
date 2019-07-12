@@ -10,10 +10,12 @@
 namespace JobSeekWeb.Models
 {
     using System;
+    using System.Collections.Generic;
     
-    public partial class spCategories_getAll_Result
+    public partial class tbl_pproject_skill
     {
-        public int id { get; set; }
-        public string text { get; set; }
+        public int pprojectSkillId { get; set; }
+        public int skillId { get; set; }
+        public int perprojectId { get; set; }
     }
 }

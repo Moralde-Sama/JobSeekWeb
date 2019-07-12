@@ -6,6 +6,7 @@ using System.Web.Mvc;
 
 namespace JobSeekWeb.Controllers
 {
+    [Authorize]
     public class PartialViewsController : Controller
     {
         #region Worker Partial Views
@@ -22,6 +23,24 @@ namespace JobSeekWeb.Controllers
         }
         [Authorize(Roles = "Worker")]
         public ActionResult WDashboard()
+        {
+            return View();
+        }
+        [Authorize(Roles = "Worker")]
+        public ActionResult WMessages()
+        {
+            return View();
+        }
+        [Authorize(Roles = "Worker")]
+        public ActionResult WProjects()
+        {
+            return View();
+        }
+        #endregion
+
+        #region Company Partial Views
+        [Authorize(Roles = "Company")]
+        public ActionResult CProfile()
         {
             return View();
         }

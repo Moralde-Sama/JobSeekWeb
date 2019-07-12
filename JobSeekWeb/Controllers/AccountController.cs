@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Globalization;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -59,32 +57,20 @@ namespace JobSeekWeb.Controllers
         #region Worker
         [HttpPost]
         [Authorize (Roles = "Worker")]
-        public JsonResult svProfDetails(Worker worker, int[] skillIds, string[] newskills)
+        [ValidateAntiForgeryToken]
+        public JsonResult svProfDetails(Worker worker)
         {
             try
             {
                 worker.workerId = Convert.ToInt32(User.Identity.GetWorkerOrCompanyId());
                 worker.asp_user_Id = Convert.ToInt32(User.Identity.GetUserId<int>());
-                worker.prof_path = "/Content/Moralde/Images/eriri.png";
-                worker.header = "Test";
+                worker.prof_path = "/Uploads/Worker/Img/eriri.png";
+                worker.cover_path = "/Uploads/Worker/Img/kodaikana.jpg";
+                worker.header = " ";
                 worker.UpdateProfileDetails();
-                if (skillIds != null)
-                {
-                    foreach (int skillId in skillIds)
-                    {
-                        worker.skillId = skillId;
-                        worker.AddSkill(worker.workerId);
-                    }
-                }
-                if (newskills != null)
-                {
-                    foreach (string title in newskills)
-                    {
-                        worker.AddNewSkill(title);
-                        worker.skillId = Skills.getSkillDetailsByTitle(title).skillId;
-                        worker.AddSkill(worker.workerId);
-                    }
-                }
+                worker.AddMultipleSkills(worker.workerId);
+                worker.addSkills = worker.AddMultipleNewSkill();
+                worker.AddMultipleSkills(worker.workerId);
                 AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
                 return Json("Success", JsonRequestBehavior.AllowGet);
             }
@@ -213,6 +199,98 @@ namespace JobSeekWeb.Controllers
         }
         #endregion
 
+        #region Company
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Company")]
+        public JsonResult UpdateCompanyDetails(Company company)
+        {
+            try
+            {
+                company.companyId = Convert.ToInt32(User.Identity.GetWorkerOrCompanyId());
+                company.SaveCategoryIfNotNull();
+                company.UpdateDetails();
+                return Json("Success", JsonRequestBehavior.AllowGet);
+            }
+            catch(Exception e)
+            {
+                return Json(e.Message, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Company")]
+        public JsonResult UpdateCompanyProfile(string base64_string)
+        {
+            try
+            {
+                DateTime date = DateTime.Now;
+                byte[] data = Convert.FromBase64String(base64_string);
+                string location = "/Uploads/Company/Profile/" + User.Identity.GetUserId<int>() +
+                    date.Month + date.Day + date.Year + date.Hour + date.Minute + date.Second + "." + GetFileExtension(base64_string);
+                System.IO.File.WriteAllBytes(Server.MapPath(location), data);
+
+                db.spCompany_updateProfilePic(User.Identity.GetUserId<int>(), location);
+                return Json("Success", JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                return Json(e.Message, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Company")]
+        public JsonResult UpdateCompanyCoverPhoto(HttpPostedFileBase coverphoto)
+        {
+            try
+            {
+                DateTime date = DateTime.Now;
+                var file = coverphoto;
+                string extension = Path.GetExtension(file.FileName);
+                string location = "/Uploads/Company/Cover/" + User.Identity.GetUserId<int>() + date.Month + date.Day + date.Year + date.Hour + date.Minute + date.Second + extension;
+                file.SaveAs(Server.MapPath(location));
+                db.spCompany_updateCoverPhoto(User.Identity.GetUserId<int>(), location);
+                return Json("Success", JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                return Json(e.Message, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Company")]
+        public JsonResult UpdateCompanyInformation(Company company)
+        {
+            try
+            {
+                company.SaveCategoryIfNotNull();
+                company.UpdateCompanyInformation();
+                return Json("Success", JsonRequestBehavior.AllowGet);
+            }
+            catch(Exception e)
+            {
+                return Json(e.Message, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Company")]
+        public JsonResult UpdateCompanyAddress(Company company)
+        {
+            try
+            {
+                company.UpdateAddress();
+                return Json("Success", JsonRequestBehavior.AllowGet);
+            }
+            catch(Exception e)
+            {
+                return Json(e.Message, JsonRequestBehavior.AllowGet);
+            }
+        }
+        #endregion
+
         //
         // GET: /Account/Login
         [AllowAnonymous]
@@ -319,7 +397,7 @@ namespace JobSeekWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new JobUser { UserName = model.Email, Email = model.Email };
+                var user = new JobUser { UserName = model.UserName, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
