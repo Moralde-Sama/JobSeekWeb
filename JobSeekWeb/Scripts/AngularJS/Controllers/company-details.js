@@ -226,7 +226,7 @@ module.controller('CompanyCtrl', ['$scope', '$q', 'CompanyService', function (sc
             minimumResultsForSearch: -1
         });
         category_manager.Selecting((selected_item) => {
-            const selected_value = selected_item.params.args.data;
+            let selected_value = selected_item.params.args.data;
             if (isNaN(selected_value.id)) {
                 scope.company.title = selected_value.id;
                 delete scope.company.type;
@@ -240,7 +240,7 @@ module.controller('CompanyCtrl', ['$scope', '$q', 'CompanyService', function (sc
             data: new ConvertDataToSelect2Data(scope.holders.regions, 0).noFilter()
         });
         region_manager.Selecting((selected_item) => {
-            const selected_value = selected_item.params.args.data;
+            let selected_value = selected_item.params.args.data;
             scope.company.region = parseInt(selected_value.id);
             province_manager.items = new ConvertDataToSelect2Data(scope.holders.provinces, 1).filter('regCode', selected_value.id);
             province_manager.clearItems();
@@ -250,7 +250,7 @@ module.controller('CompanyCtrl', ['$scope', '$q', 'CompanyService', function (sc
         });
         province_manager.initSelect2();
         province_manager.Selecting((selected_item) => {
-            const selected_value = selected_item.params.args.data;
+            let selected_value = selected_item.params.args.data;
             scope.company.province = parseInt(selected_value.id);
             city_manager.items = new ConvertDataToSelect2Data(scope.holders.cities, 2).filter('provCode', selected_value.id);
             city_manager.clearItems();
@@ -260,7 +260,7 @@ module.controller('CompanyCtrl', ['$scope', '$q', 'CompanyService', function (sc
         });
         city_manager.initSelect2();
         city_manager.Selecting((selected_item) => {
-            const selected_value = selected_item.params.args.data;
+            let selected_value = selected_item.params.args.data;
             scope.company.city = parseInt(selected_value.id);
             brgy_manager.items = new ConvertDataToSelect2Data(scope.holders.brgys, 3).filter('citymunCode', selected_value.id);
             brgy_manager.clearItems();
@@ -270,7 +270,7 @@ module.controller('CompanyCtrl', ['$scope', '$q', 'CompanyService', function (sc
         });
         brgy_manager.initSelect2();
         brgy_manager.Selecting((selected_item) => {
-            const selected_value = selected_item.params.args.data;
+            let selected_value = selected_item.params.args.data;
             scope.company.brgy = parseInt(selected_value.id);
             brgy_manager.valid();
             scope.isValid = true;

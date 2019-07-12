@@ -55,6 +55,19 @@ namespace JobSeekWeb.Models.MyClass
                 db.SaveChanges();
             }
         }
+        public void UpdateAddress()
+        {
+            using(JobEntities db = new JobEntities())
+            {
+                tbl_company company = db.tbl_company.Find(companyId);
+                company.region = region;
+                company.province = province;
+                company.city = city;
+                company.brgy = brgy;
+                db.Entry(company).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+        }
         public static spCompany_getDetails_Result GetCompanyDetails(int asp_userId)
         {
             using (JobEntities db = new JobEntities())

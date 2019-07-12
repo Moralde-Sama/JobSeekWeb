@@ -1,4 +1,4 @@
-﻿var module = angular.module("Job", ["ngRoute", "ngAnimate"]);
+﻿let module = angular.module("Job", ["ngRoute", "ngAnimate"]);
 
 module.service('NavigationService', function ($http, $q) {
     this.logout = () => {
@@ -32,6 +32,34 @@ module.service('NavigationService', function ($http, $q) {
     }
 });
 module.service('ProfileService', function ($http, $q) {
+    this.getRegions = (holder) => {
+        if (holder == null) {
+            return $http.get("../Content/PH/json/region.json");
+        } else {
+            return returnHolderIfNotNull(holder);
+        }
+    }
+    this.getProvinces = (holder) => {
+        if (holder == null) {
+            return $http.get("../Content/PH/json/province.json");
+        } else {
+            return returnHolderIfNotNull(holder);
+        }
+    }
+    this.getCities = (holder) => {
+        if (holder == null) {
+            return $http.get("../Content/PH/json/city.json");
+        } else {
+            return returnHolderIfNotNull(holder);
+        }
+    }
+    this.getBrgys = (holder) => {
+        if (holder == null) {
+            return $http.get("../Content/PH/json/refbrgy.json");
+        } else {
+            return returnHolderIfNotNull(holder);
+        }
+    }
     this.getCategories = () => {
         return $http.get('../Company/GetCategories');
     }
@@ -91,12 +119,37 @@ module.service('ProfileService', function ($http, $q) {
             headers: { 'Content-Type': undefined }
         });
     }
+    this.updateAddress = (address) => {
+        var formdata = new FormData();
+        formdata.append("__RequestVerificationToken",
+            $('input:hidden[name=__RequestVerificationToken]').val());
+        angular.forEach(address, (value, key) => {
+            formdata.append(key, value);
+        });
+        return $http({
+            method: 'POST',
+            url: '/Account/UpdateCompanyAddress',
+            data: formdata,
+            transformRequest: angular.identity,
+            headers: { 'Content-Type': undefined }
+        });
+    }
+
+    function returnHolderIfNotNull(holder) {
+        return $q(function (resolve) {
+            resolve({ data: holder })
+        });
+    }
 });
 
 module.factory('HoldersFactory', function () {
     return {
         companyInfo: null,
-        categories: null
+        categories: null,
+        regions: null,
+        provinces: null,
+        cities: null,
+        brgys: null
     }
 });
 module.directive('imageonload', function () {
@@ -177,8 +230,14 @@ module.controller('ProfileCtrl', ['$scope', '$q', 'NavigationService', 'ProfileS
         scope.navCardsVisibility = [true, false, false];
         scope.settings = true;
         scope.personal = true;
+        scope.address = true;
+        let selectAddressValue = [];
 
         const type_manager = new Select2Manager("#TypeContainer");
+        const region_manager = new Select2Manager("#RegionContainer");
+        const province_manager = new Select2Manager("#ProvinceContainer");
+        const city_manager = new Select2Manager("#CityContainer");
+        const brgy_manager = new Select2Manager("#BrgyContainer");
 
         initServices();
 
@@ -364,23 +423,68 @@ module.controller('ProfileCtrl', ['$scope', '$q', 'NavigationService', 'ProfileS
                         }
                     }
                 });
+            } else if (section === 'address') {
+                swalConfirmation({
+                    title: 'Are you sure you want to update your address?',
+                    text: '',
+                    type: 'warning',
+                    precallback: () => {
+                        angular.forEach(selectAddressValue, (address_value) => {
+                            const address_key = Object.keys(address_value); 
+                            scope.company[address_key[0]] = address_value[address_key[0]];
+                        });
+                        return profile_service.updateAddress(scope.company);
+                    },
+                    callback: (result) => {
+                        if (result) {
+                            if (result.data == 'Success') {
+                                swalSuccess({
+                                    title: 'Updated',
+                                    text: '',
+                                    callback: () => {
+                                        scope.address = true;
+                                        scope.$apply();
+                                    }
+                                });
+                            }
+                        }
+                    }
+                });
             }
         }
 
         function initServices() {
             q.all([
                 navigation_service.getCompanyInfo(holders_factory.companyInfo),
-                profile_service.getCategories()
+                profile_service.getCategories(),
+                profile_service.getRegions(holders_factory.regions),
+                profile_service.getProvinces(holders_factory.provinces),
+                profile_service.getCities(holders_factory.cities),
+                profile_service.getBrgys(holders_factory.brgys)
+
             ]).then((results) => {
-                holders_factory.companyInfo = results[0].data;
-                scope.company = results[0].data;
-                holders_factory.categories = results[1].data;
+                const holders_keys = Object.keys(holders_factory);
+                angular.forEach(results, (result, index) => {
+                    holders_factory[holders_keys[index]] = result.data;
+                });
+                scope.company = holders_factory.companyInfo;
                 scope.company.cellnumber = parseInt(scope.company.cellnumber);
 
                 initSelect2();
             });
         }
 
+        function clearAndAddItems(manager_array, options) {
+            angular.forEach(manager_array, (manager) => {
+                manager.manager.clearItems();
+                manager.manager.addCustomOptionItem(`<option disabled selected>${manager.option_text}</option`);
+                manager.manager.invalid();
+            });
+
+            options.manager.items = new ConvertDataToSelect2Data(options.holder, options.address_index)
+                .filter(options.key, options.selected_value);
+            options.manager.addItems();
+        }
         function initSelect2() {
             type_manager.initSelect2({
                 tags: true,
@@ -389,6 +493,91 @@ module.controller('ProfileCtrl', ['$scope', '$q', 'NavigationService', 'ProfileS
                 minimumResultsForSearch: -1
             });
             type_manager.setSelectedItems([scope.company.categoryId]);
+            region_manager.initSelect2({
+                data: new ConvertDataToSelect2Data(holders_factory.regions, 0).noFilter()
+            });
+            region_manager.setSelectedItems([('0' + scope.company.region).slice(-2)]);
+            const if_region_single_digit = `${scope.company.region}`.length === 1 ? '0' : '';
+            province_manager.initSelect2({
+                data: new ConvertDataToSelect2Data(holders_factory.provinces, 1)
+                    .filter('regCode', scope.company.region)
+            });
+            province_manager.setSelectedItems([`${if_region_single_digit}${scope.company.province}`]);
+            city_manager.initSelect2({
+                data: new ConvertDataToSelect2Data(holders_factory.cities, 2)
+                    .filter('provCode', scope.company.province)
+            });
+            city_manager.setSelectedItems([`${if_region_single_digit}${scope.company.city}`]);
+            brgy_manager.initSelect2({
+                data: new ConvertDataToSelect2Data(holders_factory.brgys, 3)
+                    .filter('citymunCode', scope.company.city)
+            });
+            brgy_manager.setSelectedItems([`${if_region_single_digit}${scope.company.brgy}`]);
+
+            region_manager.Selecting((selected_item) => {
+                let selected_value = selected_item.params.args.data;
+                selectAddressValue[0] = { region: parseInt(selected_value.id) };
+                const managers = [{
+                        manager: province_manager,
+                        option_text: 'Select a province'
+                    },
+                    {
+                        manager: city_manager,
+                        option_text: 'Select a province first'
+                    },
+                    {
+                        manager: brgy_manager,
+                        option_text: 'Select a city/municipality first'
+                    }];
+                clearAndAddItems(managers, {
+                    manager: province_manager,
+                    holder: holders_factory.provinces,
+                    address_index: 1,
+                    key: 'regCode',
+                    selected_value: selected_value.id
+                });
+            });
+            province_manager.Selecting((selected_item) => {
+                let selected_value = selected_item.params.args.data;
+                selectAddressValue[1] = { province: parseInt(selected_value.id) };
+                province_manager.valid();
+                const managers = [{
+                    manager: city_manager,
+                    option_text: 'Select a city'
+                },
+                {
+                    manager: brgy_manager,
+                    option_text: 'Select a city/municipality first'
+                    }];
+                clearAndAddItems(managers, {
+                    manager: city_manager,
+                    holder: holders_factory.cities,
+                    address_index: 2,
+                    key: 'provCode',
+                    selected_value: selected_value.id
+                });
+            });
+            city_manager.Selecting((selected_item) => {
+                let selected_value = selected_item.params.args.data;
+                selectAddressValue[2] = { city: parseInt(selected_value.id) };
+                city_manager.valid();
+                const managers = [{
+                    manager: brgy_manager,
+                    option_text: 'Select a city/municipality first'
+                }];
+                clearAndAddItems(managers, {
+                    manager: brgy_manager,
+                    holder: holders_factory.brgys,
+                    address_index: 3,
+                    key: 'citymunCode',
+                    selected_value: selected_value.id
+                });
+            });
+            brgy_manager.Selecting((selected_item) => {
+                let selected_value = selected_item.params.args.data;
+                selectAddressValue[3] = { brgy: parseInt(selected_value.id) };
+                brgy_manager.valid();
+            });
         }
 }]);
 function swalConfirmWithPassword(options) {
@@ -510,7 +699,7 @@ Select2Manager.prototype.addItems = function (array_selected_id) {
     });
 }
 Select2Manager.prototype.setSelectedItems = function (array_selected_id) {
-    this.select.val(array_selected_id).trigger('change');
+    this.select.select2('val', array_selected_id);
 }
 function ConvertDataToSelect2Data(data, address_index) {
     this.keys = ['reg', 'prov', 'citymun', 'brgy'];
@@ -524,7 +713,7 @@ ConvertDataToSelect2Data.prototype.filter = function (key, key_value) {
     return this.values;
 }
 ConvertDataToSelect2Data.prototype.noFilter = function () {
-    this.data.forEach((value) => {
+    $.each(this.data, (index, value) => {
         this.values.push({
             id: value[`${this.keys[this.address_index]}Code`],
             text: value[`${this.keys[this.address_index]}Desc`],

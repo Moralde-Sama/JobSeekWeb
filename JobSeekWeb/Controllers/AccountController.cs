@@ -274,6 +274,21 @@ namespace JobSeekWeb.Controllers
                 return Json(e.Message, JsonRequestBehavior.AllowGet);
             }
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Company")]
+        public JsonResult UpdateCompanyAddress(Company company)
+        {
+            try
+            {
+                company.UpdateAddress();
+                return Json("Success", JsonRequestBehavior.AllowGet);
+            }
+            catch(Exception e)
+            {
+                return Json(e.Message, JsonRequestBehavior.AllowGet);
+            }
+        }
         #endregion
 
         //
